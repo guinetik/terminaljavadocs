@@ -30,6 +30,15 @@
       return window.innerWidth <= 992;
     }
 
+    function closeMenu() {
+      isOpen = false;
+      nav.classList.remove('open');
+      nav.querySelectorAll('.dropdown.open').forEach(function(dd) {
+        dd.classList.remove('open');
+      });
+    }
+
+    // Toggle menu on hamburger click
     hamburger.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -37,27 +46,59 @@
       if (!isMobile()) return;
 
       isOpen = !isOpen;
-
       if (isOpen) {
         nav.classList.add('open');
       } else {
-        nav.classList.remove('open');
+        closeMenu();
       }
     });
 
-    document.addEventListener('click', function(e) {
+    // Close menu when clicking outside - use mousedown to avoid racing with link clicks
+    document.addEventListener('mousedown', function(e) {
       if (isOpen && !nav.contains(e.target) && !hamburger.contains(e.target)) {
-        isOpen = false;
-        nav.classList.remove('open');
+        closeMenu();
       }
     });
 
-    window.addEventListener('resize', function() {
-      isOpen = false;
-      nav.classList.remove('open');
-      nav.querySelectorAll('.dropdown.open').forEach(function(dd) {
-        dd.classList.remove('open');
+    // Handle nav link clicks - let them navigate naturally
+    nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        // For same-page anchors, close menu after brief delay
+        var href = this.getAttribute('href');
+        if (href && href.indexOf('#') === 0) {
+          setTimeout(closeMenu, 100);
+        }
       });
+    });
+
+    // Handle dropdown toggles on mobile
+    nav.querySelectorAll('.dropdown-toggle').forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        if (!isMobile()) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        var parent = this.parentElement;
+        var wasOpen = parent.classList.contains('open');
+
+        // Close all other dropdowns
+        nav.querySelectorAll('.dropdown.open').forEach(function(dd) {
+          dd.classList.remove('open');
+        });
+
+        // Toggle this one
+        if (!wasOpen) {
+          parent.classList.add('open');
+        }
+      });
+    });
+
+    // Close nav when window resizes to desktop
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 992) {
+        closeMenu();
+      }
     });
   });
 

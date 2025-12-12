@@ -240,7 +240,7 @@ header#topbar {
 
 #topbar .brand img {
   width: 28px !important;
-  height: 24px !important;
+  height: 28px !important;
   display: block !important;
 }
 
@@ -595,7 +595,7 @@ footer #poweredBy {
 
   #topbar .brand img {
     width: 28px !important;
-    height: 24px !important;
+    height: 28px !important;
     display: block !important;
   }
 
@@ -682,7 +682,7 @@ footer #poweredBy {
     gap: 0 !important;
   }
 
-  /* Nav items - full width, stacked */
+  /* Nav items - full width, stacked with large touch targets */
   #topbar .nav-collapse ul.nav.open > li {
     width: 100% !important;
     height: auto !important;
@@ -694,18 +694,21 @@ footer #poweredBy {
   #topbar .nav-collapse ul.nav.open > li > a {
     display: block !important;
     height: auto !important;
-    padding: var(--sp-4) var(--page-gutter) !important;
+    min-height: 48px !important;
+    padding: 14px var(--page-gutter) !important;
     font-size: var(--font-size-base) !important;
     color: var(--text-secondary) !important;
     border-radius: 0 !important;
     border-bottom: 1px solid var(--border-subtle) !important;
+    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2) !important;
   }
 
   #topbar .nav-collapse ul.nav.open > li:last-child > a {
     border-bottom: none !important;
   }
 
-  #topbar .nav-collapse ul.nav.open > li > a:hover {
+  #topbar .nav-collapse ul.nav.open > li > a:hover,
+  #topbar .nav-collapse ul.nav.open > li > a:active {
     background: var(--bg-overlay) !important;
     color: var(--text-primary) !important;
   }
@@ -728,14 +731,18 @@ footer #poweredBy {
   }
 
   #topbar .nav-collapse ul.nav.open .dropdown-menu > li > a {
-    padding: var(--sp-3) var(--page-gutter) !important;
+    display: block !important;
+    min-height: 44px !important;
+    padding: 12px var(--page-gutter) !important;
     padding-left: calc(var(--page-gutter) + var(--sp-5)) !important;
     color: var(--text-muted) !important;
     font-size: var(--font-size-sm) !important;
     border-radius: 0 !important;
+    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2) !important;
   }
 
-  #topbar .nav-collapse ul.nav.open .dropdown-menu > li > a:hover {
+  #topbar .nav-collapse ul.nav.open .dropdown-menu > li > a:hover,
+  #topbar .nav-collapse ul.nav.open .dropdown-menu > li > a:active {
     background: var(--bg-overlay) !important;
     color: var(--text-primary) !important;
   }
@@ -774,8 +781,9 @@ footer #poweredBy {
   }
 
   #topbar .brand img {
-    width: 24px !important;
-    height: 20px !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: block !important;
   }
 
   pre {

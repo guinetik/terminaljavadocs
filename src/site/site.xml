@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/DECORATION/1.8.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 https://maven.apache.org/xsd/decoration-1.8.0.xsd"
+    name="Terminal Javadocs">
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>2.0.0-M8</version>
+    </skin>
+
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <sideBarEnabled>false</sideBarEnabled>
+            <topBarIcon>
+                <name>${terminaljavadocs.project.name}</name>
+                <alt>${terminaljavadocs.project.name}</alt>
+                <src>${terminaljavadocs.project.logo}</src>
+                <href>/index.html</href>
+            </topBarIcon>
+            <navBarStyle>navbar-dark</navBarStyle>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+            <skipGenerationDate>true</skipGenerationDate>
+        </fluidoSkin>
+    </custom>
+
+    <body>
+        <head>
+            <![CDATA[
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+                <link href="./css/prism-terminal.css" rel="stylesheet" />
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js" defer></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-xml-doc.min.js" defer></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
+                <script src="./js/custom.js" defer></script>
+            ]]>
+        </head>
+
+        <menu name="Overview">
+            <item name="Introduction" href="index.html"/>
+            <item name="Quick Start" href="quickstart.html"/>
+        </menu>
+
+        <menu name="Project Information" ref="reports"/>
+    </body>
+</project>
