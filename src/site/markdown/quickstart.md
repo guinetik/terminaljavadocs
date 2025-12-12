@@ -15,7 +15,7 @@ In your project's `pom.xml`, set Terminal Javadocs as your parent:
 <parent>
     <groupId>com.guinetik</groupId>
     <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 </parent>
 ```
 
@@ -148,6 +148,46 @@ Here's a full example with every option explained:
     </gitHub>
 </fluidoSkin>
 ```
+
+### Twitter Follow Button
+
+Add a Twitter follow button to your site:
+
+```xml
+<fluidoSkin>
+    <twitter>
+        <user>your_username</user>
+        <showUser>true</showUser>
+        <showFollowers>true</showFollowers>
+    </twitter>
+</fluidoSkin>
+```
+
+| Option | Description |
+|--------|-------------|
+| `user` | Your Twitter/X username (without @) |
+| `showUser` | Display the username in the button |
+| `showFollowers` | Show follower count |
+
+### Google Analytics
+
+Track your site visitors:
+
+```xml
+<fluidoSkin>
+    <googleAnalytics>
+        <accountId>G-XXXXXXXXXX</accountId>
+        <anonymizeIp>false</anonymizeIp>
+        <forceSSL>false</forceSSL>
+    </googleAnalytics>
+</fluidoSkin>
+```
+
+| Option | Description |
+|--------|-------------|
+| `accountId` | Your GA4 measurement ID (starts with G-) |
+| `anonymizeIp` | Anonymize visitor IP addresses |
+| `forceSSL` | Force HTTPS for analytics requests |
 
 ## Step 3: Add Content Pages
 

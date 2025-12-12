@@ -34,7 +34,7 @@ Dark terminal-themed Maven site styling for Java documentation. Features a sleek
 <parent>
     <groupId>com.guinetik</groupId>
     <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 </parent>
 ```
 

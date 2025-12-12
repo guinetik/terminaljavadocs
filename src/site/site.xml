@@ -23,6 +23,16 @@
             <navBarStyle>navbar-dark</navBarStyle>
             <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
             <skipGenerationDate>true</skipGenerationDate>
+            <twitter>
+                <user>guinetik</user>
+                <showUser>true</showUser>
+                <showFollowers>true</showFollowers>
+            </twitter>
+            <googleAnalytics>
+                <accountId>G-ZY3ZHWZ6ZS</accountId>
+                <anonymizeIp>false</anonymizeIp>
+                <forceSSL>false</forceSSL>
+            </googleAnalytics>
         </fluidoSkin>
     </custom>
 
@@ -38,7 +48,7 @@
                 <script src="./js/custom.js" defer></script>
             ]]>
         </head>
-
+        
         <menu name="Overview">
             <item name="Introduction" href="index.html"/>
             <item name="Quick Start" href="quickstart.html"/>
@@ -46,5 +56,10 @@
         </menu>
 
         <menu name="Project Information" ref="reports"/>
+
+        <menu name="Links">
+            <item name="GitHub" href="https://github.com/guinetik/terminaljavadocs"/>
+            <item name="Maven Central" href="https://central.sonatype.com/artifact/com.guinetik/terminaljavadocs"/>
+        </menu>
     </body>
 </project>

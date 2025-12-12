@@ -6,12 +6,12 @@
 
     <groupId>com.guinetik</groupId>
     <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
 
     <name>Terminal Javadocs</name>
     <description>Dark terminal-themed Maven site styling for documentation, Javadoc, and JaCoCo reports</description>
-    <url>https://github.com/guinetik/terminaljavadocs</url>
+    <url>https://terminaljavadocs.guinetik.com</url>
 
     <licenses>
         <license>
@@ -62,7 +62,7 @@
         <maven-project-info-reports-plugin.version>3.5.0</maven-project-info-reports-plugin.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-fluido-skin.version>2.0.0-M8</maven-fluido-skin.version>
-        <terminaljavadocs.version>1.0.0</terminaljavadocs.version>
+        <terminaljavadocs.version>1.0.2</terminaljavadocs.version>
 
         <!--
             Project-specific properties - override these in your project's pom.xml:
