@@ -1,6 +1,11 @@
 # Terminal Javadocs
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.guinetik/terminaljavadocs.svg)](https://central.sonatype.com/artifact/com.guinetik/terminaljavadocs)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 Dark terminal-themed Maven site styling for Java documentation. Features a sleek black-and-green aesthetic for your Maven sites, Javadoc, and JaCoCo coverage reports.
+
+![Terminal Javadocs Main Site](main.png)
 
 ## Features
 
@@ -12,26 +17,29 @@ Dark terminal-themed Maven site styling for Java documentation. Features a sleek
 - **Maven Fluido Skin** - Built on top of the popular Fluido skin
 - **Zero Config** - Just inherit and go
 
+## Screenshots
+
+### Javadoc
+
+![Javadoc with Terminal Theme](javadocs.png)
+
+### JaCoCo Coverage Reports
+
+![JaCoCo Coverage with Terminal Theme](coverage.png)
+
 ## Quick Start
 
-### 1. Install to Local Maven Repository
-
-```bash
-cd terminaljavadocs
-mvn clean install
-```
-
-### 2. Set as Parent in Your Project
+### 1. Set as Parent in Your Project
 
 ```xml
 <parent>
     <groupId>com.guinetik</groupId>
     <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </parent>
 ```
 
-### 3. Configure Your Project Properties
+### 2. Configure Your Project Properties
 
 ```xml
 <properties>
@@ -40,7 +48,7 @@ mvn clean install
 </properties>
 ```
 
-### 4. Add site.xml
+### 3. Add site.xml
 
 Create `src/site/site.xml`:
 
@@ -97,7 +105,7 @@ Create `src/site/site.xml`:
 </project>
 ```
 
-### 5. Build Your Site
+### 4. Build Your Site
 
 ```bash
 mvn clean site
@@ -165,7 +173,7 @@ Override the CSS by placing files in your project's `src/site/resources/css/` - 
 |----------|---------|-------------|
 | `terminaljavadocs.project.name` | `${project.name}` | Display name in headers |
 | `terminaljavadocs.project.logo` | (empty) | Logo URL for Javadoc header |
-| `terminaljavadocs.version` | `1.0.0-SNAPSHOT` | Version of resources to use |
+| `terminaljavadocs.version` | `1.0.0` | Version of resources to use |
 
 ## License
 
