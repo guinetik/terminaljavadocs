@@ -41,6 +41,10 @@
             <id>central</id>
             <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         </snapshotRepository>
+        <site>
+            <id>github-pages</id>
+            <url>https://guinetik.github.io/terminaljavadocs/</url>
+        </site>
     </distributionManagement>
 
     <modules>

@@ -42,6 +42,7 @@
         <menu name="Overview">
             <item name="Introduction" href="index.html"/>
             <item name="Quick Start" href="quickstart.html"/>
+            <item name="Customization" href="customization.html"/>
         </menu>
 
         <menu name="Project Information" ref="reports"/>
