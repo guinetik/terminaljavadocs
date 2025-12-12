@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.guinetik</groupId>
+    <artifactId>terminaljavadocs</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Terminal Javadocs</name>
+    <description>Dark terminal-themed Maven site styling for documentation, Javadoc, and JaCoCo reports</description>
+    <url>https://github.com/guinetik/terminaljavadocs</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>guinetik</id>
+            <name>guinetik</name>
+            <email>guinetik@gmail.com</email>
+            <url>https://github.com/guinetik</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/guinetik/terminaljavadocs.git</connection>
+        <developerConnection>scm:git:ssh://github.com:guinetik/terminaljavadocs.git</developerConnection>
+        <url>https://github.com/guinetik/terminaljavadocs</url>
+    </scm>
+
+    <modules>
+        <module>terminaljavadocs-resources</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Plugin versions -->
+        <maven-site-plugin.version>4.0.0-M13</maven-site-plugin.version>
+        <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
+        <maven-project-info-reports-plugin.version>3.5.0</maven-project-info-reports-plugin.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <maven-fluido-skin.version>2.0.0-M8</maven-fluido-skin.version>
+        <terminaljavadocs.version>1.0.0-SNAPSHOT</terminaljavadocs.version>
+
+        <!--
+            Project-specific properties - override these in your project's pom.xml:
+
+            <properties>
+                <terminaljavadocs.project.name>My Project</terminaljavadocs.project.name>
+                <terminaljavadocs.project.logo>https://example.com/logo.svg</terminaljavadocs.project.logo>
+                <terminaljavadocs.github.user>username</terminaljavadocs.github.user>
+                <terminaljavadocs.github.repo>repo</terminaljavadocs.github.repo>
+            </properties>
+        -->
+        <terminaljavadocs.project.name>${project.name}</terminaljavadocs.project.name>
+        <terminaljavadocs.project.logo></terminaljavadocs.project.logo>
+        <terminaljavadocs.github.user></terminaljavadocs.github.user>
+        <terminaljavadocs.github.repo></terminaljavadocs.github.repo>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.guinetik</groupId>
+                <artifactId>terminaljavadocs-resources</artifactId>
+                <version>${terminaljavadocs.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Maven Site Plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${maven-site-plugin.version}</version>
+                </plugin>
+
+                <!-- Project Info Reports -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${maven-project-info-reports-plugin.version}</version>
+                </plugin>
+
+                <!-- Javadoc Plugin with Terminal Theme -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <doclint>none</doclint>
+                        <quiet>true</quiet>
+                        <detectOfflineLinks>false</detectOfflineLinks>
+                        <additionalOptions>--allow-script-in-comments</additionalOptions>
+                        <stylesheetfile>${project.build.directory}/terminaljavadocs/javadoc.css</stylesheetfile>
+                        <header>
+                            <![CDATA[
+                            <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+                            <div class="corefun-header">
+                                <a href="/" class="corefun-brand">
+                                    <img src="${terminaljavadocs.project.logo}" alt="${terminaljavadocs.project.name}" width="24" height="24" />
+                                    <span>${terminaljavadocs.project.name}</span>
+                                </a>
+                                <a href="/" class="corefun-back">&#8592; Back to Docs</a>
+                            </div>
+                            ]]>
+                        </header>
+                        <bottom>
+                            <![CDATA[
+                            &#169; ${project.inceptionYear}
+                            <script>
+                            (function(){
+                                document.querySelectorAll('pre code').forEach(function(code){
+                                    if(!code.className.match(/language-/)){
+                                        code.classList.add('language-java');
+                                        code.parentElement.classList.add('language-java');
+                                    }
+                                });
+                                if(typeof Prism!=='undefined'){Prism.highlightAll();}
+                                else{setTimeout(function(){if(typeof Prism!=='undefined')Prism.highlightAll();},500);}
+                            })();
+                            </script>
+                            ]]>
+                        </bottom>
+                    </configuration>
+                </plugin>
+
+                <!-- JaCoCo Plugin -->
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- Dependency Plugin - Unpack Terminal Javadocs Resources -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.6.1</version>
+                    <executions>
+                        <!-- Unpack site resources before site generation -->
+                        <execution>
+                            <id>unpack-site-resources</id>
+                            <phase>pre-site</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>com.guinetik</groupId>
+                                        <artifactId>terminaljavadocs-resources</artifactId>
+                                        <version>${terminaljavadocs.version}</version>
+                                        <type>jar</type>
+                                        <includes>site-resources/**</includes>
+                                        <outputDirectory>${project.build.directory}/generated-site-resources</outputDirectory>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                        <!-- Unpack javadoc.css for javadoc plugin -->
+                        <execution>
+                            <id>unpack-javadoc-css</id>
+                            <phase>pre-site</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>com.guinetik</groupId>
+                                        <artifactId>terminaljavadocs-resources</artifactId>
+                                        <version>${terminaljavadocs.version}</version>
+                                        <type>jar</type>
+                                        <includes>javadoc.css</includes>
+                                        <outputDirectory>${project.build.directory}/terminaljavadocs</outputDirectory>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- Resources Plugin - Copy unpacked resources and JaCoCo theme -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                    <executions>
+                        <!-- Copy site resources to site output -->
+                        <execution>
+                            <id>copy-terminaljavadocs-site-resources</id>
+                            <phase>pre-site</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/site</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>${project.build.directory}/generated-site-resources/site-resources</directory>
+                                        <filtering>true</filtering>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <!--
+        Profile to copy JaCoCo theme - activate in modules that use JaCoCo
+        Add to your module: <activeByDefault>true</activeByDefault> under this profile
+        Or activate with: mvn site -Pterminaljavadocs-jacoco
+    -->
+    <profiles>
+        <profile>
+            <id>terminaljavadocs-jacoco</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-jacoco-theme</id>
+                                <phase>site</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>com.guinetik</groupId>
+                                            <artifactId>terminaljavadocs-resources</artifactId>
+                                            <version>${terminaljavadocs.version}</version>
+                                            <type>jar</type>
+                                            <includes>jacoco-resources/**</includes>
+                                            <outputDirectory>${project.build.directory}/site/jacoco</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <!-- Default reporting configuration -->
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${maven-project-info-reports-plugin.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                            <report>summary</report>
+                            <report>dependency-info</report>
+                            <report>modules</report>
+                            <report>team</report>
+                            <report>scm</report>
+                            <report>issue-management</report>
+                            <report>licenses</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>

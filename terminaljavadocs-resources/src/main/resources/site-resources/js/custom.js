@@ -1,0 +1,125 @@
+/**
+ * TerminalJavadocs - Mobile Navigation & Syntax Highlighting
+ */
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Prism syntax highlighting
+    initSyntaxHighlighting();
+
+    // Initialize mobile navigation
+    var hamburger = document.querySelector('#topbar .btn-navbar');
+    var nav = document.querySelector('#topbar nav.nav-collapse ul.nav');
+    var container = document.querySelector('#topbar .navbar-inner > .container');
+
+    if (!hamburger || !nav) return;
+
+    // Inject mobile title from brand alt text
+    if (container) {
+      var brand = document.querySelector('#topbar .brand img');
+      var titleText = brand && brand.alt ? brand.alt : document.title.split('–')[0].trim();
+
+      var mobileTitle = document.createElement('span');
+      mobileTitle.id = 'mobile-nav-title';
+      mobileTitle.textContent = titleText;
+      container.appendChild(mobileTitle);
+    }
+
+    var isOpen = false;
+
+    function isMobile() {
+      return window.innerWidth <= 992;
+    }
+
+    hamburger.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!isMobile()) return;
+
+      isOpen = !isOpen;
+
+      if (isOpen) {
+        nav.classList.add('open');
+      } else {
+        nav.classList.remove('open');
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (isOpen && !nav.contains(e.target) && !hamburger.contains(e.target)) {
+        isOpen = false;
+        nav.classList.remove('open');
+      }
+    });
+
+    window.addEventListener('resize', function() {
+      isOpen = false;
+      nav.classList.remove('open');
+      nav.querySelectorAll('.dropdown.open').forEach(function(dd) {
+        dd.classList.remove('open');
+      });
+    });
+  });
+
+  /**
+   * Initialize Prism.js syntax highlighting
+   */
+  function initSyntaxHighlighting() {
+    var codeBlocks = document.querySelectorAll('pre code, pre.source');
+
+    codeBlocks.forEach(function(code) {
+      var pre = code.tagName === 'PRE' ? code : code.parentElement;
+      var content = code.textContent || '';
+      var hasLanguageClass = code.className && code.className.match(/language-/);
+
+      if (!hasLanguageClass) {
+        var language = detectLanguage(content, code.className);
+        if (language) {
+          code.classList.add('language-' + language);
+          pre.classList.add('language-' + language);
+        }
+      }
+
+      if (code.className && code.className.match(/language-(\w+)/)) {
+        var lang = code.className.match(/language-(\w+)/)[1];
+        if (!pre.classList.contains('language-' + lang)) {
+          pre.classList.add('language-' + lang);
+        }
+      }
+    });
+
+    // Highlight when Prism is ready
+    if (typeof Prism !== 'undefined') {
+      Prism.highlightAll();
+    } else {
+      var attempts = 0;
+      var interval = setInterval(function() {
+        if (typeof Prism !== 'undefined') {
+          Prism.highlightAll();
+          clearInterval(interval);
+        } else if (++attempts > 50) {
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+  }
+
+  /**
+   * Detect programming language from code content
+   */
+  function detectLanguage(content, className) {
+    if (className) {
+      if (className.indexOf('java') !== -1) return 'java';
+      if (className.indexOf('xml') !== -1) return 'xml';
+      if (className.indexOf('bash') !== -1 || className.indexOf('shell') !== -1) return 'bash';
+      if (className.indexOf('json') !== -1) return 'json';
+    }
+
+    var trimmed = content.trim();
+    if (trimmed.match(/^<\?xml/) || trimmed.match(/^<(dependency|plugin|project|groupId|artifactId)/)) return 'xml';
+    if (trimmed.match(/^(package|import|public\s+class|public\s+interface|@\w+)/m)) return 'java';
+    if (trimmed.match(/^(\$|#!\/bin\/(ba)?sh|mvn |npm |git )/m)) return 'bash';
+    if (trimmed.match(/^\s*[\[{]/) && trimmed.match(/[\]}]\s*$/)) return 'json';
+    return 'java';
+  }
+})();
