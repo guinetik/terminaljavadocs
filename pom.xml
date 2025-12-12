@@ -6,7 +6,7 @@
 
     <groupId>com.guinetik</groupId>
     <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Terminal Javadocs</name>
@@ -331,6 +331,12 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
                     </plugin>
                     <!-- Central Publishing Plugin -->
                     <plugin>
