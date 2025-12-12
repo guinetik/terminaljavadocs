@@ -39,6 +39,31 @@
     <body>
         <head>
             <![CDATA[
+                <!-- SEO Meta Tags -->
+                <meta name="description" content="Dark terminal-themed Maven site styling for Java documentation. Features sleek black-and-green aesthetic for Maven sites, Javadoc, and JaCoCo reports." />
+                <meta name="keywords" content="maven, javadoc, documentation, dark theme, terminal, java, jacoco, coverage, maven-site" />
+                <meta name="author" content="guinetik" />
+
+                <!-- Open Graph / Facebook -->
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://terminaljavadocs.guinetik.com/" />
+                <meta property="og:title" content="Terminal Javadocs - Dark Theme for Maven Sites" />
+                <meta property="og:description" content="Dark terminal-themed Maven site styling for Java documentation. Sleek black-and-green aesthetic for Maven sites, Javadoc, and JaCoCo reports." />
+                <meta property="og:image" content="https://terminaljavadocs.guinetik.com/images/og-image.png" />
+
+                <!-- Twitter Card -->
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:site" content="@guinetik" />
+                <meta name="twitter:title" content="Terminal Javadocs - Dark Theme for Maven Sites" />
+                <meta name="twitter:description" content="Dark terminal-themed Maven site styling for Java documentation." />
+                <meta name="twitter:image" content="https://terminaljavadocs.guinetik.com/images/og-image.png" />
+
+                <!-- Favicon -->
+                <link rel="icon" type="image/svg+xml" href="./images/favicon.svg" />
+                <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png" />
+
+                <!-- Prism.js -->
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
                 <link href="./css/prism-terminal.css" rel="stylesheet" />
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
