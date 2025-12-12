@@ -6,11 +6,11 @@
 
     <groupId>com.guinetik</groupId>
     <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>pom</packaging>
 
     <name>Terminal Javadocs</name>
-    <description>Dark terminal-themed Maven site styling for documentation, Javadoc, and JaCoCo reports</description>
+    <description>Dark terminal-themed Maven site styling for documentation, Javadoc, JXR source cross-reference, and JaCoCo reports</description>
     <url>https://terminaljavadocs.guinetik.com</url>
 
     <licenses>
@@ -67,6 +67,7 @@
         <maven-project-info-reports-plugin.version>3.5.0</maven-project-info-reports-plugin.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-fluido-skin.version>2.0.0-M8</maven-fluido-skin.version>
+        <maven-jxr-plugin.version>3.3.2</maven-jxr-plugin.version>
         <terminaljavadocs.version>1.0.2</terminaljavadocs.version>
 
         <!--
@@ -181,6 +182,48 @@
                     </executions>
                 </plugin>
 
+                <!-- JXR Plugin with Terminal Theme -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jxr-plugin</artifactId>
+                    <version>${maven-jxr-plugin.version}</version>
+                    <configuration>
+                        <stylesheet>${project.build.directory}/terminaljavadocs/jxr-resources/stylesheet.css</stylesheet>
+                        <linkJavadoc>true</linkJavadoc>
+                    </configuration>
+                </plugin>
+
+                <!-- Antrun Plugin - Post-process JXR files to inject Prism.js -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <id>inject-prism-into-jxr</id>
+                            <phase>post-site</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <target>
+                                    <!-- Inject Prism.js CDN scripts into all JXR HTML files -->
+                                    <!-- The jxr-prism.js converter script is inlined to avoid path issues -->
+                                    <replaceregexp match="&lt;/head&gt;"
+                                                   replace="&lt;link href=&quot;https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css&quot; rel=&quot;stylesheet&quot; /&gt;&#10;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;script&gt;(function(){function init(){if(typeof Prism===&apos;undefined&apos;)return;var pre=document.querySelector(&apos;pre&apos;);if(!pre||pre.dataset.prismProcessed)return;var clone=pre.cloneNode(true);clone.querySelectorAll(&apos;.jxr_linenumber&apos;).forEach(function(l){l.remove()});var src=clone.textContent;var c=document.createElement(&apos;div&apos;);c.className=&apos;jxr-prism-container&apos;;var ln=document.createElement(&apos;div&apos;);ln.className=&apos;jxr-line-numbers&apos;;var cc=document.createElement(&apos;div&apos;);cc.className=&apos;jxr-code-container&apos;;var code=document.createElement(&apos;code&apos;);code.className=&apos;language-java&apos;;code.textContent=src;var newPre=document.createElement(&apos;pre&apos;);newPre.className=&apos;language-java&apos;;newPre.appendChild(code);Prism.highlightElement(code);code.innerHTML.split(&apos;\\n&apos;).forEach(function(_,i){var a=document.createElement(&apos;a&apos;);a.className=&apos;jxr_linenumber&apos;;a.textContent=i+1;a.href=&apos;#L&apos;+(i+1);a.id=&apos;L&apos;+(i+1);ln.appendChild(a);ln.appendChild(document.createTextNode(&apos;\\n&apos;))});cc.appendChild(newPre);c.appendChild(ln);c.appendChild(cc);pre.parentNode.replaceChild(c,pre);c.dataset.prismProcessed=&apos;true&apos;}if(document.readyState===&apos;loading&apos;)document.addEventListener(&apos;DOMContentLoaded&apos;,init);else init()})();&lt;/script&gt;&#10;&lt;/head&gt;"
+                                                   flags="gi"
+                                                   byline="false">
+                                        <fileset dir="${project.build.directory}/site/xref">
+                                            <include name="**/*.html"/>
+                                        </fileset>
+                                    </replaceregexp>
+                                    <echo message="Prism.js injected into JXR HTML files"/>
+                                </target>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
                 <!-- Dependency Plugin - Unpack Terminal Javadocs Resources -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -222,6 +265,26 @@
                                         <version>${terminaljavadocs.version}</version>
                                         <type>jar</type>
                                         <includes>javadoc.css</includes>
+                                        <outputDirectory>${project.build.directory}/terminaljavadocs</outputDirectory>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                        <!-- Unpack JXR stylesheet for JXR plugin -->
+                        <execution>
+                            <id>unpack-jxr-css</id>
+                            <phase>pre-site</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>com.guinetik</groupId>
+                                        <artifactId>terminaljavadocs-resources</artifactId>
+                                        <version>${terminaljavadocs.version}</version>
+                                        <type>jar</type>
+                                        <includes>jxr-resources/**</includes>
                                         <outputDirectory>${project.build.directory}/terminaljavadocs</outputDirectory>
                                     </artifactItem>
                                 </artifactItems>
@@ -271,6 +334,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
@@ -408,6 +475,16 @@
                         </reports>
                     </reportSet>
                 </reportSets>
+            </plugin>
+            <!-- JXR Plugin for cross-referenced source -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven-jxr-plugin.version}</version>
+                <configuration>
+                    <stylesheet>${project.build.directory}/terminaljavadocs/jxr-resources/stylesheet.css</stylesheet>
+                    <linkJavadoc>true</linkJavadoc>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>
