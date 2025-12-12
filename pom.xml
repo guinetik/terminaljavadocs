@@ -30,6 +30,11 @@
         </developer>
     </developers>
 
+    <organization>
+        <name>guinetik</name>
+        <url>https://guinetik.com</url>
+    </organization>
+
     <scm>
         <connection>scm:git:git://github.com/guinetik/terminaljavadocs.git</connection>
         <developerConnection>scm:git:ssh://github.com:guinetik/terminaljavadocs.git</developerConnection>
