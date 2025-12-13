@@ -6,7 +6,7 @@
 
     <groupId>com.guinetik</groupId>
     <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.41</version>
+    <version>1.0.42-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Terminal Javadocs</name>
@@ -71,7 +71,7 @@
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-fluido-skin.version>2.0.0-M8</maven-fluido-skin.version>
         <maven-jxr-plugin.version>3.3.2</maven-jxr-plugin.version>
-        <terminaljavadocs.version>1.0.41</terminaljavadocs.version>
+        <terminaljavadocs.version>1.0.42-SNAPSHOT</terminaljavadocs.version>
 
         <!--
             Project-specific properties - override these in your project's pom.xml:
@@ -130,7 +130,6 @@
                         <stylesheetfile>${project.build.directory}/terminaljavadocs/javadoc.css</stylesheetfile>
                         <header>
                             <![CDATA[
-                            <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
                             <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
                             <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
                             <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
@@ -213,7 +212,7 @@
                                     <!-- Inject Prism.js CDN scripts into all JXR HTML files -->
                                     <!-- The jxr-prism.js converter script is inlined to avoid path issues -->
                                     <replaceregexp match="&lt;/head&gt;"
-                                                   replace="&lt;link href=&quot;https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css&quot; rel=&quot;stylesheet&quot; /&gt;&#10;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;script&gt;(function(){function init(){if(typeof Prism===&apos;undefined&apos;)return;var pre=document.querySelector(&apos;pre&apos;);if(!pre||pre.dataset.prismProcessed)return;var clone=pre.cloneNode(true);clone.querySelectorAll(&apos;.jxr_linenumber&apos;).forEach(function(l){l.remove()});var src=clone.textContent;var c=document.createElement(&apos;div&apos;);c.className=&apos;jxr-prism-container&apos;;var ln=document.createElement(&apos;div&apos;);ln.className=&apos;jxr-line-numbers&apos;;var cc=document.createElement(&apos;div&apos;);cc.className=&apos;jxr-code-container&apos;;var code=document.createElement(&apos;code&apos;);code.className=&apos;language-java&apos;;code.textContent=src;var newPre=document.createElement(&apos;pre&apos;);newPre.className=&apos;language-java&apos;;newPre.appendChild(code);Prism.highlightElement(code);code.innerHTML.split(&apos;\\n&apos;).forEach(function(_,i){var a=document.createElement(&apos;a&apos;);a.className=&apos;jxr_linenumber&apos;;a.textContent=i+1;a.href=&apos;#L&apos;+(i+1);a.id=&apos;L&apos;+(i+1);ln.appendChild(a);ln.appendChild(document.createTextNode(&apos;\\n&apos;))});cc.appendChild(newPre);c.appendChild(ln);c.appendChild(cc);pre.parentNode.replaceChild(c,pre);c.dataset.prismProcessed=&apos;true&apos;}if(document.readyState===&apos;loading&apos;)document.addEventListener(&apos;DOMContentLoaded&apos;,init);else init()})();&lt;/script&gt;&#10;&lt;/head&gt;"
+                                                   replace="&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js&quot;&gt;&lt;/script&gt;&#10;&lt;script&gt;(function(){function init(){if(typeof Prism===&apos;undefined&apos;)return;var pre=document.querySelector(&apos;pre&apos;);if(!pre||pre.dataset.prismProcessed)return;var clone=pre.cloneNode(true);clone.querySelectorAll(&apos;.jxr_linenumber&apos;).forEach(function(l){l.remove()});var src=clone.textContent;var c=document.createElement(&apos;div&apos;);c.className=&apos;jxr-prism-container&apos;;var ln=document.createElement(&apos;div&apos;);ln.className=&apos;jxr-line-numbers&apos;;var cc=document.createElement(&apos;div&apos;);cc.className=&apos;jxr-code-container&apos;;var code=document.createElement(&apos;code&apos;);code.className=&apos;language-java&apos;;code.textContent=src;var newPre=document.createElement(&apos;pre&apos;);newPre.className=&apos;language-java&apos;;newPre.appendChild(code);Prism.highlightElement(code);code.innerHTML.split(&apos;\\n&apos;).forEach(function(_,i){var a=document.createElement(&apos;a&apos;);a.className=&apos;jxr_linenumber&apos;;a.textContent=i+1;a.href=&apos;#L&apos;+(i+1);a.id=&apos;L&apos;+(i+1);ln.appendChild(a);ln.appendChild(document.createTextNode(&apos;\\n&apos;))});cc.appendChild(newPre);c.appendChild(ln);c.appendChild(cc);pre.parentNode.replaceChild(c,pre);c.dataset.prismProcessed=&apos;true&apos;}if(document.readyState===&apos;loading&apos;)document.addEventListener(&apos;DOMContentLoaded&apos;,init);else init()})();&lt;/script&gt;&#10;&lt;/head&gt;"
                                                    flags="gi"
                                                    byline="false">
                                         <fileset dir="${project.build.directory}/site/xref">
@@ -236,7 +235,7 @@
                         <!-- Unpack site resources before site generation -->
                         <execution>
                             <id>unpack-site-resources</id>
-                            <phase>pre-site</phase>
+                            <phase>post-integration-test</phase>
                             <goals>
                                 <goal>unpack</goal>
                             </goals>
@@ -256,7 +255,7 @@
                         <!-- Unpack javadoc.css for javadoc plugin -->
                         <execution>
                             <id>unpack-javadoc-css</id>
-                            <phase>pre-site</phase>
+                            <phase>post-integration-test</phase>
                             <goals>
                                 <goal>unpack</goal>
                             </goals>
@@ -276,7 +275,7 @@
                         <!-- Unpack JXR stylesheet for JXR plugin -->
                         <execution>
                             <id>unpack-jxr-css</id>
-                            <phase>pre-site</phase>
+                            <phase>post-integration-test</phase>
                             <goals>
                                 <goal>unpack</goal>
                             </goals>
