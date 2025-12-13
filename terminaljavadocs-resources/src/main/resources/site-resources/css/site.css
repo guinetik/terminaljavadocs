@@ -1,35 +1,55 @@
 /*
- * CoreFun — Refined Dark Documentation Theme
+ * TerminalJavadocs — Unified Dark Theme
  *
- * Design Direction: Developer-focused, precise, editorial
- * Typography: Clean sans-serif with monospace accents
- * Palette: True blacks with subtle elevation, blue accent
+ * Design: Vercel meets Terminal
+ * Pure blacks + phosphor green accents + monospace typography
  */
 
 /* =============================================================================
-   DESIGN TOKENS
+   WEB FONTS
+   ============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* =============================================================================
+   DESIGN TOKENS - Shared across site, javadoc, jxr
    ============================================================================= */
 
 :root {
-  /* Backgrounds - true blacks with elevation */
+  /* Backgrounds - pure blacks, no blue tint */
   --bg-void: #000000;
   --bg-base: #0a0a0a;
   --bg-raised: #111111;
-  --bg-overlay: #1a1a1a;
+  --bg-overlay: #171717;
+  --bg-surface: #1a1a1a;
+  --bg-hover: #222222;
 
   /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-default: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.15);
 
   /* Text */
   --text-primary: #fafafa;
-  --text-secondary: #a0a0a0;
+  --text-secondary: #a1a1a1;
   --text-muted: #666666;
+  --text-faint: #444444;
 
-  /* Accent */
-  --accent: #3b82f6;
-  --accent-hover: #60a5fa;
-  --accent-dim: rgba(59, 130, 246, 0.12);
+  /* Phosphor Green Accent - Terminal */
+  --accent: #00ff41;
+  --accent-bright: #39ff14;
+  --accent-dim: #00cc33;
+  --accent-glow: rgba(0, 255, 65, 0.15);
+  --accent-subtle: rgba(0, 255, 65, 0.08);
+
+  /* Neon green for links */
+  --link: #39ff14;
+  --link-hover: #7fff00;
+  --link-glow: rgba(57, 255, 20, 0.25);
+
+  /* Secondary accents */
+  --amber: #ffb800;
+  --cyan: #00e5ff;
 
   /* Spacing */
   --sp-1: 4px;
@@ -47,18 +67,22 @@
   --page-gutter: 48px;
   --content-max: 900px;
 
-  /* Type */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "SF Mono", "Fira Code", "Consolas", monospace;
+  /* Typography */
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'IBM Plex Mono', 'SF Mono', monospace;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', 'Fira Code', 'Consolas', monospace;
+  --font-size-xs: 11px;
   --font-size-sm: 13px;
-  --font-size-base: 15px;
-  --font-size-lg: 18px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
 
   /* Effects */
+  --radius-sm: 4px;
   --radius: 6px;
   --radius-lg: 8px;
   --transition: 150ms ease;
-  --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.7);
 }
 
 /* =============================================================================
@@ -67,13 +91,13 @@
 
 *, *::before, *::after {
   box-sizing: border-box;
-  text-shadow: none !important;
 }
 
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body,
@@ -82,7 +106,7 @@ body.topBarEnabled {
   padding: 0 !important;
   background: var(--bg-void) !important;
   color: var(--text-secondary);
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
   line-height: 1.6;
   overflow-x: hidden;
@@ -106,13 +130,14 @@ footer {
 }
 
 a {
-  color: var(--text-secondary);
+  color: var(--link);
   text-decoration: none;
-  transition: color var(--transition);
+  transition: color var(--transition), text-shadow var(--transition);
 }
 
 a:hover {
-  color: var(--text-primary);
+  color: var(--link-hover);
+  text-shadow: 0 0 8px var(--link-glow);
 }
 
 /* =============================================================================
@@ -120,6 +145,7 @@ a:hover {
    ============================================================================= */
 
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
   color: var(--text-primary);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -127,9 +153,23 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
 }
 
-h1 { font-size: 2rem; margin-bottom: var(--sp-5); }
-h2 { font-size: 1.5rem; margin-top: var(--sp-7); margin-bottom: var(--sp-4); }
-h3 { font-size: 1.2rem; margin-top: var(--sp-6); margin-bottom: var(--sp-3); }
+h1 {
+  font-size: 1.75rem;
+  margin-bottom: var(--sp-5);
+  color: var(--accent);
+}
+
+h2 {
+  font-size: 1.375rem;
+  margin-top: var(--sp-7);
+  margin-bottom: var(--sp-4);
+}
+
+h3 {
+  font-size: 1.125rem;
+  margin-top: var(--sp-6);
+  margin-bottom: var(--sp-3);
+}
 
 p { margin-bottom: var(--sp-4); }
 
@@ -138,12 +178,12 @@ code, pre, tt {
 }
 
 code, tt {
-  background: #0d1a0d;
-  border: 1px solid #1a2a1a;
-  border-radius: 4px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
   padding: 2px 6px;
-  font-size: 0.875em;
-  color: #4ade80;
+  font-size: 0.9em;
+  color: var(--accent);
 }
 
 pre {
@@ -153,17 +193,18 @@ pre {
   padding: var(--sp-4);
   overflow-x: auto;
   font-size: var(--font-size-sm);
+  color: var(--accent);
 }
 
 pre code {
   background: none;
   border: none;
   padding: 0;
-  color: var(--text-secondary);
+  color: inherit;
 }
 
 /* =============================================================================
-   GITHUB RIBBON - Style it properly
+   GITHUB RIBBON
    ============================================================================= */
 
 .github-fork-ribbon {
@@ -171,11 +212,11 @@ pre code {
 }
 
 .github-fork-ribbon::before {
-  background-color: var(--accent) !important;
+  background-color: var(--accent-dim) !important;
 }
 
 /* =============================================================================
-   NAVBAR - DESKTOP (>1200px)
+   NAVBAR - DESKTOP
    ============================================================================= */
 
 #topbar,
@@ -189,6 +230,22 @@ header#topbar {
   min-height: var(--navbar-height) !important;
   background: var(--bg-void) !important;
   border-bottom: 1px solid var(--border-subtle) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Kill all Bootstrap navbar shadows */
+.navbar,
+.navbar-inner,
+.navbar-fixed-top,
+.nav,
+.nav > li,
+.nav > li > a,
+.dropdown-menu,
+#topbar *,
+#topbar *::before,
+#topbar *::after {
+  text-shadow: none !important;
 }
 
 #topbar .navbar-inner {
@@ -230,12 +287,14 @@ header#topbar {
   align-items: center !important;
   gap: var(--sp-2) !important;
   color: var(--text-primary) !important;
+  font-family: var(--font-display) !important;
   font-weight: 600 !important;
   font-size: var(--font-size-lg) !important;
   padding: 0 !important;
   margin-right: var(--sp-6) !important;
   flex-shrink: 0 !important;
   height: 100% !important;
+  transition: color var(--transition), text-shadow var(--transition) !important;
 }
 
 #topbar .brand img {
@@ -245,11 +304,10 @@ header#topbar {
 }
 
 #topbar .brand:hover {
-  color: var(--text-primary) !important;
-  opacity: 0.9;
+  color: var(--accent) !important;
+  text-shadow: 0 0 20px var(--accent-glow) !important;
 }
 
-/* Hide ::after text on desktop - brand shows via topBarIcon */
 #topbar .brand::after {
   display: none !important;
 }
@@ -278,8 +336,11 @@ header#topbar {
   height: 36px !important;
   padding: 0 var(--sp-3) !important;
   color: var(--text-secondary) !important;
+  font-family: var(--font-mono) !important;
   font-size: var(--font-size-sm) !important;
   font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
   border-radius: var(--radius) !important;
   transition: all var(--transition) !important;
   white-space: nowrap !important;
@@ -287,8 +348,9 @@ header#topbar {
 
 #topbar ul.nav > li > a:hover,
 #topbar ul.nav > li.open > a {
-  color: var(--text-primary) !important;
-  background: var(--bg-overlay) !important;
+  color: var(--accent) !important;
+  background: var(--accent-subtle) !important;
+  text-shadow: 0 0 10px var(--accent-glow) !important;
 }
 
 /* Caret */
@@ -313,7 +375,6 @@ header#topbar {
   z-index: 1001 !important;
 }
 
-/* Invisible bridge to prevent hover gap */
 #topbar .dropdown-menu::before {
   content: "" !important;
   position: absolute !important;
@@ -327,14 +388,15 @@ header#topbar {
   display: block !important;
   padding: var(--sp-2) var(--sp-3) !important;
   color: var(--text-secondary) !important;
+  font-family: var(--font-mono) !important;
   font-size: var(--font-size-sm) !important;
   border-radius: var(--radius) !important;
   transition: all var(--transition) !important;
 }
 
 #topbar .dropdown-menu > li > a:hover {
-  background: var(--bg-overlay) !important;
-  color: var(--text-primary) !important;
+  background: var(--accent-subtle) !important;
+  color: var(--accent) !important;
 }
 
 /* Submenu */
@@ -345,7 +407,6 @@ header#topbar {
   margin-left: 0 !important;
 }
 
-/* Invisible bridge for submenus (horizontal gap) */
 #topbar .dropdown-submenu > .dropdown-menu::before {
   content: "" !important;
   position: absolute !important;
@@ -355,7 +416,7 @@ header#topbar {
   height: 100% !important;
 }
 
-/* Twitter button container - hide on mobile, show on desktop */
+/* Twitter button container */
 #topbar .nav-collapse .nav.pull-right {
   margin-left: auto !important;
   border: none !important;
@@ -382,7 +443,6 @@ body.topBarEnabled {
    MAIN LAYOUT
    ============================================================================= */
 
-/* Reset Bootstrap container padding to let children control spacing */
 .container,
 .container-top {
   padding-left: 0 !important;
@@ -404,7 +464,7 @@ body.topBarEnabled {
 }
 
 /* =============================================================================
-   SIDEBAR - Hidden by default, shown >1400px
+   SIDEBAR
    ============================================================================= */
 
 #leftColumn {
@@ -423,7 +483,6 @@ body.topBarEnabled {
   }
 }
 
-/* Sidebar styling */
 #leftColumn .well,
 #leftColumn .sidebar-nav {
   background: transparent !important;
@@ -436,10 +495,11 @@ body.topBarEnabled {
 
 #leftColumn .nav-header {
   color: var(--text-muted) !important;
-  font-size: 11px !important;
+  font-family: var(--font-mono) !important;
+  font-size: var(--font-size-xs) !important;
   font-weight: 600 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
+  letter-spacing: 0.08em !important;
   padding: var(--sp-5) 0 var(--sp-2) 0 !important;
   margin: 0 !important;
 }
@@ -452,6 +512,7 @@ body.topBarEnabled {
   display: block !important;
   padding: var(--sp-2) var(--sp-3) !important;
   color: var(--text-secondary) !important;
+  font-family: var(--font-mono) !important;
   font-size: var(--font-size-sm) !important;
   border-radius: var(--radius) !important;
   border-left: 2px solid transparent !important;
@@ -465,8 +526,8 @@ body.topBarEnabled {
 }
 
 #leftColumn .nav-list > li.active > a {
-  background: var(--accent-dim) !important;
-  color: var(--text-primary) !important;
+  background: var(--accent-subtle) !important;
+  color: var(--accent) !important;
   border-left-color: var(--accent) !important;
 }
 
@@ -508,10 +569,11 @@ th, td {
 
 th {
   color: var(--text-primary) !important;
+  font-family: var(--font-mono) !important;
   font-weight: 600 !important;
-  font-size: 11px !important;
+  font-size: var(--font-size-xs) !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
+  letter-spacing: 0.05em !important;
   background: var(--bg-raised) !important;
 }
 
@@ -551,13 +613,12 @@ footer .row p {
   margin: 0 !important;
 }
 
-/* Hide the "Built by Maven" badge */
 footer #poweredBy {
   display: none !important;
 }
 
 /* =============================================================================
-   RESPONSIVE: <=992px (Collapsed Navigation)
+   RESPONSIVE: <=992px
    ============================================================================= */
 
 @media (max-width: 992px) {
@@ -565,7 +626,6 @@ footer #poweredBy {
     --page-gutter: 24px;
   }
 
-  /* Navbar container - logo left, title center, hamburger right */
   #topbar .navbar-inner > .container {
     display: flex !important;
     justify-content: space-between !important;
@@ -574,7 +634,6 @@ footer #poweredBy {
     padding: 0 var(--page-gutter) !important;
   }
 
-  /* Nav-collapse wrapper - NO transform to allow fixed positioning in children */
   #topbar .nav-collapse {
     position: static !important;
     transform: none !important;
@@ -585,7 +644,6 @@ footer #poweredBy {
     height: var(--navbar-height) !important;
   }
 
-  /* Brand/Logo - visible on left */
   #topbar .brand {
     display: flex !important;
     align-items: center !important;
@@ -599,18 +657,17 @@ footer #poweredBy {
     display: block !important;
   }
 
-  /* Hide the brand text on mobile */
   #topbar .brand span,
   #topbar .brand > *:not(img) {
     display: none !important;
   }
 
-  /* Mobile title - centered, injected by JS */
   #mobile-nav-title {
     position: absolute !important;
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
+    font-family: var(--font-display) !important;
     font-size: var(--font-size-base) !important;
     font-weight: 600 !important;
     color: var(--text-primary) !important;
@@ -618,7 +675,6 @@ footer #poweredBy {
     white-space: nowrap !important;
   }
 
-  /* ========== HAMBURGER BUTTON ========== */
   #topbar .btn-navbar {
     display: flex !important;
     flex-direction: column !important;
@@ -638,7 +694,7 @@ footer #poweredBy {
 
   #topbar .btn-navbar:hover {
     background: var(--bg-overlay) !important;
-    border-color: var(--border-default) !important;
+    border-color: var(--accent-dim) !important;
   }
 
   #topbar .btn-navbar .icon-bar {
@@ -651,14 +707,11 @@ footer #poweredBy {
     transition: all 0.2s ease !important;
   }
 
-  /* ========== COLLAPSED NAV MENU ========== */
-  /* Hide nav by default */
   #topbar ul.nav,
   #topbar .nav-collapse ul.nav {
     display: none !important;
   }
 
-  /* Show nav when JS adds .open class - higher specificity to override hiding rule */
   #topbar .nav-collapse ul.nav.open,
   #topbar nav.nav-collapse ul.nav.open {
     display: flex !important;
@@ -678,11 +731,10 @@ footer #poweredBy {
     z-index: 999 !important;
     max-height: calc(100vh - var(--navbar-height)) !important;
     overflow-y: auto !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
     gap: 0 !important;
   }
 
-  /* Nav items - full width, stacked with large touch targets */
   #topbar .nav-collapse ul.nav.open > li {
     width: 100% !important;
     height: auto !important;
@@ -700,7 +752,7 @@ footer #poweredBy {
     color: var(--text-secondary) !important;
     border-radius: 0 !important;
     border-bottom: 1px solid var(--border-subtle) !important;
-    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2) !important;
+    -webkit-tap-highlight-color: var(--accent-subtle) !important;
   }
 
   #topbar .nav-collapse ul.nav.open > li:last-child > a {
@@ -710,10 +762,9 @@ footer #poweredBy {
   #topbar .nav-collapse ul.nav.open > li > a:hover,
   #topbar .nav-collapse ul.nav.open > li > a:active {
     background: var(--bg-overlay) !important;
-    color: var(--text-primary) !important;
+    color: var(--accent) !important;
   }
 
-  /* Dropdown menus - expand inline when nav is open */
   #topbar .nav-collapse ul.nav.open .dropdown.open .dropdown-menu {
     position: static !important;
     display: block !important;
@@ -738,23 +789,22 @@ footer #poweredBy {
     color: var(--text-muted) !important;
     font-size: var(--font-size-sm) !important;
     border-radius: 0 !important;
-    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2) !important;
+    -webkit-tap-highlight-color: var(--accent-subtle) !important;
   }
 
   #topbar .nav-collapse ul.nav.open .dropdown-menu > li > a:hover,
   #topbar .nav-collapse ul.nav.open .dropdown-menu > li > a:active {
     background: var(--bg-overlay) !important;
-    color: var(--text-primary) !important;
+    color: var(--accent) !important;
   }
 
-  /* Hide Twitter widget on smaller screens */
   #topbar .nav.pull-right {
     display: none !important;
   }
 }
 
 /* =============================================================================
-   RESPONSIVE: <=768px (Phone)
+   RESPONSIVE: <=768px
    ============================================================================= */
 
 @media (max-width: 768px) {
@@ -767,7 +817,6 @@ footer #poweredBy {
   h2 { font-size: 1.25rem; }
   h3 { font-size: 1.1rem; }
 
-  /* Navbar adjustments for phone - comfortable edge padding */
   #topbar .navbar-inner > .container {
     padding: 0 20px !important;
   }
@@ -801,7 +850,6 @@ footer #poweredBy {
     padding: var(--sp-2) var(--sp-3);
   }
 
-  /* Ensure GitHub ribbon doesn't overlap */
   .github-fork-ribbon {
     display: none !important;
   }
@@ -817,16 +865,35 @@ footer #poweredBy {
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--bg-base);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-overlay);
+  background: var(--bg-surface);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333;
+  background: var(--bg-hover);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-surface) var(--bg-base);
+}
+
+/* =============================================================================
+   SELECTION
+   ============================================================================= */
+
+::selection {
+  background: var(--accent-glow);
+  color: var(--text-primary);
+}
+
+::-moz-selection {
+  background: var(--accent-glow);
+  color: var(--text-primary);
 }
 
 /* =============================================================================

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examples - Terminal Javadocs</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #050508;
+      font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+    }
+
+    .terminal-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      padding: 0 24px;
+      background: linear-gradient(180deg, #12121a 0%, #0d0d14 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .terminal-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(57, 255, 20, 0.4) 20%,
+        #00cc33 50%,
+        rgba(57, 255, 20, 0.4) 80%,
+        transparent 100%
+      );
+      opacity: 0.5;
+    }
+
+    .terminal-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #00ff41;
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    }
+
+    .terminal-brand img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .terminal-brand:hover {
+      color: #39ff14;
+      text-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+    }
+
+    .terminal-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .terminal-badge {
+      padding: 4px 12px;
+      background: rgba(0, 255, 65, 0.1);
+      border: 1px solid rgba(0, 255, 65, 0.3);
+      border-radius: 4px;
+      color: #00ff41;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .terminal-back {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      color: #888899;
+      font-size: 13px;
+      text-decoration: none;
+      transition: all 150ms ease;
+    }
+
+    .terminal-back:hover {
+      background: rgba(0, 255, 65, 0.1);
+      border-color: rgba(0, 255, 65, 0.3);
+      color: #00ff41;
+    }
+
+    .xref-frame {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: none;
+      width: 100%;
+      height: calc(100vh - 56px);
+      background: #0a0a0f;
+    }
+
+    @media (max-width: 768px) {
+      .terminal-header {
+        height: 48px;
+        padding: 0 16px;
+      }
+
+      .terminal-brand {
+        font-size: 14px;
+      }
+
+      .terminal-brand img {
+        width: 20px;
+        height: 20px;
+      }
+
+      .terminal-badge {
+        display: none;
+      }
+
+      .terminal-back {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .xref-frame {
+        top: 48px;
+        height: calc(100vh - 48px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="terminal-header">
+    <a href="../index.html" class="terminal-brand">
+      <img src="../images/favicon.svg" alt="Terminal Javadocs" />
+      <span>Terminal Javadocs</span>
+    </a>
+    <nav class="terminal-nav">
+      <span class="terminal-badge">Source XRef</span>
+      <a href="../index.html" class="terminal-back">&larr; Back to Docs</a>
+    </nav>
+  </header>
+
+  <iframe id="xref-frame" src="../xref/index.html" class="xref-frame" title="Source Code Cross-Reference"></iframe>
+
+  <script>
+    (function() {
+      // Get the 'path' query parameter to load a specific file
+      // Usage: examples/index.html?path=com/guinetik/examples/HelloTerminal.html
+      var params = new URLSearchParams(window.location.search);
+      var path = params.get('path');
+
+      if (path) {
+        // Sanitize: only allow paths within xref directory
+        // Remove any leading slashes or dots
+        path = path.replace(/^[\.\/]+/, '');
+
+        // Set the iframe source to the specified path
+        var frame = document.getElementById('xref-frame');
+        frame.src = '../xref/' + path;
+
+        // Update page title based on filename
+        var filename = path.split('/').pop().replace('.html', '');
+        document.title = filename + ' - Terminal Javadocs Examples';
+      }
+    })();
+  </script>
+</body>
+</html>

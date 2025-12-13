@@ -80,6 +80,11 @@
             <item name="Customization" href="customization.html"/>
         </menu>
 
+        <menu name="Examples">
+            <item name="Browse All" href="examples/index.html"/>
+            <item name="HelloTerminal" href="examples/index.html?path=com/guinetik/examples/HelloTerminal.html"/>
+        </menu>
+
         <menu name="Project Information" ref="reports"/>
 
         <menu name="Links">

@@ -16,6 +16,8 @@
     <name>Terminal Javadocs Resources</name>
     <description>Shared resources for Terminal Javadocs theme</description>
 
+    <inceptionYear>2025</inceptionYear>
+
     <profiles>
         <profile>
             <id>release</id>
