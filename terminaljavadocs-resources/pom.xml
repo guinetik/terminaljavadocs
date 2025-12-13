@@ -18,6 +18,45 @@
 
     <inceptionYear>2025</inceptionYear>
 
+    <!-- Disable inherited dependency-plugin executions that try to unpack this module's own artifact -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-site-resources</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>unpack-javadoc-css</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>unpack-jxr-css</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Also disable the resources copy that depends on unpacked files -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-terminaljavadocs-site-resources</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>copy-jxr-stylesheet</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>release</id>
