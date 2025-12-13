@@ -71,7 +71,7 @@
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-fluido-skin.version>2.0.0-M8</maven-fluido-skin.version>
         <maven-jxr-plugin.version>3.3.2</maven-jxr-plugin.version>
-        <terminaljavadocs.version>1.0.4-SNAPSHOT</terminaljavadocs.version>
+        <terminaljavadocs.version>1.0.4</terminaljavadocs.version>
 
         <!--
             Project-specific properties - override these in your project's pom.xml:
