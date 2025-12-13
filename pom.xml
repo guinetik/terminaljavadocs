@@ -84,7 +84,7 @@
             </properties>
         -->
         <terminaljavadocs.project.name>${project.name}</terminaljavadocs.project.name>
-        <terminaljavadocs.project.logo>https://guinetik.github.io/corefun/images/logo.svg</terminaljavadocs.project.logo>
+        <terminaljavadocs.project.logo>https://terminaljavadocs.guinetik.com/images/favicon.svg</terminaljavadocs.project.logo>
         <terminaljavadocs.github.user>guinetik</terminaljavadocs.github.user>
         <terminaljavadocs.github.repo>https://github.com/guinetik/terminaljavadocs</terminaljavadocs.github.repo>
     </properties>
