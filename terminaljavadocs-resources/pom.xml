@@ -39,7 +39,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Also disable the resources copy that depends on unpacked files -->
+            <!-- Disable inherited copy that depends on unpacked files -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -51,6 +51,23 @@
                     <execution>
                         <id>copy-jxr-stylesheet</id>
                         <phase>none</phase>
+                    </execution>
+                    <!-- Copy CSS directly from our own src/main/resources (no unpack needed) -->
+                    <execution>
+                        <id>copy-own-site-resources</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/site</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src/main/resources/site-resources</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
