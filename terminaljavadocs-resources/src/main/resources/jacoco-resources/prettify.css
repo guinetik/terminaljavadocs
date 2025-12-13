@@ -1,14 +1,84 @@
-/* Pretty printing styles - Terminal Dark Theme */
-/* Used with prettify.js for source code highlighting */
+/*
+ * TerminalJavadocs — Prettify Syntax Highlighting
+ *
+ * Design: Vercel meets Terminal
+ * Neon green phosphor theme for source code
+ */
 
-.str { color: #00ffcc; }           /* Strings - cyan */
-.kwd { color: #00ff44; font-weight: 600; }  /* Keywords - bright green */
-.com { color: #3d5a3d; font-style: italic; }  /* Comments - dim green */
-.typ { color: #88ff00; }           /* Types - lime */
-.lit { color: #ffcc00; }           /* Literals - gold */
-.pun { color: #00cc00; }           /* Punctuation - green */
-.pln { color: #a0a0a0; }           /* Plain text - gray */
-.tag { color: #00ff66; }           /* Tags - green */
-.atn { color: #88ff44; }           /* Attribute names - lime */
-.atv { color: #00ffcc; }           /* Attribute values - cyan */
-.dec { color: #ffaa00; }           /* Declarations - orange */
+/* Keywords - bright neon green (the star of the show) */
+.kwd {
+  color: #39ff14;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+}
+
+/* Strings - amber/gold for contrast */
+.str {
+  color: #ffb800;
+}
+
+/* Comments - dim muted green */
+.com {
+  color: #4a6a4a;
+  font-style: italic;
+}
+
+/* Types/Classes - lime green */
+.typ {
+  color: #7fff00;
+}
+
+/* Literals (numbers, booleans) - cyan accent */
+.lit {
+  color: #00e5ff;
+}
+
+/* Punctuation - subtle green */
+.pun {
+  color: #00cc66;
+}
+
+/* Plain text - secondary gray */
+.pln {
+  color: #a1a1a1;
+}
+
+/* Tags (XML/HTML) - bright green */
+.tag {
+  color: #39ff14;
+}
+
+/* Attribute names - lime */
+.atn {
+  color: #7fff00;
+}
+
+/* Attribute values - amber */
+.atv {
+  color: #ffb800;
+}
+
+/* Declarations - orange accent */
+.dec {
+  color: #ff8c00;
+}
+
+/* Variables */
+.var {
+  color: #a1a1a1;
+}
+
+/* Functions */
+.fun {
+  color: #7fff00;
+}
+
+/* Preprocessor/annotations */
+.ppc {
+  color: #888888;
+}
+
+/* Regex */
+.regex {
+  color: #ffb800;
+}
