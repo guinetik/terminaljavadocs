@@ -203,6 +203,15 @@ pre code {
   color: inherit;
 }
 
+/* Override Prism.js default white backgrounds on tokens */
+.token,
+code .token,
+pre .token,
+code[class*="language-"],
+pre[class*="language-"] {
+  background: transparent !important;
+}
+
 /* =============================================================================
    GITHUB RIBBON
    ============================================================================= */
@@ -310,6 +319,16 @@ header#topbar {
 
 #topbar .brand::after {
   display: none !important;
+}
+
+/* Project title in brand - visible on desktop */
+#topbar .brand .project-title {
+  display: block !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-display) !important;
+  font-size: var(--font-size-lg) !important;
+  font-weight: 600 !important;
+  margin-left: var(--sp-3) !important;
 }
 
 /* Desktop navigation */
@@ -657,22 +676,9 @@ footer #poweredBy {
     display: block !important;
   }
 
-  #topbar .brand span,
-  #topbar .brand > *:not(img) {
+  /* Hide project title on mobile */
+  #topbar .brand .project-title {
     display: none !important;
-  }
-
-  #mobile-nav-title {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    font-family: var(--font-display) !important;
-    font-size: var(--font-size-base) !important;
-    font-weight: 600 !important;
-    color: var(--text-primary) !important;
-    pointer-events: none !important;
-    white-space: nowrap !important;
   }
 
   #topbar .btn-navbar {

@@ -13,15 +13,17 @@
 
     if (!hamburger || !nav) return;
 
-    // Inject mobile title from brand alt text
-    if (container) {
-      var brand = document.querySelector('#topbar .brand img');
-      var titleText = brand && brand.alt ? brand.alt : document.title.split('–')[0].trim();
+    // Inject project title into brand element (visible on desktop, hidden on mobile)
+    var brandLink = document.querySelector('#topbar .brand');
+    var brandImg = document.querySelector('#topbar .brand img');
+    if (brandLink && brandImg) {
+      var titleText = brandImg.alt || document.title.split('–')[0].trim();
 
-      var mobileTitle = document.createElement('span');
-      mobileTitle.id = 'mobile-nav-title';
-      mobileTitle.textContent = titleText;
-      container.appendChild(mobileTitle);
+      var projectTitle = document.createElement('span');
+      projectTitle.id = 'project-title';
+      projectTitle.textContent = titleText;
+      projectTitle.className = 'project-title';
+      brandLink.appendChild(projectTitle);
     }
 
     var isOpen = false;
