@@ -4,7 +4,7 @@
   "description": "CSS Zen Garden design system for TerminalJavadocs",
   "type": "module",
   "scripts": {
-    "build": "node build.js && cp dist/terminaljavadocs.min.css dist/terminaljavadocs.min.js ../target/staging/",
+    "build": "node build.js",
     "watch": "node build.js --watch",
     "dev": "python3 -m http.server 8800 --directory ../target/staging"
   },

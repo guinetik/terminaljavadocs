@@ -1,0 +1,7 @@
+/**
+ * TerminalJavadocs - JaCoCo Entry Point
+ * For JaCoCo coverage report pages
+ */
+
+@import './_core.css';
+@import './pages/coverage.css';

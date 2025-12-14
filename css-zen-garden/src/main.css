@@ -1,30 +1,12 @@
 /**
  * TerminalJavadocs Design System
- * Entry point - imports all partials
+ * Full bundle - includes everything
  */
 
-/* Tokens */
-@import './tokens/colors.css';
-@import './tokens/typography.css';
-@import './tokens/spacing.css';
+@import './_core.css';
 
-/* Base */
-@import './base/reset.css';
-@import './base/elements.css';
-
-/* Components */
-@import './components/navbar.css';
-@import './components/sidebar.css';
-@import './components/tables.css';
-@import './components/code.css';
-
-/* Pages */
-@import './pages/site.css';
+/* All page-specific styles */
 @import './pages/coverage.css';
 @import './pages/landing.css';
 @import './pages/javadoc.css';
 @import './pages/xref.css';
-
-/* Utilities */
-@import './utilities/effects.css';
-@import './utilities/print.css';

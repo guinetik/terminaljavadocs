@@ -17,26 +17,50 @@ npm run dev      # Serves staging on localhost:8800
 
 ## Injection
 
-Add to your browser console or inject via site customization:
+Use the injection utility to load the appropriate CSS bundle for your page type:
 
 ```javascript
-// CSS
-const css = document.createElement('link');
-css.rel = 'stylesheet';
-css.href = 'terminaljavadocs.min.css';
-document.head.appendChild(css);
-
-// JS (Prism syntax highlighting + mobile nav)
+// One-liner injection
 const js = document.createElement('script');
-js.src = 'terminaljavadocs.min.js';
+js.src = '/inject.min.js';
+js.onload = () => injectJavadocs();  // or injectPage(), injectJacoco(), etc.
 document.body.appendChild(js);
+```
+
+### Available Injection Functions
+
+| Function | CSS Bundle | Use For |
+|----------|------------|---------|
+| `injectPage()` | terminaljavadocs-page.min.css | Doxia markdown pages |
+| `injectLandings()` | terminaljavadocs-landings.min.css | Custom landing pages |
+| `injectJavadocs()` | terminaljavadocs-javadocs.min.css | Javadoc API documentation |
+| `injectJacoco()` | terminaljavadocs-jacoco.min.css | JaCoCo coverage reports |
+| `injectJxr()` | terminaljavadocs-jxr.min.css | JXR source cross-reference |
+| `injectAll()` | terminaljavadocs.min.css | Full bundle (all pages) |
+
+All functions inject the page-specific CSS plus the shared `terminaljavadocs.min.js`.
+
+### Namespaced API
+
+Functions are also available on `window.TerminalJavadocs`:
+
+```javascript
+TerminalJavadocs.injectJavadocs();
+TerminalJavadocs.basePath;      // Auto-detected base path
+TerminalJavadocs.entryPoints;   // Map of entry point names to CSS files
 ```
 
 ## Architecture
 
 ```
 src/
-├── main.css              # Entry point - imports everything
+├── _core.css             # Shared foundation (imported by all entry points)
+├── main.css              # Full bundle entry point
+├── page.css              # Doxia pages entry point
+├── landings.css          # Landing pages entry point
+├── javadocs.css          # Javadoc entry point
+├── jacoco.css            # JaCoCo entry point
+├── jxr.css               # JXR entry point
 ├── tokens/               # Design tokens (CSS custom properties)
 │   ├── colors.css        # Palette: phosphor green, pure blacks
 │   ├── typography.css    # Fonts: Fira Code, Space Grotesk
@@ -50,15 +74,33 @@ src/
 │   ├── tables.css        # Data tables
 │   └── code.css          # Code blocks + Prism terminal theme
 ├── pages/                # Page-specific overrides
-│   ├── site.css          # Main site pages
-│   └── coverage.css      # JaCoCo coverage reports
+│   ├── site.css          # Core Doxia/Maven site layout (shared)
+│   ├── landing.css       # Custom landing pages
+│   ├── javadoc.css       # Javadoc API documentation
+│   ├── coverage.css      # JaCoCo coverage reports
+│   └── xref.css          # JXR source cross-reference
 ├── utilities/            # Utility classes
 │   ├── effects.css       # Glow, scanlines, animations
 │   └── print.css         # Print styles
 └── js/                   # JavaScript
+    ├── inject.js         # Injection utility (built separately)
     ├── main.js           # Prism.js loader + syntax highlighting
-    └── mobile-nav.js     # Hamburger menu + project title injection
+    ├── mobile-nav.js     # Hamburger menu + project title injection
+    └── terminaljavadocs.js
 ```
+
+### Entry Point Composition
+
+Each entry point imports `_core.css` (tokens + base + components + site.css + utilities) plus its specific page styles:
+
+| Entry Point | Includes |
+|-------------|----------|
+| `page.css` | _core.css |
+| `landings.css` | _core.css + landing.css |
+| `javadocs.css` | _core.css + javadoc.css |
+| `jacoco.css` | _core.css + coverage.css |
+| `jxr.css` | _core.css + javadoc.css + xref.css |
+| `main.css` | _core.css + all page-specific CSS |
 
 ## Build System
 
@@ -66,11 +108,21 @@ src/
 - **cssnano** for CSS minification
 - **Terser** for JS minification
 
-Outputs:
-- `dist/terminaljavadocs.css` - Expanded CSS
-- `dist/terminaljavadocs.min.css` - Minified CSS
-- `dist/terminaljavadocs.js` - Expanded JS
-- `dist/terminaljavadocs.min.js` - Minified JS
+### Build Outputs
+
+```
+dist/ (also copied to ../target/staging/)
+├── terminaljavadocs.css          # Full bundle (expanded)
+├── terminaljavadocs.min.css      # Full bundle (minified)
+├── terminaljavadocs-page.min.css
+├── terminaljavadocs-landings.min.css
+├── terminaljavadocs-javadocs.min.css
+├── terminaljavadocs-jacoco.min.css
+├── terminaljavadocs-jxr.min.css
+├── terminaljavadocs.js           # Main JS (expanded)
+├── terminaljavadocs.min.js       # Main JS (minified)
+└── inject.min.js                 # Injection utility
+```
 
 ## Design Tokens
 
@@ -100,6 +152,11 @@ Outputs:
 
 ## JavaScript Features
 
+### Injection Utility
+- Auto-detects base path from script location
+- Prevents duplicate injection
+- Supports switching between page types
+
 ### Prism Syntax Highlighting
 - Loads Prism.js core + language grammars from CDN
 - Auto-detects language from code content (Java, XML, Bash, JSON)
@@ -122,7 +179,7 @@ Outputs:
 - Javadoc API documentation
 - JaCoCo coverage reports
 - JXR source cross-reference
-- Test documentation
+- Custom landing pages
 
 ## Reference
 
