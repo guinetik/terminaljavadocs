@@ -23,6 +23,7 @@
 @import './pages/coverage.css';
 @import './pages/landing.css';
 @import './pages/javadoc.css';
+@import './pages/xref.css';
 
 /* Utilities */
 @import './utilities/effects.css';
