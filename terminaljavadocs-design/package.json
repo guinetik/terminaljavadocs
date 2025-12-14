@@ -1,0 +1,18 @@
+{
+  "name": "terminaljavadocs-design-system",
+  "version": "1.0.0",
+  "description": "CSS Zen Garden design system for TerminalJavadocs",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch",
+    "dev": "python3 -m http.server 8800 --directory ../target/staging"
+  },
+  "devDependencies": {
+    "cssnano": "^6.0.0",
+    "postcss": "^8.4.31",
+    "postcss-import": "^15.1.0",
+    "postcss-nested": "^6.0.1",
+    "terser": "^5.27.0"
+  }
+}

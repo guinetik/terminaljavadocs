@@ -1,0 +1,261 @@
+/**
+ * Code Blocks + Prism Terminal Theme
+ */
+
+/* Base code styling */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #00ff00 !important;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.6;
+  tab-size: 4;
+  hyphens: none;
+  text-shadow: none !important;
+}
+
+/* Code blocks */
+pre[class*="language-"],
+pre:has(> code[class*="language-"]),
+pre {
+  position: relative;
+  padding: 2.5em 1.25em 1.25em 1.25em;
+  margin: 1.5em 0;
+  overflow: auto;
+  border-radius: var(--radius-lg);
+  background: var(--bg-base) !important;
+  border: 1px solid var(--border-default);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Terminal window header - three dots */
+pre[class*="language-"]::before,
+pre:has(> code[class*="language-"])::before {
+  content: '● ● ●';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 6px 12px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: #3d5a3d;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* Inline code with language class */
+:not(pre) > code[class*="language-"] {
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-sm);
+  background: var(--bg-raised) !important;
+  border: 1px solid var(--border-default);
+  color: #4ade80;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRISM TOKEN COLORS - Terminal Palette
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Comments - dim green */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #3d5a3d !important;
+  font-style: italic;
+  background: none !important;
+}
+
+/* Punctuation */
+.token.punctuation {
+  color: #00cc00 !important;
+  background: none !important;
+}
+
+/* Namespace */
+.token.namespace {
+  opacity: 0.8;
+}
+
+/* Strings - bright cyan/teal */
+.token.string,
+.token.attr-value {
+  color: #00ffcc !important;
+  background: none !important;
+}
+
+/* Properties, tags, symbols - yellow */
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #ffcc00 !important;
+  background: none !important;
+}
+
+/* Selectors, chars, inserted */
+.token.selector,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #00ff88 !important;
+  background: none !important;
+}
+
+/* Operators, entities, URLs */
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #00ffaa !important;
+  background: none !important;
+}
+
+/* At-rules, attributes, functions */
+.token.atrule,
+.token.attr-name,
+.token.function,
+.token.class-name {
+  color: #88ff00 !important;
+  background: none !important;
+}
+
+/* Keywords - bright green */
+.token.keyword {
+  color: #00ff44 !important;
+  font-weight: 600;
+  background: none !important;
+}
+
+/* Regex, important, variable */
+.token.regex,
+.token.important,
+.token.variable {
+  color: #ff8800 !important;
+  background: none !important;
+}
+
+/* Important, bold */
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+/* Italic */
+.token.italic {
+  font-style: italic;
+}
+
+/* Entity */
+.token.entity {
+  cursor: help;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LANGUAGE-SPECIFIC OVERRIDES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Java */
+.language-java .token.keyword {
+  color: #00ff44 !important;
+  background: none !important;
+}
+
+.language-java .token.class-name {
+  color: #88ff00 !important;
+  background: none !important;
+}
+
+.language-java .token.function {
+  color: #44ff88 !important;
+  background: none !important;
+}
+
+.language-java .token.annotation {
+  color: #ffaa00 !important;
+  background: none !important;
+}
+
+/* XML */
+.language-xml .token.tag {
+  color: #00ff66 !important;
+  background: none !important;
+}
+
+.language-xml .token.attr-name {
+  color: #88ff44 !important;
+  background: none !important;
+}
+
+.language-xml .token.attr-value {
+  color: #00ffcc !important;
+  background: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SELECTION & SCROLLBAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+pre[class*="language-"]::selection,
+pre[class*="language-"] ::selection,
+code[class*="language-"]::selection,
+code[class*="language-"] ::selection {
+  background: #0a3a0a;
+  text-shadow: none;
+}
+
+pre[class*="language-"]::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+pre[class*="language-"]::-webkit-scrollbar-thumb {
+  background: #1a3a1a;
+  border-radius: 4px;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-thumb:hover {
+  background: #2a4a2a;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BACKGROUND OVERRIDES - Kill any white from Prism CDN
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.token,
+pre .token,
+pre code,
+pre[class*="language-"],
+pre[class*="language-"] code {
+  background: transparent !important;
+  text-shadow: none !important;
+}
+
+/* Inline code in text */
+:not(pre) > code,
+p code,
+li code,
+td code,
+a code {
+  background: var(--bg-raised) !important;
+  border: 1px solid var(--border-default) !important;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+}

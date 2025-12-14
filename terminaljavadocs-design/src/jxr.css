@@ -1,0 +1,10 @@
+/**
+ * TerminalJavadocs - JXR Entry Point
+ * For JXR cross-reference source browser pages
+ *
+ * Note: Includes javadoc.css for nav/typography, then JXR-specific overrides
+ */
+
+@import './_core.css';
+@import './pages/javadoc.css';
+@import './pages/xref.css';
