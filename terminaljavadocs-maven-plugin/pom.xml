@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -14,7 +16,20 @@
     <packaging>maven-plugin</packaging>
 
     <name>Terminal Javadocs Maven Plugin</name>
-    <description>Maven plugin to generate dynamic landing pages for coverage and xref reports</description>
+    <description
+    >Maven plugin to generate dynamic landing pages for coverage and xref reports</description>
+
+    <properties>
+        <!-- Terminal Specific Propeties -->
+        <terminaljavadocs.version>1.0.43-SNAPSHOT</terminaljavadocs.version>
+        <terminaljavadocs.project.name
+        >Terminal Java Docs</terminaljavadocs.project.name>
+        <terminaljavadocs.github.user>guinetik</terminaljavadocs.github.user>
+        <terminaljavadocs.github.repo
+        >terminaljavadocs</terminaljavadocs.github.repo>
+        <terminaljavadocs.project.logo
+        >https://terminaljavadocs.guinetik.com/images/favicon.svg</terminaljavadocs.project.logo>
+    </properties>
 
     <dependencies>
         <!-- Maven Plugin API -->
