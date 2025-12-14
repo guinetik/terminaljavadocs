@@ -21,18 +21,18 @@ import java.util.Map;
  *
  * <h2>Fibonacci Definition</h2>
  * <p>The Fibonacci sequence is defined as:</p>
- * <pre>{@code
+ * <pre class="language-java"><code>
  * F(0) = 0
  * F(1) = 1
- * F(n) = F(n-1) + F(n-2) for n > 1
- * }</pre>
+ * F(n) = F(n-1) + F(n-2) for n &gt; 1
+ * </code></pre>
  *
  * <h2>Usage Example</h2>
- * <pre>{@code
+ * <pre class="language-java"><code>
  * FibonacciSequence fib = new FibonacciSequence();
  * long number = fib.calculate(10);  // Returns 55
- * List<Long> sequence = fib.generateSequence(5);
- * }</pre>
+ * List&lt;Long&gt; sequence = fib.generateSequence(5);
+ * </code></pre>
  *
  * @author guinetik
  * @version 1.0.0

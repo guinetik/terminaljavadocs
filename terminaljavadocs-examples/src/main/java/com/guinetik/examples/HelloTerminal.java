@@ -33,18 +33,18 @@ import java.util.stream.IntStream;
  * </ul>
  *
  * <h2>Usage Example</h2>
- * <pre>{@code
+ * <pre class="language-java"><code>
  * HelloTerminal terminal = new HelloTerminal("World");
  * terminal.displayGreeting();
  * terminal.runAsyncTask("Process data");
- * }</pre>
+ * </code></pre>
  *
  * @author guinetik
  * @version 1.0.0
  * @since 2024
  * @see java.util.concurrent.CompletableFuture
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class HelloTerminal {
 
     // =========================================================================
@@ -124,7 +124,9 @@ public class HelloTerminal {
         String coloredOutput = ANSI_GREEN + greeting + ANSI_RESET;
 
         System.out.println(coloredOutput);
-        System.out.println("Timestamp: " + formatTimestamp(LocalDateTime.now()));
+        System.out.println(
+            "Timestamp: " + formatTimestamp(LocalDateTime.now())
+        );
 
         updateStatus(Status.ACTIVE);
     }
@@ -147,11 +149,9 @@ public class HelloTerminal {
      * @return the processed message after all handlers have been applied
      */
     public String processMessage(String message) {
-        return handlers.stream()
-            .reduce(
-                Function.identity(),
-                Function::andThen
-            )
+        return handlers
+            .stream()
+            .reduce(Function.identity(), Function::andThen)
             .apply(message);
     }
 
@@ -177,7 +177,6 @@ public class HelloTerminal {
 
                 updateStatus(Status.ACTIVE);
                 return new TaskResult(true, result, null);
-
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 updateStatus(Status.ERROR);
@@ -194,7 +193,6 @@ public class HelloTerminal {
      * @param defaultValue the default value if not found
      * @return an Optional containing the found value or default
      */
-    @SuppressWarnings("unchecked")
     public <T> Optional<T> findValue(String key, T defaultValue) {
         // Demonstrating Optional usage
         return Optional.ofNullable(key)
@@ -258,7 +256,9 @@ public class HelloTerminal {
      * @return formatted timestamp string
      */
     private String formatTimestamp(LocalDateTime timestamp) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+            "yyyy-MM-dd HH:mm:ss"
+        );
         return timestamp.format(formatter);
     }
 
@@ -410,20 +410,27 @@ public class HelloTerminal {
 
         // Run async task
         System.out.println("Running async task...");
-        terminal.runAsyncTask("Example async operation")
+        terminal
+            .runAsyncTask("Example async operation")
             .thenAccept(taskResult -> {
                 if (taskResult.isSuccess()) {
-                    System.out.println("Task result: " + taskResult.getMessage());
-                } else {
-                    taskResult.getError().ifPresent(e ->
-                        System.err.println("Task failed: " + e.getMessage())
+                    System.out.println(
+                        "Task result: " + taskResult.getMessage()
                     );
+                } else {
+                    taskResult
+                        .getError()
+                        .ifPresent(e ->
+                            System.err.println("Task failed: " + e.getMessage())
+                        );
                 }
             })
             .join(); // Wait for completion in this example
 
         System.out.println();
-        System.out.println("Final status: " + terminal.getStatus().getDisplayName());
+        System.out.println(
+            "Final status: " + terminal.getStatus().getDisplayName()
+        );
         System.out.println("Last activity: " + terminal.getLastActivity());
     }
 }
