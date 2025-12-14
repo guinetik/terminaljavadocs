@@ -37,7 +37,8 @@ jobs:
         # Must run install and site in a SINGLE Maven invocation to avoid MDEP-98 reactor issues
         # When split into separate commands, Maven rebuilds the reactor and prefers reactor versions
         # over installed versions, causing "Artifact has not been packaged yet" errors
-        run: mvn clean install site site:stage -DskipTests
+        # -Psite-generation: Activates the profile that generates dynamic landing pages for coverage and xref reports
+        run: mvn clean install site site:stage -DskipTests -Psite-generation
 
       - name: Deploy to GitHub Pages branch
         uses: peaceiris/actions-gh-pages@v4

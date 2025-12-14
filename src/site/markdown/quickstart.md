@@ -223,11 +223,33 @@ public class Example {
 
 ## Step 4: Build Your Site
 
+### Basic Site Generation
+
 ```bash
 mvn clean site
 ```
 
 Open `target/site/index.html` in your browser to see the result.
+
+### Generate Landing Pages (Recommended)
+
+For multi-module projects, Terminal Javadocs automatically generates **dynamic landing pages** that list modules with coverage and source cross-reference reports:
+
+```bash
+mvn clean install site site:stage -Psite-generation
+```
+
+The `-Psite-generation` profile activates the landing page generator, which creates:
+
+- **`coverage.html`** - Lists all modules with JaCoCo coverage reports
+- **`source-xref.html`** - Lists all modules with JXR source cross-reference reports
+
+These pages are placed in `target/staging/` and automatically updated if you add or remove modules with reports.
+
+**Why use `site:stage`?**
+- Creates an aggregated site with all module reports accessible
+- Generates proper relative paths between modules
+- Required for proper multi-module site structure
 
 ## Using Maven Properties
 

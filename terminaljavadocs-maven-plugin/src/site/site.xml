@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/DECORATION/1.8.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 https://maven.apache.org/xsd/decoration-1.8.0.xsd"
-    name="Terminal Javadocs Examples">
+    name="Terminal Javadocs Maven Plugin">
 
     <skin>
         <groupId>org.apache.maven.skins</groupId>
@@ -23,7 +23,7 @@
     <body>
         <breadcrumbs>
             <item name="Terminal Javadocs" href="../../index.html"/>
-            <item name="Examples" href="index.html"/>
+            <item name="Maven Plugin" href="index.html"/>
         </breadcrumbs>
 
         <menu name="Documentation">

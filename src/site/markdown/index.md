@@ -8,6 +8,7 @@ Dark terminal-themed Maven site styling for Java documentation.
 - **Prism.js Syntax Highlighting** - Green-on-black code blocks
 - **Styled Javadoc** - Custom header with navigation back to docs
 - **JaCoCo Theme** - Dark coverage reports with themed progress bars
+- **Dynamic Landing Pages** - Automatically generates `coverage.html` and `source-xref.html` listing only modules with actual reports
 - **Responsive Design** - Works on mobile devices
 - **Maven Fluido Skin** - Built on top of the popular Fluido skin
 - **Zero Config** - Just inherit and go

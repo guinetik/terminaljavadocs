@@ -178,6 +178,97 @@ Instead of manually adding each language, use Prism's autoloader:
 
 The autoloader automatically loads language definitions when needed.
 
+## Dynamic Landing Pages
+
+Terminal Javadocs includes a Maven plugin that automatically generates landing pages for your reports.
+
+### How It Works
+
+The `terminaljavadocs-maven-plugin` scans all modules in your reactor build and:
+
+1. Checks each module for actual generated reports:
+   - JaCoCo coverage: `target/site/jacoco/index.html`
+   - JXR source xref: `target/site/xref/index.html`
+2. Generates landing pages listing only modules with actual reports
+3. Creates proper links from the aggregated site to module reports
+
+### Generated Pages
+
+**`coverage.html`**
+- Lists all modules with JaCoCo coverage reports
+- Shows module names and descriptions
+- Links directly to each module's coverage report
+
+**`source-xref.html`**
+- Lists all modules with JXR source cross-reference
+- Shows module names and descriptions
+- Links directly to each module's source browser
+
+### Using the Landing Pages
+
+#### Local Development
+
+```bash
+mvn clean install site site:stage -Psite-generation
+cd target/staging
+python -m http.server 8000
+```
+
+Then open http://localhost:8000/ and navigate to `/coverage.html` or `/source-xref.html`
+
+#### CI/CD (GitHub Actions)
+
+The workflow automatically includes the profile:
+
+```yaml
+run: mvn clean install site site:stage -DskipTests -Psite-generation
+```
+
+#### Why Only Actual Reports?
+
+The plugin scans for actual generated files instead of relying on configuration. This means:
+
+- ✅ If a module generates coverage reports, it appears in `coverage.html`
+- ✅ If a module has no tests, it won't appear (no empty reports)
+- ✅ If you remove a module, it automatically disappears
+- ✅ No broken links or 404 errors
+
+### Customizing Landing Pages
+
+The landing pages use semantic CSS class names for styling:
+
+```html
+<header class="terminal-header">
+  <a class="terminal-brand">Brand</a>
+  <nav class="terminal-nav">
+    <span class="terminal-badge">Badge</span>
+  </nav>
+</header>
+
+<main class="module-list">
+  <table>
+    <!-- Module rows -->
+  </table>
+</main>
+```
+
+You can override the styling in your custom CSS:
+
+```css
+.terminal-badge {
+    background: var(--terminal-green);
+    color: #000;
+}
+```
+
+### Skipping Landing Page Generation
+
+If you don't want landing pages, simply don't use the `-Psite-generation` profile:
+
+```bash
+mvn clean install site site:stage
+```
+
 ## Deploying to GitHub Pages
 
 To deploy your Maven site to GitHub Pages, you need to configure `site:stage` and a GitHub Actions workflow.
@@ -240,11 +331,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build project
-        run: mvn clean install -DskipTests
-
-      - name: Generate Maven Site
-        run: mvn site site:stage
+      - name: Build project and Generate Maven Site with Landing Pages
+        # -Psite-generation: Activates the profile that generates dynamic landing pages for coverage and xref reports
+        run: mvn clean install site site:stage -DskipTests -Psite-generation
 
       - name: Deploy to GitHub Pages branch
         uses: peaceiris/actions-gh-pages@v4
