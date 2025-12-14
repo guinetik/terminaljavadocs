@@ -227,40 +227,6 @@ table.typeSummary tr.rowColor {
 }
 
 /* =============================================================================
-   STICKY FOOTER - Push to bottom when content is short
-   ============================================================================= */
-
-/* Make body a flex column */
-body {
-    display: flex !important;
-    flex-direction: column !important;
-    min-height: 100vh !important;
-}
-
-/* Footer sticks to bottom */
-#footer {
-    margin-top: auto !important;
-    padding: var(--sp-5) var(--sp-6) !important;
-    border-top: 1px solid var(--border-subtle) !important;
-    color: var(--text-muted) !important;
-    font-family: var(--font-mono) !important;
-    font-size: var(--text-xs) !important;
-    background: var(--bg-base) !important;
-}
-
-#footer a {
-    color: var(--accent-dim) !important;
-    transition:
-        color var(--transition),
-        text-shadow var(--transition) !important;
-}
-
-#footer a:hover {
-    color: var(--accent) !important;
-    text-shadow: 0 0 8px var(--link-glow) !important;
-}
-
-/* =============================================================================
    RESPONSIVE
    ============================================================================= */
 

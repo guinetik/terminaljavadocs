@@ -12,6 +12,33 @@ body.topBarEnabled {
   font-size: var(--text-base);
   line-height: 1.6;
   overflow-x: hidden;
+  /* Sticky footer layout */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Sticky footer - push to bottom when content is short */
+footer,
+#footer {
+  margin-top: auto;
+  background: var(--bg-base);
+  border-top: 1px solid var(--border-subtle);
+  padding: var(--sp-5) var(--sp-6);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+footer a,
+#footer a {
+  color: var(--accent-dim);
+}
+
+footer a:hover,
+#footer a:hover {
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--link-glow);
 }
 
 /* Typography */
