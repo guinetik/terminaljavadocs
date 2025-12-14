@@ -95,9 +95,10 @@ public class GenerateLandingPagesMojo extends AbstractMojo {
                 }
 
                 // Check for xref reports - try staging first, then site
-                File xrefIndex = new File(buildDir, "staging/xref/index.html");
+                // Use overview-summary.html (no-frames version) instead of index.html (frameset)
+                File xrefIndex = new File(buildDir, "staging/xref/overview-summary.html");
                 if (!xrefIndex.exists()) {
-                    xrefIndex = new File(buildDir, "site/xref/index.html");
+                    xrefIndex = new File(buildDir, "site/xref/overview-summary.html");
                 }
                 getLog().debug(
                     "Checking for xref in " + artifactId + " at: " + xrefIndex.getAbsolutePath()
@@ -216,7 +217,7 @@ public class GenerateLandingPagesMojo extends AbstractMojo {
                 "</td>\n" +
                 "                    <td><a href=\"./" +
                 escapeHtml(module.getArtifactId()) +
-                "/xref/index.html\">Browse Source →</a></td>\n" +
+                "/xref/overview-summary.html\">Browse Source →</a></td>\n" +
                 "                </tr>\n";
             rows.append(row);
         }
