@@ -159,7 +159,7 @@
     </build>
 
     <profiles>
-        <!-- Site generation profile - generates landing pages after module builds -->
+        <!-- Site generation profile - generates landing pages and injects styles after module builds -->
         <profile>
             <id>site-generation</id>
             <build>
@@ -175,6 +175,19 @@
                                 <goals>
                                     <goal>generate-landing-pages</goal>
                                 </goals>
+                            </execution>
+                            <execution>
+                                <id>inject-terminal-styles</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>inject-styles</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Directory name for styles within the site -->
+                                    <stylesDir>terminal-styles</stylesDir>
+                                    <!-- Process nested module sites -->
+                                    <processNestedSites>true</processNestedSites>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

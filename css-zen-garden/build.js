@@ -1,9 +1,9 @@
 /**
  * TerminalJavadocs Build Script
- * Builds CSS (with PostCSS) and JS (concatenation)
+ * Builds CSS (with PostCSS) and JS for multiple page types
  */
 
-import { readFile, writeFile, mkdir, readdir } from 'fs/promises';
+import { readFile, writeFile, mkdir, readdir, copyFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import postcss from 'postcss';
@@ -14,33 +14,59 @@ import { minify } from 'terser';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Entry points for each page type
+ */
+const ENTRY_POINTS = {
+  site: 'entry-site.css',
+  javadoc: 'entry-javadoc.css',
+  coverage: 'entry-coverage.css',
+  jxr: 'entry-jxr.css',
+};
+
 const PATHS = {
-  cssEntry: join(__dirname, 'src', 'main.css'),
+  srcDir: join(__dirname, 'src'),
   jsDir: join(__dirname, 'src', 'js'),
   outDir: join(__dirname, 'dist'),
+  // Maven plugin resources directory for bundled styles
+  pluginResources: join(__dirname, '..', 'terminaljavadocs-maven-plugin', 'src', 'main', 'resources', 'styles'),
 };
 
 /**
- * Build CSS
+ * Build CSS for a specific entry point
  */
-async function buildCSS() {
-  const css = await readFile(PATHS.cssEntry, 'utf8');
+async function buildCSSEntry(name, entryFile) {
+  const entryPath = join(PATHS.srcDir, entryFile);
+  const css = await readFile(entryPath, 'utf8');
 
   const expanded = await postcss([
     postcssImport(),
     postcssNested(),
-  ]).process(css, { from: PATHS.cssEntry });
+  ]).process(css, { from: entryPath });
 
   const minified = await postcss([
     postcssImport(),
     postcssNested(),
     cssnano({ preset: 'default' }),
-  ]).process(css, { from: PATHS.cssEntry });
+  ]).process(css, { from: entryPath });
 
-  await writeFile(join(PATHS.outDir, 'terminaljavadocs.css'), expanded.css);
-  await writeFile(join(PATHS.outDir, 'terminaljavadocs.min.css'), minified.css);
+  const baseName = `terminaljavadocs-${name}`;
+  await writeFile(join(PATHS.outDir, `${baseName}.css`), expanded.css);
+  await writeFile(join(PATHS.outDir, `${baseName}.min.css`), minified.css);
 
-  return { expanded: expanded.css.length, minified: minified.css.length };
+  return { name, expanded: expanded.css.length, minified: minified.css.length };
+}
+
+/**
+ * Build all CSS entry points
+ */
+async function buildAllCSS() {
+  const results = [];
+  for (const [name, entryFile] of Object.entries(ENTRY_POINTS)) {
+    const result = await buildCSSEntry(name, entryFile);
+    results.push(result);
+  }
+  return results;
 }
 
 /**
@@ -67,6 +93,30 @@ async function buildJS() {
 }
 
 /**
+ * Copy built files to Maven plugin resources
+ */
+async function copyToPlugin() {
+  await mkdir(PATHS.pluginResources, { recursive: true });
+
+  // Copy each CSS entry point
+  for (const name of Object.keys(ENTRY_POINTS)) {
+    const baseName = `terminaljavadocs-${name}`;
+    await copyFile(
+      join(PATHS.outDir, `${baseName}.min.css`),
+      join(PATHS.pluginResources, `${baseName}.min.css`)
+    );
+  }
+
+  // Copy JS
+  await copyFile(
+    join(PATHS.outDir, 'terminaljavadocs.min.js'),
+    join(PATHS.pluginResources, 'terminaljavadocs.min.js')
+  );
+
+  console.log('  → Copied to Maven plugin resources');
+}
+
+/**
  * Main build
  */
 async function build() {
@@ -75,13 +125,21 @@ async function build() {
   try {
     await mkdir(PATHS.outDir, { recursive: true });
 
-    const [css, js] = await Promise.all([buildCSS(), buildJS()]);
-
-    const cssSize = (css.minified / 1024).toFixed(1);
-    const jsSize = (js.minified / 1024).toFixed(1);
+    const [cssResults, js] = await Promise.all([buildAllCSS(), buildJS()]);
 
     console.log(`✓ Built in ${Date.now() - start}ms`);
-    console.log(`  CSS: ${cssSize} KB  JS: ${jsSize} KB`);
+
+    // Log CSS sizes
+    for (const css of cssResults) {
+      const size = (css.minified / 1024).toFixed(1);
+      console.log(`  ${css.name}: ${size} KB`);
+    }
+
+    const jsSize = (js.minified / 1024).toFixed(1);
+    console.log(`  JS: ${jsSize} KB`);
+
+    // Copy to Maven plugin resources
+    await copyToPlugin();
   } catch (err) {
     console.error('✗ Build failed:', err.message);
     process.exit(1);

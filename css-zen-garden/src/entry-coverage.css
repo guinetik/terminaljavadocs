@@ -1,0 +1,24 @@
+/**
+ * Coverage Entry Point
+ * For JaCoCo coverage report pages
+ */
+
+/* Tokens */
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+
+/* Base */
+@import './base/reset.css';
+@import './base/elements.css';
+
+/* Components */
+@import './components/tables.css';
+@import './components/code.css';
+
+/* Page-specific */
+@import './pages/coverage.css';
+
+/* Utilities */
+@import './utilities/effects.css';
+@import './utilities/print.css';
