@@ -176,6 +176,13 @@
                                     <goal>generate-landing-pages</goal>
                                 </goals>
                             </execution>
+                            <execution>
+                                <id>inject-styles</id>
+                                <phase>site</phase>
+                                <goals>
+                                    <goal>inject-styles</goal>
+                                </goals>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
