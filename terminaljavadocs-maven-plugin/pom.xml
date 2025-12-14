@@ -93,6 +93,22 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Inject Terminal Javadocs styles -->
+            <plugin>
+                <groupId>com.guinetik</groupId>
+                <artifactId>terminaljavadocs-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>inject-styles</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>inject-styles</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
