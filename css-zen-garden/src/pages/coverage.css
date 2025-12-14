@@ -1,0 +1,66 @@
+/**
+ * JaCoCo Coverage Reports
+ */
+
+table.coverage {
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+table.coverage thead {
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-overlay) 100%);
+}
+
+table.coverage thead td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+table.coverage tbody td {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all var(--transition);
+}
+
+table.coverage tbody tr:hover {
+  background: var(--accent-subtle) !important;
+}
+
+table.coverage tfoot td {
+  padding: 14px 18px;
+  background: var(--bg-overlay);
+  font-weight: 600;
+  border-top: 1px solid var(--border-strong);
+}
+
+/* Source highlighting */
+pre.source span.fc {
+  background: var(--cov-full-bg);
+  border-bottom: 2px solid var(--cov-full);
+}
+
+pre.source span.nc {
+  background: var(--cov-none-bg);
+  border-bottom: 2px solid var(--cov-none);
+}
+
+pre.source span.pc {
+  background: var(--cov-partial-bg);
+  border-bottom: 2px solid var(--cov-partial);
+}
+
+/* Element prefixes */
+.el_report::before { content: "[ REPORT ] "; color: var(--accent-bright); font-weight: 600; }
+.el_group::before { content: "> "; color: var(--accent); }
+.el_package::before { content: "./"; color: var(--text-muted); }
+.el_method::before { content: "fn "; color: var(--cov-partial); font-style: italic; }

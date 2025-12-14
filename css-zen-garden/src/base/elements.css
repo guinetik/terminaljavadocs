@@ -1,0 +1,97 @@
+/**
+ * Base Elements
+ */
+
+body,
+body.topBarEnabled {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: var(--bg-void) !important;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin-bottom: var(--sp-5);
+  color: var(--accent);
+}
+
+h2 {
+  font-size: 1.375rem;
+  margin-top: var(--sp-7);
+  margin-bottom: var(--sp-4);
+}
+
+h3 {
+  font-size: 1.125rem;
+  margin-top: var(--sp-6);
+  margin-bottom: var(--sp-3);
+}
+
+p {
+  margin-bottom: var(--sp-4);
+}
+
+/* Links */
+a {
+  color: var(--link);
+  text-decoration: none;
+  transition: color var(--transition), text-shadow var(--transition);
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-shadow: 0 0 8px var(--link-glow);
+}
+
+/* Code */
+code, pre, tt {
+  font-family: var(--font-mono);
+}
+
+code, tt {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-size: 0.9em;
+  color: var(--accent);
+}
+
+pre {
+  background: var(--bg-base) !important;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: var(--sp-4);
+  overflow-x: auto;
+  font-size: var(--text-sm);
+  color: var(--accent);
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* Prism token backgrounds */
+.token,
+code .token,
+pre .token {
+  background: transparent !important;
+}
