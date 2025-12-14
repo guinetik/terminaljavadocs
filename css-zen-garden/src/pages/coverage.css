@@ -2,65 +2,349 @@
  * JaCoCo Coverage Reports
  */
 
-table.coverage {
-  border-collapse: separate;
-  border-spacing: 0;
-  background: var(--bg-raised);
-  border: 1px solid var(--border-default);
-  border-radius: 12px;
-  overflow: hidden;
+/* =============================================================================
+   COVERAGE COLORS
+   ============================================================================= */
+
+:root {
+  --cov-full: #39ff14;
+  --cov-full-bg: rgba(57, 255, 20, 0.12);
+  --cov-none: #ff4757;
+  --cov-none-bg: rgba(255, 71, 87, 0.12);
+  --cov-partial: #ffa502;
+  --cov-partial-bg: rgba(255, 165, 2, 0.12);
 }
 
+/* =============================================================================
+   PAGE LAYOUT - JaCoCo specific elements
+   ============================================================================= */
+
+/* All JaCoCo content elements get horizontal margins */
+.breadcrumb,
+table.coverage,
+.footer,
+.breadcrumb ~ h1,
+.breadcrumb ~ p {
+  margin-left: 64px !important;
+  margin-right: 64px !important;
+}
+
+/* Title with blinking cursor */
+h1 {
+  font-family: var(--font-display) !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: var(--accent) !important;
+  margin: 0 0 var(--sp-6) 0 !important;
+  letter-spacing: -0.02em !important;
+}
+
+h1::after {
+  content: ' _';
+  color: var(--accent-bright);
+  animation: cursor-blink 1s infinite;
+  font-weight: 400;
+}
+
+/* =============================================================================
+   BREADCRUMB / SESSION BAR
+   ============================================================================= */
+
+.breadcrumb {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: var(--bg-raised) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: var(--sp-4) var(--sp-5) !important;
+  margin-top: var(--sp-6) !important;
+  margin-bottom: var(--sp-5) !important;
+  font-family: var(--font-mono) !important;
+  font-size: var(--text-sm) !important;
+}
+
+.breadcrumb .info {
+  float: none !important;
+  order: -1 !important;
+}
+
+.breadcrumb .info a {
+  display: inline-block !important;
+  padding: var(--sp-2) var(--sp-4) !important;
+  background: var(--accent-subtle) !important;
+  border: 1px solid var(--accent-dim) !important;
+  border-radius: var(--radius) !important;
+  font-size: var(--text-xs) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: var(--accent) !important;
+}
+
+.breadcrumb .info a:hover {
+  background: var(--accent-glow) !important;
+  box-shadow: 0 0 20px var(--accent-glow) !important;
+}
+
+/* =============================================================================
+   ELEMENT PREFIXES
+   ============================================================================= */
+
+.el_report,
+.el_group,
+.el_bundle,
+.el_package,
+.el_class,
+.el_source,
+.el_method,
+.el_session {
+  padding-left: 0 !important;
+  background-image: none !important;
+}
+
+.el_report::before { content: "[ REPORT ] "; color: var(--accent-bright); font-weight: 600; }
+.el_group::before { content: "> "; color: var(--accent); }
+.el_bundle::before { content: "pkg/"; color: var(--text-muted); }
+.el_package::before { content: "./"; color: var(--text-muted); }
+.el_class::before { content: "class "; color: var(--accent-dim); }
+.el_source::before { content: ""; }
+.el_method::before { content: "fn "; color: var(--cov-partial); font-style: italic; }
+.el_session::before { content: "@"; color: var(--accent-bright); font-weight: 600; }
+
+/* =============================================================================
+   COVERAGE TABLE
+   ============================================================================= */
+
+table.coverage {
+  display: table !important;
+  table-layout: auto !important;
+  width: calc(100% - 128px) !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background: var(--bg-base) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+  margin-left: 64px !important;
+  margin-right: 64px !important;
+  margin-top: var(--sp-6) !important;
+  margin-bottom: var(--sp-6) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Header row */
 table.coverage thead {
-  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-overlay) 100%);
+  background: var(--bg-raised) !important;
 }
 
 table.coverage thead td {
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border-strong);
-  color: var(--text-primary);
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  padding: var(--sp-4) !important;
+  border-bottom: 1px solid var(--border-strong) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  font-size: var(--text-xs) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
 }
 
+table.coverage thead td.sortable {
+  cursor: pointer !important;
+  transition: color var(--transition) !important;
+}
+
+table.coverage thead td.sortable:hover {
+  color: var(--accent) !important;
+}
+
+table.coverage thead td.ctr1,
+table.coverage thead td.ctr2 {
+  text-align: right !important;
+}
+
+table.coverage thead td.bar {
+  border-left: 1px solid var(--border-subtle) !important;
+}
+
+/* Body rows */
 table.coverage tbody td {
-  padding: 12px 18px;
-  border-bottom: 1px solid var(--border-subtle);
-  transition: all var(--transition);
+  padding: var(--sp-3) var(--sp-4) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  color: var(--text-secondary) !important;
+  font-family: var(--font-mono) !important;
+  font-size: var(--text-sm) !important;
+  transition: all var(--transition) !important;
+}
+
+/* Numeric columns stay compact */
+table.coverage td.ctr1,
+table.coverage td.ctr2 {
+  white-space: nowrap !important;
+  width: 1% !important;
+}
+
+/* Bar columns stay compact */
+table.coverage td.bar {
+  white-space: nowrap !important;
+  width: 1% !important;
 }
 
 table.coverage tbody tr:hover {
   background: var(--accent-subtle) !important;
 }
 
-table.coverage tfoot td {
-  padding: 14px 18px;
-  background: var(--bg-overlay);
-  font-weight: 600;
-  border-top: 1px solid var(--border-strong);
+table.coverage tbody tr:hover td {
+  color: var(--text-primary) !important;
 }
 
-/* Source highlighting */
+table.coverage tbody td.ctr1,
+table.coverage tbody td.ctr2 {
+  text-align: right !important;
+  font-weight: 500 !important;
+}
+
+table.coverage tbody td.bar {
+  border-left: 1px solid var(--border-subtle) !important;
+}
+
+/* Footer totals */
+table.coverage tfoot td {
+  padding: var(--sp-4) !important;
+  background: var(--bg-raised) !important;
+  border-top: 1px solid var(--border-strong) !important;
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  font-family: var(--font-mono) !important;
+}
+
+table.coverage tfoot td.ctr1,
+table.coverage tfoot td.ctr2 {
+  text-align: right !important;
+}
+
+table.coverage tfoot td.ctr2 {
+  color: var(--accent-bright) !important;
+  text-shadow: 0 0 10px var(--accent-glow) !important;
+}
+
+/* =============================================================================
+   SOURCE CODE VIEW
+   ============================================================================= */
+
+pre.source {
+  position: relative !important;
+  background: var(--bg-base) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-lg) !important;
+  margin: var(--sp-6) 0 !important;
+  padding: var(--sp-4) !important;
+  overflow-x: auto !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+pre.source ol {
+  margin: 0 !important;
+  padding: 0 0 0 50px !important;
+}
+
+pre.source li {
+  color: var(--text-secondary) !important;
+  padding: 2px var(--sp-3) !important;
+  font-family: var(--font-mono) !important;
+  font-size: var(--text-sm) !important;
+  line-height: 1.6 !important;
+}
+
+pre.source li:hover {
+  background: var(--bg-hover) !important;
+}
+
+pre.source li::marker {
+  color: var(--text-faint) !important;
+  font-size: var(--text-xs) !important;
+}
+
+/* Coverage highlighting */
 pre.source span.fc {
-  background: var(--cov-full-bg);
-  border-bottom: 2px solid var(--cov-full);
+  background: var(--cov-full-bg) !important;
+  border-bottom: 2px solid var(--cov-full) !important;
 }
 
 pre.source span.nc {
-  background: var(--cov-none-bg);
-  border-bottom: 2px solid var(--cov-none);
+  background: var(--cov-none-bg) !important;
+  border-bottom: 2px solid var(--cov-none) !important;
 }
 
 pre.source span.pc {
-  background: var(--cov-partial-bg);
-  border-bottom: 2px solid var(--cov-partial);
+  background: var(--cov-partial-bg) !important;
+  border-bottom: 2px solid var(--cov-partial) !important;
 }
 
-/* Element prefixes */
-.el_report::before { content: "[ REPORT ] "; color: var(--accent-bright); font-weight: 600; }
-.el_group::before { content: "> "; color: var(--accent); }
-.el_package::before { content: "./"; color: var(--text-muted); }
-.el_method::before { content: "fn "; color: var(--cov-partial); font-style: italic; }
+/* =============================================================================
+   FOOTER
+   ============================================================================= */
+
+.footer {
+  margin-top: var(--sp-8) !important;
+  padding-top: var(--sp-5) !important;
+  border-top: 1px solid var(--border-subtle) !important;
+  color: var(--text-muted) !important;
+  font-family: var(--font-mono) !important;
+  font-size: var(--text-xs) !important;
+}
+
+/* =============================================================================
+   RESPONSIVE
+   ============================================================================= */
+
+@media (max-width: 1200px) {
+  .breadcrumb,
+  .footer,
+  .breadcrumb ~ h1,
+  .breadcrumb ~ p {
+    margin-left: 32px !important;
+    margin-right: 32px !important;
+  }
+
+  table.coverage {
+    width: calc(100% - 64px) !important;
+    margin-left: 32px !important;
+    margin-right: 32px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .breadcrumb,
+  .footer,
+  .breadcrumb ~ h1,
+  .breadcrumb ~ p {
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+  }
+
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .breadcrumb {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: var(--sp-3) !important;
+  }
+
+  table.coverage {
+    width: calc(100% - 32px) !important;
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  table.coverage thead td,
+  table.coverage tbody td,
+  table.coverage tfoot td {
+    padding: var(--sp-2) var(--sp-3) !important;
+    font-size: var(--text-xs) !important;
+  }
+}

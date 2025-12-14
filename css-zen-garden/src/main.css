@@ -21,6 +21,7 @@
 /* Pages */
 @import './pages/site.css';
 @import './pages/coverage.css';
+@import './pages/landing.css';
 
 /* Utilities */
 @import './utilities/effects.css';

@@ -2,6 +2,12 @@
  * Visual Effects
  */
 
+/* Blinking cursor animation */
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
 /* CRT Scan Lines */
 body::before {
   content: '';

@@ -1,7 +1,7 @@
 /**
  * TerminalJavadocs - Main JS Entry
- * Loads Prism.js and initializes syntax highlighting
- * Theme is in our CSS - we only load Prism core + language grammars
+ * - Prism.js syntax highlighting
+ * - Terminal window wrappers for tables
  */
 (function() {
   'use strict';
@@ -60,7 +60,6 @@
       var content = code.textContent || '';
       var hasLanguageClass = code.className && code.className.match(/language-/);
 
-      // Auto-detect language if not specified
       if (!hasLanguageClass) {
         var language = detectLanguage(content, code.className);
         if (language) {
@@ -69,7 +68,6 @@
         }
       }
 
-      // Sync language class to pre element
       var match = code.className && code.className.match(/language-(\w+)/);
       if (match) {
         var lang = match[1];
@@ -79,6 +77,7 @@
       }
     });
   }
+
 
   /**
    * Initialize Prism highlighting

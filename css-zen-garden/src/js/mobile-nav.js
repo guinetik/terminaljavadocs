@@ -1,11 +1,50 @@
 /**
- * Mobile Navigation & Project Title
- * Handles hamburger menu toggle and injects project title into navbar
+ * Navigation Handler
+ * - Injects minimal header on pages without #topbar (JaCoCo, Javadoc, etc.)
+ * - Handles mobile hamburger menu on pages with full navbar
+ * - Injects project title into brand
  */
 (function() {
   'use strict';
 
-  function init() {
+  // Logo SVG (inline to avoid path issues)
+  var LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28"><circle cx="50" cy="85" r="8" fill="#00ff41"/><path d="M50 10 L30 75 L40 75 L50 45 L60 75 L70 75 Z" fill="#00ff41"/></svg>';
+
+  /**
+   * Calculate root path based on current location
+   */
+  function getRootPath() {
+    var path = window.location.pathname;
+    var depth = (path.match(/\//g) || []).length - 1;
+    if (depth <= 0) return './';
+    return '../'.repeat(depth);
+  }
+
+  /**
+   * Inject minimal header for pages without navbar
+   */
+  function injectMinimalHeader() {
+    var root = getRootPath();
+
+    var header = document.createElement('header');
+    header.id = 'topbar';
+    header.className = 'topbar-minimal';
+    header.innerHTML =
+      '<div class="topbar-minimal-inner">' +
+        '<a href="' + root + 'index.html" class="brand" title="Back to Home">' +
+          LOGO_SVG +
+          '<span class="project-title">Terminal Javadocs</span>' +
+        '</a>' +
+      '</div>';
+
+    document.body.insertBefore(header, document.body.firstChild);
+    document.body.classList.add('topBarEnabled');
+  }
+
+  /**
+   * Initialize mobile navigation for full navbar
+   */
+  function initMobileNav() {
     var hamburger = document.querySelector('#topbar .btn-navbar');
     var nav = document.querySelector('#topbar nav.nav-collapse ul.nav');
 
@@ -14,7 +53,7 @@
     // Inject project title into brand element
     var brandLink = document.querySelector('#topbar .brand');
     var brandImg = document.querySelector('#topbar .brand img');
-    if (brandLink && brandImg) {
+    if (brandLink && brandImg && !document.querySelector('#project-title')) {
       var titleText = brandImg.alt || document.title.split('–')[0].trim();
 
       var projectTitle = document.createElement('span');
@@ -33,7 +72,6 @@
     function closeMenu() {
       isOpen = false;
       nav.classList.remove('open');
-      // Close all dropdowns
       nav.querySelectorAll('.dropdown').forEach(function(dd) {
         dd.classList.remove('open');
       });
@@ -45,8 +83,7 @@
       });
     }
 
-    // Disable Bootstrap's dropdown handling on mobile by removing data-toggle
-    // We'll handle it ourselves
+    // Disable Bootstrap's dropdown handling on mobile
     function disableBootstrapDropdowns() {
       nav.querySelectorAll('.dropdown-toggle[data-toggle]').forEach(function(toggle) {
         toggle.setAttribute('data-toggle-disabled', toggle.getAttribute('data-toggle'));
@@ -54,7 +91,6 @@
       });
     }
 
-    // Re-enable Bootstrap dropdowns on desktop
     function enableBootstrapDropdowns() {
       nav.querySelectorAll('.dropdown-toggle[data-toggle-disabled]').forEach(function(toggle) {
         toggle.setAttribute('data-toggle', toggle.getAttribute('data-toggle-disabled'));
@@ -62,7 +98,6 @@
       });
     }
 
-    // Check and set mobile/desktop mode
     function updateMode() {
       if (isMobile()) {
         disableBootstrapDropdowns();
@@ -72,14 +107,11 @@
       }
     }
 
-    // Initial mode setup
     updateMode();
 
-    // Toggle menu on hamburger click
     hamburger.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-
       if (!isMobile()) return;
 
       isOpen = !isOpen;
@@ -90,11 +122,9 @@
       }
     });
 
-    // Handle clicks on dropdown toggles (use delegation on nav)
     nav.addEventListener('click', function(e) {
       if (!isMobile()) return;
 
-      // Find if we clicked on a dropdown-toggle or inside one
       var toggle = e.target.closest('.dropdown-toggle');
       if (!toggle) return;
 
@@ -105,17 +135,13 @@
       if (!dropdown) return;
 
       var wasOpen = dropdown.classList.contains('open');
-
-      // Close all other dropdowns
       closeAllDropdowns();
 
-      // Toggle this one
       if (!wasOpen) {
         dropdown.classList.add('open');
       }
     });
 
-    // Close menu when clicking outside
     document.addEventListener('click', function(e) {
       if (!isOpen) return;
       if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
@@ -123,7 +149,6 @@
       }
     });
 
-    // Handle nav link clicks - close menu for same-page anchors
     nav.querySelectorAll('a:not(.dropdown-toggle)').forEach(function(link) {
       link.addEventListener('click', function() {
         var href = this.getAttribute('href');
@@ -133,13 +158,26 @@
       });
     });
 
-    // Update mode on resize
     window.addEventListener('resize', function() {
       updateMode();
     });
   }
 
-  // Run on DOM ready
+  /**
+   * Main init
+   */
+  function init() {
+    var topbar = document.querySelector('#topbar');
+
+    if (!topbar) {
+      // No navbar - inject minimal header
+      injectMinimalHeader();
+    } else {
+      // Has navbar - init mobile nav
+      initMobileNav();
+    }
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
