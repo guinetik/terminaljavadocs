@@ -229,56 +229,209 @@ table.coverage tfoot td.ctr2 {
 }
 
 /* =============================================================================
-   SOURCE CODE VIEW
+   SOURCE CODE VIEW - Terminal Window (Vercel + Terminal aesthetic)
    ============================================================================= */
 
 pre.source {
   position: relative !important;
-  background: var(--bg-base) !important;
-  border: 1px solid var(--border-default) !important;
+  background: #0a0a0a !important;
+  border: 1px solid #1a1a1a !important;
   border-radius: var(--radius-lg) !important;
-  margin: var(--sp-6) 0 !important;
-  padding: var(--sp-4) !important;
-  overflow-x: auto !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+  margin-left: 64px !important;
+  margin-right: 64px !important;
+  margin-top: var(--sp-6) !important;
+  margin-bottom: var(--sp-6) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5) !important;
 }
 
-pre.source ol {
+/* Terminal window title bar */
+pre.source::before {
+  content: '';
+  display: block !important;
+  height: 32px !important;
+  background: #111111 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+}
+
+/* Terminal dots - muted green */
+pre.source::after {
+  content: '● ● ●' !important;
+  position: absolute !important;
+  top: 9px !important;
+  left: 14px !important;
+  font-size: 10px !important;
+  letter-spacing: 4px !important;
+  color: #3d5a3d !important;
+}
+
+/* Prettify's ordered list container */
+pre.source ol.linenums {
   margin: 0 !important;
-  padding: 0 0 0 50px !important;
+  padding: var(--sp-4) var(--sp-5) !important;
+  list-style-position: inside !important;
+  overflow-x: auto !important;
+  background: transparent !important;
 }
 
-pre.source li {
-  color: var(--text-secondary) !important;
-  padding: 2px var(--sp-3) !important;
-  font-family: var(--font-mono) !important;
-  font-size: var(--text-sm) !important;
+/* Line styling - Prettify generates <li> elements */
+pre.source ol.linenums > li {
+  color: #00ff00 !important;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', 'Monaco', monospace !important;
+  font-size: 13px !important;
   line-height: 1.6 !important;
+  padding: 2px var(--sp-4) 2px var(--sp-3) !important;
+  margin: 0 !important;
+  border-left: 2px solid transparent !important;
+  list-style-type: decimal !important;
+  transition: background 0.15s ease, border-color 0.15s ease !important;
 }
 
-pre.source li:hover {
-  background: var(--bg-hover) !important;
+/* Line number styling */
+pre.source ol.linenums > li::marker {
+  color: #2a4a2a !important;
+  font-size: 12px !important;
+  font-family: 'SF Mono', 'Fira Code', monospace !important;
 }
 
-pre.source li::marker {
-  color: var(--text-faint) !important;
-  font-size: var(--text-xs) !important;
+/* Line hover state */
+pre.source ol.linenums > li:hover {
+  background: rgba(0, 255, 0, 0.03) !important;
+  border-left-color: var(--accent-dim) !important;
 }
 
-/* Coverage highlighting */
+pre.source ol.linenums > li:hover::marker {
+  color: #4a7a4a !important;
+}
+
+/* Target line (from URL hash - spans have IDs) */
+pre.source span[id^="L"]:target {
+  display: inline-block !important;
+  background: rgba(0, 255, 65, 0.1) !important;
+  box-shadow:
+    -100vw 0 0 rgba(0, 255, 65, 0.06),
+    100vw 0 0 rgba(0, 255, 65, 0.06) !important;
+}
+
+/* =============================================================================
+   PRETTIFY SYNTAX HIGHLIGHTING - Terminal Green Palette
+   ============================================================================= */
+
+/* Keywords - bright green */
+pre.source .kwd {
+  color: #00ff44 !important;
+  font-weight: 600 !important;
+}
+
+/* Types (class names, interfaces) - lime green */
+pre.source .typ {
+  color: #88ff00 !important;
+}
+
+/* Strings - cyan/teal */
+pre.source .str {
+  color: #00ffcc !important;
+}
+
+/* Comments - dim green */
+pre.source .com {
+  color: #3d5a3d !important;
+  font-style: italic !important;
+}
+
+/* Literals/Numbers - amber */
+pre.source .lit {
+  color: #ffcc00 !important;
+}
+
+/* Punctuation - soft green */
+pre.source .pun {
+  color: #00cc00 !important;
+}
+
+/* Plain text - terminal green */
+pre.source .pln {
+  color: #00ff00 !important;
+}
+
+/* Annotations - orange */
+pre.source .atn {
+  color: #ffaa00 !important;
+}
+
+/* Attribute values - cyan */
+pre.source .atv {
+  color: #00ffcc !important;
+}
+
+/* Tags (for XML/HTML in Javadoc) */
+pre.source .tag {
+  color: #00ff66 !important;
+}
+
+/* Functions - bright teal */
+pre.source .fun {
+  color: #44ff88 !important;
+}
+
+/* =============================================================================
+   COVERAGE HIGHLIGHTING - Flat Terminal Style
+   ============================================================================= */
+
+/* Fully covered - green */
 pre.source span.fc {
   background: var(--cov-full-bg) !important;
   border-bottom: 2px solid var(--cov-full) !important;
 }
 
+/* Not covered - red */
 pre.source span.nc {
   background: var(--cov-none-bg) !important;
   border-bottom: 2px solid var(--cov-none) !important;
 }
 
+/* Partially covered - amber */
 pre.source span.pc {
   background: var(--cov-partial-bg) !important;
   border-bottom: 2px solid var(--cov-partial) !important;
+}
+
+/* =============================================================================
+   SOURCE VIEW RESPONSIVE
+   ============================================================================= */
+
+@media (max-width: 1200px) {
+  pre.source {
+    margin-left: 32px !important;
+    margin-right: 32px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  pre.source {
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+    border-radius: var(--radius) !important;
+  }
+
+  pre.source ol.linenums > li {
+    font-size: 11px !important;
+    padding-left: var(--sp-2) !important;
+  }
+
+  pre.source ol.linenums > li::marker {
+    font-size: 10px !important;
+  }
+
+  pre.source::before {
+    height: 32px !important;
+  }
+
+  pre.source::after {
+    top: 9px !important;
+    font-size: 10px !important;
+  }
 }
 
 /* =============================================================================
