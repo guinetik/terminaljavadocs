@@ -1,13 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.guinetik</groupId>
         <artifactId>terminaljavadocs</artifactId>
-        <version>1.0.41</version>
+        <version>1.0.42-SNAPSHOT</version>
     </parent>
 
     <artifactId>terminaljavadocs-resources</artifactId>
@@ -17,6 +19,16 @@
     <description>Shared resources for Terminal Javadocs theme</description>
 
     <inceptionYear>2025</inceptionYear>
+
+    <properties>
+    <terminaljavadocs.project.name
+        >${project.name}</terminaljavadocs.project.name>
+    <terminaljavadocs.project.logo
+        >https://terminaljavadocs.guinetik.com/images/favicon.svg</terminaljavadocs.project.logo>
+    <terminaljavadocs.github.user>guinetik</terminaljavadocs.github.user>
+    <terminaljavadocs.github.repo
+        >https://github.com/guinetik/terminaljavadocs</terminaljavadocs.github.repo>
+    </properties>
 
     <!-- Disable inherited dependency-plugin executions that try to unpack this module's own artifact -->
     <build>
@@ -52,6 +64,10 @@
                         <id>copy-jxr-stylesheet</id>
                         <phase>none</phase>
                     </execution>
+                    <execution>
+                        <id>copy-coverage-wrapper</id>
+                        <phase>none</phase>
+                    </execution>
                     <!-- Copy CSS directly from our own src/main/resources (no unpack needed) -->
                     <execution>
                         <id>copy-own-site-resources</id>
@@ -60,10 +76,12 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/site</outputDirectory>
+                            <outputDirectory
+                            >${project.build.directory}/site</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/src/main/resources/site-resources</directory>
+                                    <directory
+                                    >${project.basedir}/src/main/resources/site-resources</directory>
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
@@ -93,7 +111,8 @@
                                 </goals>
                                 <configuration>
                                     <classifier>sources</classifier>
-                                    <classesDirectory>${project.basedir}/src/main/resources</classesDirectory>
+                                    <classesDirectory
+                                    >${project.basedir}/src/main/resources</classesDirectory>
                                     <includes>
                                         <include>**/*</include>
                                     </includes>
@@ -107,7 +126,8 @@
                                 </goals>
                                 <configuration>
                                     <classifier>javadoc</classifier>
-                                    <classesDirectory>${project.basedir}</classesDirectory>
+                                    <classesDirectory
+                                    >${project.basedir}</classesDirectory>
                                     <includes>
                                         <include>README*</include>
                                     </includes>

@@ -793,6 +793,44 @@ pre[class*="language-"] {
 }
 
 /* =============================================================================
+   PRISM.JS OVERRIDE - Remove white backgrounds from CDN default theme
+   ============================================================================= */
+
+/* Override Prism's default white/light backgrounds on all code elements */
+code,
+code[class*="language-"],
+pre[class*="language-"],
+.token,
+code .token,
+pre .token {
+  background: transparent !important;
+}
+
+/* Inline code fragments - ensure dark background */
+:not(pre) > code,
+:not(pre) > code[class*="language-"],
+p code,
+li code,
+td code,
+th code,
+dd code,
+dt code,
+a code,
+span code {
+  background: var(--bg-elevated) !important;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+/* Code blocks should have the deep background */
+pre,
+pre[class*="language-"],
+pre code,
+pre code[class*="language-"] {
+  background: var(--bg-deep) !important;
+}
+
+/* =============================================================================
    PACKAGE / CLASS INDEX
    ============================================================================= */
 

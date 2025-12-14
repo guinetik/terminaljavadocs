@@ -13,7 +13,7 @@
 
     if (!hamburger || !nav) return;
 
-    // Inject project title into brand element (visible on desktop, hidden on mobile)
+    // Inject project title into brand element (shown on desktop, centered on mobile via CSS)
     var brandLink = document.querySelector('#topbar .brand');
     var brandImg = document.querySelector('#topbar .brand img');
     if (brandLink && brandImg) {

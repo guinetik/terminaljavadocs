@@ -666,19 +666,30 @@ footer #poweredBy {
   #topbar .brand {
     display: flex !important;
     align-items: center !important;
-    margin: 0 !important;
+    gap: 0 !important;
+    margin-right: 0 !important;
     padding: 0 !important;
+    flex-shrink: 0 !important;
+    height: 100% !important;
   }
 
   #topbar .brand img {
     width: 28px !important;
     height: 28px !important;
     display: block !important;
+    flex-shrink: 0 !important;
   }
 
-  /* Hide project title on mobile */
+  /* Show project title centered on mobile */
   #topbar .brand .project-title {
-    display: none !important;
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin-left: 0 !important;
+    font-size: var(--font-size-base) !important;
+    pointer-events: none !important;
+    white-space: nowrap !important;
   }
 
   #topbar .btn-navbar {
@@ -816,7 +827,6 @@ footer #poweredBy {
 @media (max-width: 768px) {
   :root {
     --page-gutter: 16px;
-    --navbar-height: 56px;
   }
 
   h1 { font-size: 1.5rem; }
@@ -824,21 +834,12 @@ footer #poweredBy {
   h3 { font-size: 1.1rem; }
 
   #topbar .navbar-inner > .container {
-    padding: 0 20px !important;
-  }
-
-  #topbar .nav-collapse {
-    left: 20px !important;
+    padding: 0 var(--page-gutter) !important;
   }
 
   #topbar .brand {
     font-size: var(--font-size-base) !important;
-  }
-
-  #topbar .brand img {
-    width: 28px !important;
-    height: 28px !important;
-    display: block !important;
+    margin-left: var(--page-gutter) !important;
   }
 
   pre {

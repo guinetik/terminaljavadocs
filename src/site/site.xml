@@ -63,8 +63,7 @@
                 <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png" />
                 <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png" />
 
-                <!-- Prism.js -->
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+                <!-- Prism.js - using custom terminal theme only, no CDN theme -->
                 <link href="./css/prism-terminal.css" rel="stylesheet" />
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js" defer></script>
@@ -78,6 +77,12 @@
             <item name="Introduction" href="index.html"/>
             <item name="Quick Start" href="quickstart.html"/>
             <item name="Customization" href="customization.html"/>
+        </menu>
+
+        <menu name="Documentation">
+            <item name="Javadoc" href="apidocs/index.html"/>
+            <item name="Source Code (XRef)" href="xref/index.html"/>
+            <item name="Code Coverage" href="coverage/index.html"/>
         </menu>
 
         <menu name="Examples">

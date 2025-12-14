@@ -223,6 +223,24 @@
                                 </target>
                             </configuration>
                         </execution>
+                        <execution>
+                            <id>apply-jacoco-theme</id>
+                            <phase>post-site</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <target>
+                                    <!-- Copy Terminal Javadocs JaCoCo theme over default theme -->
+                                    <copy todir="${project.build.directory}/site/jacoco/jacoco-resources" overwrite="true" failonerror="false" quiet="true">
+                                        <fileset dir="${project.build.directory}/terminaljavadocs/jacoco-resources">
+                                            <include name="**/*"/>
+                                        </fileset>
+                                    </copy>
+                                    <echo message="Terminal Javadocs JaCoCo theme applied (if jacoco directory exists)"/>
+                                </target>
+                            </configuration>
+                        </execution>
                     </executions>
                 </plugin>
 
@@ -292,6 +310,26 @@
                                 </artifactItems>
                             </configuration>
                         </execution>
+                        <!-- Unpack JaCoCo resources for automatic theme override -->
+                        <execution>
+                            <id>unpack-jacoco-resources</id>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>com.guinetik</groupId>
+                                        <artifactId>terminaljavadocs-resources</artifactId>
+                                        <version>${terminaljavadocs.version}</version>
+                                        <type>jar</type>
+                                        <includes>jacoco-resources/**</includes>
+                                        <outputDirectory>${project.build.directory}/terminaljavadocs</outputDirectory>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
                     </executions>
                 </plugin>
 
@@ -333,6 +371,23 @@
                                         <includes>
                                             <include>stylesheet.css</include>
                                         </includes>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                        <!-- Copy coverage wrapper with filtering enabled -->
+                        <execution>
+                            <id>copy-coverage-wrapper</id>
+                            <phase>post-site</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/site/coverage</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>src/main/resources/coverage-template</directory>
+                                        <filtering>true</filtering>
                                     </resource>
                                 </resources>
                             </configuration>

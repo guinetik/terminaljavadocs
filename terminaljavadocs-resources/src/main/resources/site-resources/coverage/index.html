@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Code Coverage - PROJECT_NAME</title>
+  <title>Code Coverage - ${terminaljavadocs.project.name}</title>
   <style>
     * {
       margin: 0;
@@ -126,25 +126,17 @@
   </style>
 </head>
 <body>
-  <!--
-    Terminal Javadocs - Coverage Wrapper Template
-
-    Customize:
-    - Replace PROJECT_NAME with your project name
-    - Replace PROJECT_LOGO_URL with your logo URL
-    - Adjust ../jacoco/index.html path if needed
-  -->
   <header class="corefun-header">
     <a href="../index.html" class="corefun-brand">
-      <img src="PROJECT_LOGO_URL" alt="PROJECT_NAME" />
-      <span>PROJECT_NAME</span>
+      <img src="${terminaljavadocs.project.logo}" alt="${terminaljavadocs.project.name}" />
+      <span>${terminaljavadocs.project.name}</span>
     </a>
     <nav class="corefun-nav">
       <span class="corefun-badge">Code Coverage</span>
-      <a href="/" class="corefun-back">← Back to Docs</a>
+      <a href="../index.html" class="corefun-back">&larr; Back to Docs</a>
     </nav>
   </header>
 
-  <iframe src="../jacoco/index.html" class="jacoco-frame" title="JaCoCo Coverage Report"></iframe>
+  <iframe src="../terminaljavadocs-examples/jacoco/index.html" class="jacoco-frame" title="JaCoCo Coverage Report"></iframe>
 </body>
 </html>

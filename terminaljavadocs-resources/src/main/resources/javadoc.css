@@ -239,9 +239,28 @@ pre {
   background: var(--bg-deep);
   border: 1px solid var(--border-dim);
   border-radius: var(--radius-md);
-  padding: var(--space-md);
+  padding: var(--space-lg);
+  padding-top: var(--space-xl);
+  margin: var(--space-lg) 0;
   overflow-x: auto;
   color: var(--phosphor-core);
+  line-height: 1.6;
+  position: relative;
+}
+
+pre[class*="language-"]::before {
+  content: '● ● ●';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 6px var(--space-sm);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-dim);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--text-muted);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 code, tt {
@@ -297,23 +316,27 @@ button:hover {
 ul {
   list-style-type: none;
   padding-left: var(--space-lg);
+  margin: var(--space-sm) 0;
 }
 
 li {
   position: relative;
   padding: var(--space-xs) 0;
+  line-height: 1.6;
 }
 
-li::before {
+/* Tree markers only for description/content lists, not navigation or special lists */
+main ul:not(.nav-list):not(.navList):not(.sub-nav-list):not(.subNavList):not(.block-list):not(.blockList):not(.member-list):not(.memberList):not(.summary-list):not(.summaryList):not(.details-list):not(.detailsList):not(.see-list):not(.see-list-long):not(.horizontal) > li::before {
   content: '├─';
   position: absolute;
-  left: -20px;
+  left: -22px;
+  top: var(--space-xs);
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: 12px;
 }
 
-li:last-child::before {
+main ul:not(.nav-list):not(.navList):not(.sub-nav-list):not(.subNavList):not(.block-list):not(.blockList):not(.member-list):not(.memberList):not(.summary-list):not(.summaryList):not(.details-list):not(.detailsList):not(.see-list):not(.see-list-long):not(.horizontal) > li:last-child::before {
   content: '└─';
 }
 
@@ -405,9 +428,11 @@ li:last-child::before {
 
 /* =============================================================================
    TOP NAVIGATION
+   Supports both Java 11 (camelCase) and Java 17+ (kebab-case) class names
    ============================================================================= */
 
-.top-nav {
+.top-nav,
+.topNav {
   background: var(--bg-elevated);
   color: var(--text-primary);
   float: left;
@@ -421,17 +446,19 @@ li:last-child::before {
   border-bottom: 1px solid var(--border-dim);
 }
 
-.sub-nav {
+.sub-nav,
+.subNav {
   background: var(--bg-main);
   width: 100%;
   align-items: center;
   overflow: hidden;
   font-size: 12px;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   border-bottom: 1px solid var(--border-subtle);
 }
 
-.sub-nav div {
+.sub-nav div,
+.subNav div {
   clear: left;
   float: left;
   padding: 0 0 5px 6px;
@@ -439,16 +466,21 @@ li:last-child::before {
   letter-spacing: 0.05em;
 }
 
-.sub-nav .nav-list {
+.sub-nav .nav-list,
+.sub-nav .navList,
+.subNav .nav-list,
+.subNav .navList {
   padding-top: 5px;
 }
 
-#navbar-top-firstrow {
+#navbar-top-firstrow,
+#navbar\.top\.firstrow {
   margin-block: 0.75rem;
   overflow-x: auto;
 }
 
-ul.nav-list {
+ul.nav-list,
+ul.navList {
   display: flex;
   justify-content: left;
   margin: auto;
@@ -457,7 +489,8 @@ ul.nav-list {
   list-style: none;
 }
 
-ul.nav-list li {
+ul.nav-list li,
+ul.navList li {
   list-style: none;
   float: left;
   padding: 5px 6px;
@@ -465,16 +498,19 @@ ul.nav-list li {
   color: var(--text-secondary);
 }
 
-ul.nav-list li::before {
+ul.nav-list li::before,
+ul.navList li::before {
   content: none;
 }
 
-ul.nav-list li:first-child {
+ul.nav-list li:first-child,
+ul.navList li:first-child {
   color: var(--phosphor-core);
   font-weight: bold;
 }
 
-ul.sub-nav-list {
+ul.sub-nav-list,
+ul.subNavList {
   float: left;
   margin: 0.9rem 25px 0 0.85rem;
   padding: 0;
@@ -482,13 +518,15 @@ ul.sub-nav-list {
   list-style: none;
 }
 
-ul.sub-nav-list li {
+ul.sub-nav-list li,
+ul.subNavList li {
   list-style: none;
   float: left;
   padding-top: 10px;
 }
 
-ul.sub-nav-list li::before {
+ul.sub-nav-list li::before,
+ul.subNavList li::before {
   content: none;
 }
 
@@ -496,21 +534,28 @@ ul.sub-nav-list li::before {
   display: none;
 }
 
-.sub-nav .nav-list-search {
+.sub-nav .nav-list-search,
+.sub-nav .navListSearch,
+.subNav .nav-list-search,
+.subNav .navListSearch {
   margin: 0;
   padding: 5px 6px;
   clear: none;
   float: right;
 }
 
-.nav-list-search label {
+.nav-list-search label,
+.navListSearch label {
   color: var(--text-muted);
   display: none;
 }
 
 .top-nav a:link,
 .top-nav a:active,
-.top-nav a:visited {
+.top-nav a:visited,
+.topNav a:link,
+.topNav a:active,
+.topNav a:visited {
   color: var(--text-secondary);
   text-decoration: none;
   text-transform: uppercase;
@@ -523,13 +568,15 @@ ul.sub-nav-list li::before {
   transition: all var(--transition-normal);
 }
 
-.top-nav a:hover {
+.top-nav a:hover,
+.topNav a:hover {
   color: var(--phosphor-core);
   background: var(--phosphor-subtle);
   text-shadow: 0 0 10px var(--phosphor-glow);
 }
 
-.nav-bar-cell1-rev {
+.nav-bar-cell1-rev,
+.navBarCell1Rev {
   color: var(--bg-deepest) !important;
   margin: auto 5px;
   background: linear-gradient(135deg, var(--phosphor-core), var(--phosphor-dim));
@@ -538,7 +585,8 @@ ul.sub-nav-list li::before {
   font-weight: 600;
 }
 
-.skip-nav {
+.skip-nav,
+.skipNav {
   position: absolute;
   top: auto;
   left: -9999px;
@@ -547,9 +595,17 @@ ul.sub-nav-list li::before {
 
 @media print {
   ul.nav-list,
-  div.sub-nav {
+  ul.navList,
+  div.sub-nav,
+  div.subNav {
     display: none;
   }
+}
+
+/* Java 11 fixed nav wrapper */
+.fixedNav {
+  position: relative;
+  background: var(--bg-elevated);
 }
 
 /* =============================================================================
@@ -558,9 +614,10 @@ ul.sub-nav-list li::before {
 
 .title {
   color: var(--phosphor-core);
-  margin: 10px 0;
+  margin: var(--space-sm) 0 var(--space-md) 0;
   text-shadow: 0 0 15px var(--phosphor-glow);
   font-family: var(--font-display);
+  font-size: 1.75rem;
 }
 
 main > .sub-title,
@@ -646,8 +703,9 @@ body.class-declaration-page .summary .inherited-list h2 {
 
 main {
   clear: both;
-  padding: 0px 20px;
+  padding: var(--space-md) var(--space-xl);
   position: relative;
+  max-width: 1400px;
 }
 
 main > hr {
@@ -716,20 +774,39 @@ ul.horizontal li::before {
 }
 
 div.inheritance {
-  margin: 0;
-  padding: 0;
+  margin: var(--space-xs) 0;
+  padding: var(--space-xs) 0 var(--space-xs) var(--space-md);
   color: var(--text-secondary);
+  border-left: 2px solid var(--border-dim);
 }
 
 div.inheritance div.inheritance {
-  margin-left: 2em;
-  margin-bottom: 1rem;
+  margin-left: var(--space-md);
+  margin-top: var(--space-xs);
+  margin-bottom: 0;
+  border-left: 2px solid var(--phosphor-dim);
 }
 
+/* Remove tree markers from inheritance */
+div.inheritance ul,
+div.inheritance li {
+  margin: 0;
+  padding: 0;
+}
+
+div.inheritance li::before {
+  content: none !important;
+}
+
+/* Java 17+ uses kebab-case, Java 11 uses camelCase for list classes */
 ul.block-list,
 ul.details-list,
 ul.member-list,
-ul.summary-list {
+ul.summary-list,
+ul.blockList,
+ul.detailsList,
+ul.memberList,
+ul.summaryList {
   margin-top: 10px;
   padding: 0;
 }
@@ -737,18 +814,42 @@ ul.summary-list {
 ul.block-list > li,
 ul.details-list > li,
 ul.member-list > li,
-ul.summary-list > li {
+ul.summary-list > li,
+ul.blockList > li,
+ul.detailsList > li,
+ul.memberList > li,
+ul.summaryList > li {
   list-style: none;
-  margin-bottom: 15px;
+  margin: 0;
+  margin-bottom: var(--space-lg);
   line-height: 1.4;
-  background: var(--bg-main);
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl) var(--space-md) var(--space-md) var(--space-md);
 }
 
 ul.block-list > li::before,
 ul.details-list > li::before,
 ul.member-list > li::before,
-ul.summary-list > li::before {
-  content: none;
+ul.summary-list > li::before,
+ul.blockList > li::before,
+ul.detailsList > li::before,
+ul.memberList > li::before,
+ul.summaryList > li::before {
+  content: '● ● ●';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 6px var(--space-sm);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-dim);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--text-muted);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 ul.member-list > li:last-child {
@@ -785,15 +886,57 @@ ul.see-list-long li:not(:last-child):after {
 
 /* =============================================================================
    TABLES
+   Java 17+ uses .summary-table/.details-table
+   Java 11 uses .memberSummary, .typeSummary, .packagesSummary, etc.
    ============================================================================= */
 
 .summary-table,
-.details-table {
+.details-table,
+.memberSummary,
+.typeSummary,
+.packagesSummary,
+.constantsSummary,
+.deprecatedSummary,
+.useSummary,
+table.overviewSummary {
   width: 100%;
   padding: 0;
   border: solid 1px var(--border-dim);
   border-radius: var(--radius-md);
   overflow: hidden;
+}
+
+/* Java 11 table cells */
+.memberSummary td,
+.memberSummary th,
+.typeSummary td,
+.typeSummary th,
+.packagesSummary td,
+.packagesSummary th,
+table.overviewSummary td,
+table.overviewSummary th {
+  text-align: left;
+  padding: 0.85rem 3px 0.85rem 0.65rem;
+  border-bottom: solid 1px var(--border-subtle);
+  vertical-align: middle;
+}
+
+/* Java 11 table headers */
+.memberSummary th,
+.typeSummary th,
+.packagesSummary th,
+table.overviewSummary th {
+  background: var(--bg-surface);
+  font-weight: bold;
+  color: var(--text-bright);
+}
+
+/* Java 11 content container */
+.contentContainer,
+.sourceContainer {
+  clear: both;
+  padding: 0px 20px;
+  position: relative;
 }
 
 footer > hr {
@@ -922,7 +1065,8 @@ div.table-tabs > button:last-child {
   .two-column-summary {
     grid-template-columns: 1fr;
   }
-  ul.nav-list {
+  ul.nav-list,
+  ul.navList {
     justify-content: center;
   }
 }
@@ -950,17 +1094,23 @@ div.table-tabs > button:last-child {
   vertical-align: middle;
 }
 
+/* Java 17+ uses kebab-case, Java 11 uses camelCase for column classes */
 .col-first,
 .col-second,
 .col-last,
 .col-constructor-name,
-.col-summary-item-name {
+.col-summary-item-name,
+.colFirst,
+.colSecond,
+.colLast,
+.colConstructorName {
   vertical-align: middle;
   padding-right: 0;
   padding-block: 0px;
 }
 
-.table-header {
+.table-header,
+.tableHeader {
   background: var(--bg-surface);
   font-weight: bold;
   display: none;
@@ -971,18 +1121,26 @@ div.table-tabs > button:last-child {
 .col-second,
 .col-last,
 .col-constructor-name,
-.col-summary-item-name {
+.col-summary-item-name,
+.colFirst,
+.colSecond,
+.colLast,
+.colConstructorName {
   font-size: 13px;
 }
 
 .col-first,
 .col-second,
-.col-constructor-name {
+.col-constructor-name,
+.colFirst,
+.colSecond,
+.colConstructorName {
   vertical-align: middle;
   overflow: auto;
 }
 
-.col-last {
+.col-last,
+.colLast {
   white-space: normal;
 }
 
@@ -994,6 +1152,12 @@ div.table-tabs > button:last-child {
 .col-constructor-name a:visited,
 .col-summary-item-name a:link,
 .col-summary-item-name a:visited,
+.colFirst a:link,
+.colFirst a:visited,
+.colSecond a:link,
+.colSecond a:visited,
+.colConstructorName a:link,
+.colConstructorName a:visited,
 .constant-values-container a:link,
 .constant-values-container a:visited,
 .all-classes-container a:link,
@@ -1007,18 +1171,25 @@ div.table-tabs > button:last-child {
   background-color: var(--bg-surface);
 }
 
+/* Java 17+ uses even-row-color/odd-row-color, Java 11 uses rowColor/altColor */
 .even-row-color,
-.even-row-color .table-header {
+.even-row-color .table-header,
+.rowColor,
+.rowColor .tableHeader {
   background-color: var(--bg-elevated);
 }
 
 .odd-row-color,
-.odd-row-color .table-header {
+.odd-row-color .table-header,
+.altColor,
+.altColor .tableHeader {
   background-color: var(--bg-main);
 }
 
 .even-row-color:hover,
-.odd-row-color:hover {
+.odd-row-color:hover,
+.rowColor:hover,
+.altColor:hover {
   background-color: var(--bg-hover);
 }
 
@@ -1197,6 +1368,17 @@ div.block {
   font-size: 14px;
   font-family: var(--font-body);
   color: var(--text-secondary);
+  line-height: 1.7;
+  margin: var(--space-md) 0;
+  padding: var(--space-md);
+}
+
+/* Remove excessive nav padding added by Javadoc */
+.navPadding,
+.nav-padding {
+  padding-top: 0 !important;
+  height: 0 !important;
+  display: none !important;
 }
 
 .col-last div {
@@ -1217,12 +1399,12 @@ div.block {
 }
 
 .class-description .type-signature {
-  margin-top: 0.1rem;
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-lg);
   background: var(--bg-deep);
-  padding: 0.75rem;
+  padding: var(--space-md) var(--space-lg);
   border: solid 1px var(--border-dim);
   border-radius: var(--radius-md);
-  margin-right: 0.5rem;
   color: var(--phosphor-core);
 }
 
@@ -1233,10 +1415,10 @@ div.block {
   font-family: var(--font-mono);
   color: var(--phosphor-core);
   font-size: 13px;
-  margin: 14px 0;
+  margin: var(--space-lg) 0;
   white-space: pre-wrap;
   background: var(--bg-deep);
-  padding: 0.75rem 1rem;
+  padding: var(--space-md) var(--space-lg);
   border: 1px solid var(--border-dim);
   border-radius: var(--radius-md);
 }
@@ -1244,7 +1426,7 @@ div.block {
 .module-signature,
 .package-signature,
 .type-signature {
-  margin-top: -5px;
+  margin-top: var(--space-sm);
 }
 
 .member-signature .type-parameters-long,
@@ -1399,9 +1581,12 @@ section.class-description {
   background: var(--bg-elevated);
   border: solid 1px var(--border-dim);
   border-radius: var(--radius-md);
-  padding: 0.65rem 0 0 0.5rem;
-  line-height: 1.4;
+  padding: var(--space-lg);
+  padding-top: var(--space-md);
+  line-height: 1.6;
   position: relative;
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-lg);
 }
 
 section.class-description::before {
@@ -1423,9 +1608,10 @@ section.class-description > hr {
 .details section[class$="-details"],
 .class-uses .detail,
 .serialized-class-details {
-  padding: 0px 10px 0.7rem 10px;
+  padding: var(--space-md) var(--space-lg);
   border: solid 1px var(--border-dim);
-  margin-top: 1rem;
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-lg);
   background: var(--bg-elevated);
   border-radius: var(--radius-md);
 }
@@ -1608,21 +1794,30 @@ table.striped > tbody > tr > th {
     margin-top: 1rem !important;
   }
   .top-nav,
-  .bottom-nav {
+  .topNav,
+  .bottom-nav,
+  .bottomNav {
     font-size: 11px;
     padding-top: 6px;
   }
-  .sub-nav {
+  .sub-nav,
+  .subNav {
     font-size: 11px;
   }
-  .about-language {
+  .about-language,
+  .aboutLanguage {
     padding-right: 16px;
   }
   ul.nav-list li,
-  .sub-nav .nav-list-search {
+  ul.navList li,
+  .sub-nav .nav-list-search,
+  .sub-nav .navListSearch,
+  .subNav .nav-list-search,
+  .subNav .navListSearch {
     padding: 6px;
   }
-  ul.sub-nav-list li {
+  ul.sub-nav-list li,
+  ul.subNavList li {
     padding-top: 5px;
   }
   main {
@@ -1646,13 +1841,17 @@ table.striped > tbody > tr > th {
 
 @media screen and (max-width: 500px) {
   .top-nav,
-  .bottom-nav {
+  .topNav,
+  .bottom-nav,
+  .bottomNav {
     font-size: 10px;
   }
-  .sub-nav {
+  .sub-nav,
+  .subNav {
     font-size: 10px;
   }
-  .about-language {
+  .about-language,
+  .aboutLanguage {
     font-size: 10px;
     padding-right: 12px;
   }
@@ -1952,4 +2151,42 @@ code[class*="language-"]::selection,
 code[class*="language-"] ::selection {
   background: rgba(57, 255, 20, 0.3);
   text-shadow: none;
+}
+
+/* =============================================================================
+   PRISM.JS OVERRIDE - Remove white backgrounds from CDN default theme
+   ============================================================================= */
+
+/* Override Prism's default white/light backgrounds on all code elements */
+code,
+code[class*="language-"],
+pre[class*="language-"],
+.token,
+code .token,
+pre .token {
+  background: transparent !important;
+}
+
+/* Inline code fragments - ensure dark background */
+:not(pre) > code,
+:not(pre) > code[class*="language-"],
+p code,
+li code,
+td code,
+th code,
+dd code,
+dt code,
+a code,
+span code {
+  background: var(--bg-elevated) !important;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+/* Code blocks should have the deep background */
+pre,
+pre[class*="language-"],
+pre code,
+pre code[class*="language-"] {
+  background: var(--bg-deep) !important;
 }
