@@ -8,7 +8,7 @@
 
     <groupId>com.guinetik</groupId>
     <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.43-SNAPSHOT</version>
+    <version>1.0.44-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Terminal Javadocs</name>
@@ -55,12 +55,11 @@
         </snapshotRepository>
         <site>
             <id>github-pages</id>
-            <url>https://guinetik.github.io/terminaljavadocs/</url>
+            <url>https://terminaljavadocs.guinetik.com/</url>
         </site>
     </distributionManagement>
 
     <modules>
-        <module>terminaljavadocs-resources</module>
         <module>terminaljavadocs-maven-plugin</module>
         <module>terminaljavadocs-examples</module>
     </modules>
@@ -78,7 +77,7 @@
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-jxr-plugin.version>3.3.2</maven-jxr-plugin.version>
         <!-- Terminal Specific Propeties -->
-        <terminaljavadocs.version>1.0.43-SNAPSHOT</terminaljavadocs.version>
+        <terminaljavadocs.version>${project.version}</terminaljavadocs.version>
         <terminaljavadocs.project.name
         >Terminal Java Docs</terminaljavadocs.project.name>
         <terminaljavadocs.github.user>guinetik</terminaljavadocs.github.user>
@@ -159,36 +158,6 @@
     </build>
 
     <profiles>
-        <!-- Site generation profile - generates landing pages after module builds -->
-        <profile>
-            <id>site-generation</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.guinetik</groupId>
-                        <artifactId>terminaljavadocs-maven-plugin</artifactId>
-                        <version>${project.version}</version>
-                        <executions>
-                            <execution>
-                                <id>generate-landing-pages</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>generate-landing-pages</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>inject-styles</id>
-                                <phase>site</phase>
-                                <goals>
-                                    <goal>inject-styles</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
         <!-- Release profile for Maven Central publishing -->
         <profile>
             <id>release</id>
