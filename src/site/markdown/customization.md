@@ -35,7 +35,6 @@ Add it to your `site.xml` head section:
 ```xml
 <head>
     <![CDATA[
-        <!-- ... existing includes ... -->
         <link href="./css/custom.css" rel="stylesheet" />
     ]]>
 </head>
@@ -71,41 +70,22 @@ Terminal Javadocs uses CSS custom properties that you can override:
 }
 ```
 
-## <a name="jacoco"></a>JaCoCo Dark Theme
+## Report Theming
 
-Terminal Javadocs includes a dark theme for JaCoCo coverage reports.
+The plugin automatically detects and themes all report types:
 
-### Enabling JaCoCo Theme
+| Report Type | Detection | Theme Applied |
+|-------------|-----------|---------------|
+| Javadoc | `apidocs/` path | Dark Javadoc CSS + header |
+| JaCoCo | `jacoco/` path | Dark coverage tables and bars |
+| JXR | `xref/` path | Dark source browser |
+| Maven Site | Fluido skin markers | Dark site theme |
 
-**Option 1: Command line**
-
-```bash
-mvn clean site -Pterminaljavadocs-jacoco
-```
-
-**Option 2: Always-on in pom.xml**
-
-```xml
-<profiles>
-    <profile>
-        <id>terminaljavadocs-jacoco</id>
-        <activation>
-            <activeByDefault>true</activeByDefault>
-        </activation>
-    </profile>
-</profiles>
-```
-
-### How It Works
-
-The JaCoCo profile copies themed resources over JaCoCo's default styles:
-- `report.css` - Dark theme for the report tables
-- `prettify.css` - Syntax highlighting for source view
-- Coverage bar images with terminal-green colors
+No configuration required - the plugin injects appropriate CSS/JS for each page type.
 
 ## Customizing Javadoc Header
 
-The Javadoc pages include a custom header with your logo. This is configured in the parent POM but can be overridden.
+The Javadoc pages include a custom header with your logo. Configure it with Maven properties:
 
 ### Using Maven Properties
 
@@ -144,20 +124,15 @@ Override the Javadoc plugin configuration:
 
 ## Adding Syntax Highlighting Languages
 
-### Available Prism Languages
+The plugin includes Prism.js with common languages. For additional languages, add them to your `site.xml`:
 
-Add these script tags to your `site.xml` for additional language support:
+### Available Prism Languages
 
 ```xml
 <!-- Common languages -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-xml-doc.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js" defer></script>
 ```
 
 ### Using the Autoloader
@@ -167,11 +142,7 @@ Instead of manually adding each language, use Prism's autoloader:
 ```xml
 <head>
     <![CDATA[
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
-        <link href="./css/prism-terminal.css" rel="stylesheet" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
-        <script src="./js/custom.js" defer></script>
     ]]>
 </head>
 ```
@@ -180,15 +151,15 @@ The autoloader automatically loads language definitions when needed.
 
 ## Dynamic Landing Pages
 
-Terminal Javadocs includes a Maven plugin that automatically generates landing pages for your reports.
+For multi-module projects, the plugin can generate landing pages that list all modules with reports.
 
 ### How It Works
 
-The `terminaljavadocs-maven-plugin` scans all modules in your reactor build and:
+The `generate-landing-pages` goal scans all modules in your reactor build and:
 
 1. Checks each module for actual generated reports:
-   - JaCoCo coverage: `target/site/jacoco/index.html`
-   - JXR source xref: `target/site/xref/index.html`
+   - JaCoCo coverage: `target/staging/*/jacoco/index.html`
+   - JXR source xref: `target/staging/*/xref/overview-summary.html`
 2. Generates landing pages listing only modules with actual reports
 3. Creates proper links from the aggregated site to module reports
 
@@ -204,34 +175,28 @@ The `terminaljavadocs-maven-plugin` scans all modules in your reactor build and:
 - Shows module names and descriptions
 - Links directly to each module's source browser
 
-### Using the Landing Pages
+### Generating Landing Pages
 
-#### Local Development
+Landing pages require direct goal invocation (they scan the entire reactor):
 
 ```bash
-mvn clean install site site:stage -Psite-generation
-cd target/staging
-python -m http.server 8000
+mvn clean install site site:stage \
+    com.guinetik:terminaljavadocs-maven-plugin:generate-landing-pages \
+    com.guinetik:terminaljavadocs-maven-plugin:inject-styles
 ```
 
-Then open http://localhost:8000/ and navigate to `/coverage.html` or `/source-xref.html`
+### Why Direct Invocation?
 
-#### CI/CD (GitHub Actions)
+The `generate-landing-pages` goal is an aggregator mojo that needs to run once at the reactor root level, not per-module. This is a Maven limitation - aggregator mojos cannot be bound to lifecycle phases via configuration.
 
-The workflow automatically includes the profile:
-
-```yaml
-run: mvn clean install site site:stage -DskipTests -Psite-generation
-```
-
-#### Why Only Actual Reports?
+### Why Only Actual Reports?
 
 The plugin scans for actual generated files instead of relying on configuration. This means:
 
-- ✅ If a module generates coverage reports, it appears in `coverage.html`
-- ✅ If a module has no tests, it won't appear (no empty reports)
-- ✅ If you remove a module, it automatically disappears
-- ✅ No broken links or 404 errors
+- If a module generates coverage reports, it appears in `coverage.html`
+- If a module has no tests, it won't appear (no empty reports)
+- If you remove a module, it automatically disappears
+- No broken links or 404 errors
 
 ### Customizing Landing Pages
 
@@ -259,14 +224,6 @@ You can override the styling in your custom CSS:
     background: var(--terminal-green);
     color: #000;
 }
-```
-
-### Skipping Landing Page Generation
-
-If you don't want landing pages, simply don't use the `-Psite-generation` profile:
-
-```bash
-mvn clean install site site:stage
 ```
 
 ## Deploying to GitHub Pages
@@ -331,9 +288,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build project and Generate Maven Site with Landing Pages
-        # -Psite-generation: Activates the profile that generates dynamic landing pages for coverage and xref reports
-        run: mvn clean install site site:stage -DskipTests -Psite-generation
+      - name: Build project and Generate Maven Site
+        run: mvn clean install site site:stage -DskipTests
+
+      - name: Generate Landing Pages and Apply Theme
+        run: |
+          mvn com.guinetik:terminaljavadocs-maven-plugin:generate-landing-pages \
+              com.guinetik:terminaljavadocs-maven-plugin:inject-styles
 
       - name: Deploy to GitHub Pages branch
         uses: peaceiris/actions-gh-pages@v4
@@ -350,7 +311,7 @@ jobs:
 ### Enable GitHub Pages
 
 In your repo settings:
-1. Go to **Settings** → **Pages**
+1. Go to **Settings** > **Pages**
 2. Set **Source** to "Deploy from a branch"
 3. Select the `gh-pages` branch
 
@@ -381,17 +342,17 @@ The aggregated site will be in `target/staging/`.
 ### CSS Not Loading
 
 1. Make sure you ran `mvn clean site` (not just `mvn site`)
-2. Check that resources are being unpacked in `target/site/css/`
-3. Verify paths in your `site.xml` start with `./`
+2. Check that Terminal Javadocs resources are in `target/site/terminal-styles/`
+3. Verify the plugin is configured with `<phase>site</phase>`
 
 ### Javadoc Not Themed
 
-1. The theme requires the pre-site phase to unpack resources
-2. Run `mvn clean site` to ensure `javadoc.css` is unpacked
-3. Check `target/terminaljavadocs/javadoc.css` exists
+1. Ensure the plugin runs after Javadoc generation (it does by default in `site` phase)
+2. Check `target/site/terminal-styles/` contains `javadoc.css`
+3. Inspect the HTML - look for `<link>` tags pointing to terminal-styles
 
 ### JaCoCo Not Themed
 
-1. Make sure you activated the profile: `-Pterminaljavadocs-jacoco`
-2. The JaCoCo report must be generated first (`mvn test`)
-3. Theme is applied during the `site` phase
+1. Make sure JaCoCo reports are generated first (`mvn test` or `mvn verify`)
+2. The plugin detects JaCoCo pages by the `/jacoco/` path
+3. Check `target/site/jacoco/` exists before running `mvn site`

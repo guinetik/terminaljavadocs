@@ -37,8 +37,15 @@ jobs:
         # Must run install and site in a SINGLE Maven invocation to avoid MDEP-98 reactor issues
         # When split into separate commands, Maven rebuilds the reactor and prefers reactor versions
         # over installed versions, causing "Artifact has not been packaged yet" errors
-        # -Psite-generation: Activates the profile that generates dynamic landing pages for coverage and xref reports
-        run: mvn clean install site site:stage -DskipTests -Psite-generation
+        run: mvn clean install site site:stage -DskipTests
+
+      - name: Generate Landing Pages and Inject Styles
+        # Aggregator goals must be invoked directly - they cannot be bound to lifecycle phases
+        # generate-landing-pages: Scans reactor for JaCoCo/JXR reports and creates coverage.html + source-xref.html
+        # inject-styles: Applies terminal theme CSS/JS to all generated HTML in staging directory
+        run: |
+          mvn com.guinetik:terminaljavadocs-maven-plugin:generate-landing-pages \
+              com.guinetik:terminaljavadocs-maven-plugin:inject-styles
 
       - name: Deploy to GitHub Pages branch
         uses: peaceiris/actions-gh-pages@v4
