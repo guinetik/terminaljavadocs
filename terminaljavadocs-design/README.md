@@ -9,7 +9,7 @@ The Maven site generator (with Fluido skin) produces consistent HTML structure a
 ## Quick Start
 
 ```bash
-cd css-zen-garden
+cd terminaljavadocs-design
 npm install
 npm run build    # Builds and copies to ../target/staging/
 npm run dev      # Serves staging on localhost:8800
@@ -26,6 +26,10 @@ js.src = '/inject.min.js';
 js.onload = () => injectJavadocs();  // or injectPage(), injectJacoco(), etc.
 document.body.appendChild(js);
 ```
+
+This is useful for testing while the staging site is being served.
+
+For actual publishing on the lib, the `npm run build` will place the generated files in the `terminaljavadocs-maven-plugin` resources directory.
 
 ### Available Injection Functions
 

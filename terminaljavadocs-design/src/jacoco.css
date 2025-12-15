@@ -3,5 +3,5 @@
  * For JaCoCo coverage report pages
  */
 
-@import './_core.css';
-@import './pages/coverage.css';
+@import "./_core.css";
+@import "./pages/coverage.css";

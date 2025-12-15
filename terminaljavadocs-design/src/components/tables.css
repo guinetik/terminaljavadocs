@@ -3,39 +3,40 @@
  */
 
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: var(--sp-5) 0;
-  font-size: var(--text-sm);
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--sp-5) 0;
+    font-size: var(--text-sm);
 }
 
-th, td {
-  padding: var(--sp-3) var(--sp-4);
-  text-align: left;
-  border-bottom: 1px solid var(--border-subtle);
+th,
+td {
+    padding: var(--sp-3) var(--sp-4);
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 th {
-  color: var(--text-primary) !important;
-  font-family: var(--font-mono) !important;
-  font-weight: 600 !important;
-  font-size: var(--text-xs) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  background: var(--bg-raised) !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-mono) !important;
+    font-weight: 600 !important;
+    font-size: var(--text-xs) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    background: var(--bg-raised) !important;
 }
 
 tbody tr:hover td {
-  background: var(--bg-overlay);
+    background: var(--bg-overlay);
 }
 
 .table-striped tbody > tr:nth-child(odd) > td {
-  background: rgba(255, 255, 255, 0.02) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
 }
 
 @media (max-width: 768px) {
-  table {
-    display: block;
-    overflow-x: auto;
-  }
+    table {
+        display: block;
+        overflow-x: auto;
+    }
 }

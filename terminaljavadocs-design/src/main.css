@@ -3,10 +3,10 @@
  * Full bundle - includes everything
  */
 
-@import './_core.css';
+@import "./_core.css";
 
 /* All page-specific styles */
-@import './pages/coverage.css';
-@import './pages/landing.css';
-@import './pages/javadoc.css';
-@import './pages/xref.css';
+@import "./pages/coverage.css";
+@import "./pages/landing.css";
+@import "./pages/javadoc.css";
+@import "./pages/xref.css";

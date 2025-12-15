@@ -5,6 +5,6 @@
  * Note: Includes javadoc.css for nav/typography, then JXR-specific overrides
  */
 
-@import './_core.css';
-@import './pages/javadoc.css';
-@import './pages/xref.css';
+@import "./_core.css";
+@import "./pages/javadoc.css";
+@import "./pages/xref.css";

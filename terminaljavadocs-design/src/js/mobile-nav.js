@@ -168,6 +168,13 @@
    */
   function init() {
     var topbar = document.querySelector('#topbar');
+    var terminalHeader = document.querySelector('.terminal-header');
+
+    if (terminalHeader) {
+      // Landing page with its own header - do nothing
+      // The header is already styled by landing.css
+      return;
+    }
 
     if (!topbar) {
       // No navbar - inject minimal header
