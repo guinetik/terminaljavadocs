@@ -1,16 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.guinetik</groupId>
     <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.43-SNAPSHOT</version>
+    <version>1.0.5</version>
     <packaging>pom</packaging>
 
     <name>Terminal Javadocs</name>
-    <description>Dark terminal-themed Maven site styling for documentation, Javadoc, JXR source cross-reference, and JaCoCo reports</description>
+    <description
+    >Dark terminal-themed Maven site styling for documentation, Javadoc, JXR source cross-reference, and JaCoCo reports</description>
     <url>https://terminaljavadocs.guinetik.com</url>
 
     <licenses>
@@ -38,8 +41,10 @@
     </organization>
 
     <scm>
-        <connection>scm:git:git://github.com/guinetik/terminaljavadocs.git</connection>
-        <developerConnection>scm:git:ssh://github.com:guinetik/terminaljavadocs.git</developerConnection>
+        <connection
+        >scm:git:git://github.com/guinetik/terminaljavadocs.git</connection>
+        <developerConnection
+        >scm:git:ssh://github.com:guinetik/terminaljavadocs.git</developerConnection>
         <url>https://github.com/guinetik/terminaljavadocs</url>
     </scm>
 
@@ -50,12 +55,11 @@
         </snapshotRepository>
         <site>
             <id>github-pages</id>
-            <url>https://guinetik.github.io/terminaljavadocs/</url>
+            <url>https://terminaljavadocs.guinetik.com/</url>
         </site>
     </distributionManagement>
 
     <modules>
-        <module>terminaljavadocs-resources</module>
         <module>terminaljavadocs-maven-plugin</module>
         <module>terminaljavadocs-examples</module>
     </modules>
@@ -68,9 +72,19 @@
         <!-- Plugin versions -->
         <maven-site-plugin.version>4.0.0-M13</maven-site-plugin.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
-        <maven-project-info-reports-plugin.version>3.5.0</maven-project-info-reports-plugin.version>
+        <maven-project-info-reports-plugin.version
+        >3.5.0</maven-project-info-reports-plugin.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-jxr-plugin.version>3.3.2</maven-jxr-plugin.version>
+        <!-- Terminal Specific Propeties -->
+        <terminaljavadocs.version>${project.version}</terminaljavadocs.version>
+        <terminaljavadocs.project.name
+        >Terminal Java Docs</terminaljavadocs.project.name>
+        <terminaljavadocs.github.user>guinetik</terminaljavadocs.github.user>
+        <terminaljavadocs.github.repo
+        >terminaljavadocs</terminaljavadocs.github.repo>
+        <terminaljavadocs.project.logo
+        >https://terminaljavadocs.guinetik.com/images/favicon.svg</terminaljavadocs.project.logo>
     </properties>
 
     <dependencyManagement>
@@ -92,7 +106,8 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>${maven-project-info-reports-plugin.version}</version>
+                    <version
+                    >${maven-project-info-reports-plugin.version}</version>
                 </plugin>
 
                 <!-- Javadoc Plugin -->
@@ -143,29 +158,6 @@
     </build>
 
     <profiles>
-        <!-- Site generation profile - generates landing pages after module builds -->
-        <profile>
-            <id>site-generation</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.guinetik</groupId>
-                        <artifactId>terminaljavadocs-maven-plugin</artifactId>
-                        <version>${project.version}</version>
-                        <executions>
-                            <execution>
-                                <id>generate-landing-pages</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>generate-landing-pages</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
         <!-- Release profile for Maven Central publishing -->
         <profile>
             <id>release</id>

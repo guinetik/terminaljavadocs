@@ -27,24 +27,59 @@ import org.apache.maven.project.MavenProject;
 )
 public class GenerateLandingPagesMojo extends AbstractMojo {
 
+    /**
+     * The current Maven session, providing access to reactor projects.
+     */
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
+    /**
+     * The current Maven project being built.
+     */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
+    /**
+     * The project name to display in landing page headers.
+     * Defaults to the project's name from pom.xml.
+     */
     @Parameter(
         property = "terminaljavadocs.project.name",
         defaultValue = "${project.name}"
     )
     private String projectName;
 
+    /**
+     * Skip landing page generation when set to {@code true}.
+     * Can be set via {@code -Dterminaljavadocs.skip=true}.
+     */
     @Parameter(property = "terminaljavadocs.skip", defaultValue = "false")
     private boolean skip;
 
+    /**
+     * The project's build output directory (typically {@code target/}).
+     */
     @Parameter(defaultValue = "${project.build.directory}", readonly = true)
     private File buildDirectory;
 
+    /**
+     * Executes the landing page generation goal.
+     *
+     * <p>
+     * This method:
+     * <ol>
+     * <li>Skips execution if {@code skip=true} or project is not a POM</li>
+     * <li>Scans all reactor projects for JaCoCo and JXR reports</li>
+     * <li>Generates {@code coverage.html} if coverage reports exist</li>
+     * <li>Generates {@code source-xref.html} if xref reports exist</li>
+     * </ol>
+     *
+     * <p>
+     * Output is written to {@code target/staging} if it exists, otherwise {@code target/site}.
+     *
+     * @throws MojoExecutionException if template loading or file writing fails
+     */
+    @Override
     public void execute() throws MojoExecutionException {
         if (skip) {
             getLog().info("Skipping landing page generation");
@@ -95,9 +130,10 @@ public class GenerateLandingPagesMojo extends AbstractMojo {
                 }
 
                 // Check for xref reports - try staging first, then site
-                File xrefIndex = new File(buildDir, "staging/xref/index.html");
+                // Use overview-summary.html (no-frames version) instead of index.html (frameset)
+                File xrefIndex = new File(buildDir, "staging/xref/overview-summary.html");
                 if (!xrefIndex.exists()) {
-                    xrefIndex = new File(buildDir, "site/xref/index.html");
+                    xrefIndex = new File(buildDir, "site/xref/overview-summary.html");
                 }
                 getLog().debug(
                     "Checking for xref in " + artifactId + " at: " + xrefIndex.getAbsolutePath()
@@ -165,6 +201,21 @@ public class GenerateLandingPagesMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * Generates the coverage landing page HTML from the template.
+     *
+     * <p>
+     * Loads {@code templates/coverage-page.html} and replaces placeholders:
+     * <ul>
+     * <li>{@code {{project.name}}} - the project name</li>
+     * <li>{@code {{module-rows}}} - table rows for each module with coverage</li>
+     * </ul>
+     *
+     * @param modules     list of modules with coverage reports
+     * @param projectName the project name to display in the page header
+     * @return the rendered HTML content
+     * @throws IOException if the template cannot be loaded
+     */
     private String generateCoveragePage(
         List<ModuleReport> modules,
         String projectName
@@ -197,6 +248,21 @@ public class GenerateLandingPagesMojo extends AbstractMojo {
         return result;
     }
 
+    /**
+     * Generates the source cross-reference landing page HTML from the template.
+     *
+     * <p>
+     * Loads {@code templates/xref-page.html} and replaces placeholders:
+     * <ul>
+     * <li>{@code {{project.name}}} - the project name</li>
+     * <li>{@code {{module-rows}}} - table rows for each module with xref reports</li>
+     * </ul>
+     *
+     * @param modules     list of modules with xref reports
+     * @param projectName the project name to display in the page header
+     * @return the rendered HTML content
+     * @throws IOException if the template cannot be loaded
+     */
     private String generateXrefPage(
         List<ModuleReport> modules,
         String projectName
@@ -216,7 +282,7 @@ public class GenerateLandingPagesMojo extends AbstractMojo {
                 "</td>\n" +
                 "                    <td><a href=\"./" +
                 escapeHtml(module.getArtifactId()) +
-                "/xref/index.html\">Browse Source →</a></td>\n" +
+                "/xref/overview-summary.html\">Browse Source →</a></td>\n" +
                 "                </tr>\n";
             rows.append(row);
         }
@@ -229,6 +295,27 @@ public class GenerateLandingPagesMojo extends AbstractMojo {
         return result;
     }
 
+    /**
+     * Loads an HTML template from the classpath or filesystem.
+     *
+     * <p>
+     * Attempts to load the template in the following order:
+     * <ol>
+     * <li>Thread context classloader (packaged JAR)</li>
+     * <li>Class classloader (packaged JAR)</li>
+     * <li>Direct resource stream with leading slash</li>
+     * <li>Filesystem at {@code src/main/resources/} (development mode)</li>
+     * </ol>
+     *
+     * <p>
+     * The filesystem fallback enables template loading during development
+     * when the JAR hasn't been built yet.
+     *
+     * @param resourcePath the resource path relative to the classpath root
+     *                     (e.g., "templates/coverage-page.html")
+     * @return the template content as a UTF-8 string
+     * @throws IOException if the template cannot be found in any location
+     */
     private String loadTemplate(String resourcePath) throws IOException {
         // Try 1: Load from classloader (for packaged plugin JAR) - most reliable
         InputStream is = null;
@@ -299,6 +386,22 @@ public class GenerateLandingPagesMojo extends AbstractMojo {
         );
     }
 
+    /**
+     * Escapes HTML special characters to prevent XSS vulnerabilities.
+     *
+     * <p>
+     * Converts the following characters:
+     * <ul>
+     * <li>{@code &} → {@code &amp;}</li>
+     * <li>{@code <} → {@code &lt;}</li>
+     * <li>{@code >} → {@code &gt;}</li>
+     * <li>{@code "} → {@code &quot;}</li>
+     * <li>{@code '} → {@code &#39;}</li>
+     * </ul>
+     *
+     * @param text the text to escape, may be {@code null}
+     * @return the escaped text, or empty string if input is {@code null}
+     */
     private String escapeHtml(String text) {
         if (text == null) {
             return "";

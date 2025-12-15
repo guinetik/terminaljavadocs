@@ -1,0 +1,7 @@
+/**
+ * TerminalJavadocs - Landing Pages Entry Point
+ * For custom landing pages (coverage list, xref list, etc.)
+ */
+
+@import "./_core.css";
+@import "./pages/landing.css";

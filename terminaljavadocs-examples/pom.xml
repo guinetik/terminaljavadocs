@@ -1,22 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.guinetik</groupId>
         <artifactId>terminaljavadocs</artifactId>
-        <version>1.0.43-SNAPSHOT</version>
+        <version>1.0.5</version>
     </parent>
 
     <artifactId>terminaljavadocs-examples</artifactId>
     <packaging>jar</packaging>
 
     <name>Terminal Javadocs Examples</name>
-    <description>Example classes demonstrating JXR source cross-reference with Prism.js syntax highlighting.</description>
+    <description
+    >Example classes demonstrating JXR source cross-reference with Prism.js syntax highlighting.</description>
 
     <inceptionYear>2025</inceptionYear>
+
+    <properties>
+        <!-- Terminal Specific Propeties -->
+        <terminaljavadocs.version>${project.version}</terminaljavadocs.version>
+        <terminaljavadocs.project.name
+        >Terminal Java Docs</terminaljavadocs.project.name>
+        <terminaljavadocs.github.user>guinetik</terminaljavadocs.github.user>
+        <terminaljavadocs.github.repo
+        >terminaljavadocs</terminaljavadocs.github.repo>
+        <terminaljavadocs.project.logo
+        >https://terminaljavadocs.guinetik.com/images/favicon.svg</terminaljavadocs.project.logo>
+    </properties>
 
     <dependencies>
         <!-- JUnit 5 for testing -->
@@ -47,6 +62,21 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+            <!-- Inject Terminal Javadocs styles -->
+            <plugin>
+                <groupId>com.guinetik</groupId>
+                <artifactId>terminaljavadocs-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>inject-styles</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>inject-styles</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

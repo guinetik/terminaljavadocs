@@ -1,0 +1,63 @@
+/**
+ * Sidebar
+ */
+
+#leftColumn {
+    display: none !important;
+}
+
+@media (min-width: 1401px) {
+    #leftColumn {
+        display: block !important;
+        width: var(--sidebar-width) !important;
+        flex-shrink: 0 !important;
+        background: var(--bg-base) !important;
+        border-right: 1px solid var(--border-subtle) !important;
+        padding: var(--sp-6) var(--sp-5) !important;
+        padding-left: var(--page-gutter) !important;
+    }
+}
+
+#leftColumn .well,
+#leftColumn .sidebar-nav {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+#leftColumn .nav-header {
+    color: var(--text-muted) !important;
+    font-family: var(--font-mono) !important;
+    font-size: var(--text-xs) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    padding: var(--sp-5) 0 var(--sp-2) 0 !important;
+}
+
+#leftColumn .nav-list > li > a {
+    display: block !important;
+    padding: var(--sp-2) var(--sp-3) !important;
+    color: var(--text-secondary) !important;
+    font-family: var(--font-mono) !important;
+    font-size: var(--text-sm) !important;
+    border-radius: var(--radius) !important;
+    border-left: 2px solid transparent !important;
+    transition: all var(--transition) !important;
+}
+
+#leftColumn .nav-list > li > a:hover {
+    background: var(--bg-overlay) !important;
+    color: var(--text-primary) !important;
+}
+
+#leftColumn .nav-list > li.active > a {
+    background: var(--accent-subtle) !important;
+    color: var(--accent) !important;
+    border-left-color: var(--accent) !important;
+}
+
+#leftColumn #poweredBy {
+    display: none !important;
+}

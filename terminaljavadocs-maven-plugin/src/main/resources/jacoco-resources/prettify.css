@@ -1,0 +1,93 @@
+/*
+ * TerminalJavadocs — Prettify Syntax Highlighting
+ *
+ * Unified Terminal Palette
+ * Mirrors --syn-* tokens from colors.css (hardcoded for precomputed HTML)
+ *
+ * Palette:
+ *   Comments    = #a1a1a1 (gray, text-secondary)
+ *   Strings     = #e0e0e0 (almost white)
+ *   Keywords    = #39ff14 (neon green)
+ *   Numbers     = #00e5ff (cyan)
+ *   Tokens      = #00cc33 (darker green)
+ *   Types       = #7fff00 (lime)
+ *   Functions   = #00ffaa (seafoam)
+ *   Annotations = #ffb800 (amber)
+ */
+
+/* Keywords - neon green, the star */
+.kwd {
+  color: #39ff14;
+  font-weight: 600;
+}
+
+/* Strings - almost white for high contrast */
+.str {
+  color: #e0e0e0;
+}
+
+/* Comments - gray, recedes into background */
+.com {
+  color: #a1a1a1;
+  font-style: italic;
+}
+
+/* Types/Classes - lime */
+.typ {
+  color: #7fff00;
+}
+
+/* Literals (numbers, booleans) - cyan pop */
+.lit {
+  color: #00e5ff;
+}
+
+/* Punctuation - darker green */
+.pun {
+  color: #00cc33;
+}
+
+/* Plain text - secondary gray */
+.pln {
+  color: #a1a1a1;
+}
+
+/* Tags (XML/HTML) - neon green like keywords */
+.tag {
+  color: #39ff14;
+}
+
+/* Attribute names - lime */
+.atn {
+  color: #7fff00;
+}
+
+/* Attribute values - almost white like strings */
+.atv {
+  color: #e0e0e0;
+}
+
+/* Declarations - amber accent */
+.dec {
+  color: #ffb800;
+}
+
+/* Variables - darker green */
+.var {
+  color: #00cc33;
+}
+
+/* Functions - seafoam */
+.fun {
+  color: #00ffaa;
+}
+
+/* Preprocessor/annotations - amber */
+.ppc {
+  color: #ffb800;
+}
+
+/* Regex - amber */
+.regex {
+  color: #ffb800;
+}

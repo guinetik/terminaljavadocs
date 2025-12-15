@@ -1,35 +1,41 @@
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Source Cross-Reference - {{project.name}}</title>
-</head>
-<body>
-    <header class="terminal-header">
-        <a href="./index.html" class="terminal-brand">
-            <img src="./images/favicon.svg" alt="{{project.name}}" width="24" height="24" />
-            <span>{{project.name}}</span>
-        </a>
-        <nav class="terminal-nav">
-            <span class="terminal-badge">Source XRef</span>
-            <a href="./index.html" class="terminal-back">← Back to Docs</a>
-        </nav>
-    </header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Source Cross-Reference - {{project.name}}</title>
+    </head>
+    <body>
+        <header class="terminal-header">
+            <a href="./index.html" class="terminal-brand">
+                <img
+                    src="./images/favicon.svg"
+                    alt="{{project.name}}"
+                    width="24"
+                    height="24"
+                />
+                <span>{{project.name}}</span>
+            </a>
+            <nav class="terminal-nav">
+                <span class="terminal-badge">Source XRef</span>
+                <a href="./index.html" class="terminal-back">← Back to Docs</a>
+            </nav>
+        </header>
 
-    <main class="module-list">
-        <h1>Source Cross-Reference</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Module</th>
-                    <th>Description</th>
-                    <th>Source</th>
-                </tr>
-            </thead>
-            <tbody>
-{{module-rows}}            </tbody>
-        </table>
-    </main>
-</body>
+        <main class="module-list">
+            <h1>Source Cross-Reference</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Description</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{module-rows}}
+                </tbody>
+            </table>
+        </main>
+    </body>
 </html>

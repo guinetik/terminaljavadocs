@@ -1,37 +1,53 @@
 # Quick Start Guide
 
-This guide walks you through setting up Terminal Javadocs with detailed explanations of each configuration option.
+This guide walks you through setting up Terminal Javadocs with detailed explanations.
 
 ## Prerequisites
 
 - Maven 3.6+
 - Java 8+
 
-## Step 1: Add the Parent POM
+## Step 1: Add the Plugin
 
-In your project's `pom.xml`, set Terminal Javadocs as your parent:
+Add the Terminal Javadocs plugin to your `pom.xml`:
 
 ```xml
-<parent>
-    <groupId>com.guinetik</groupId>
-    <artifactId>terminaljavadocs</artifactId>
-    <version>1.0.2</version>
-</parent>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.guinetik</groupId>
+            <artifactId>terminaljavadocs-maven-plugin</artifactId>
+            <version>1.0.44</version>
+            <executions>
+                <execution>
+                    <id>inject-styles</id>
+                    <phase>site</phase>
+                    <goals>
+                        <goal>inject-styles</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 ```
 
-This gives your project access to:
-- Pre-configured Maven Site Plugin
-- Javadoc Plugin with terminal theme
-- JaCoCo Plugin for coverage reports
-- All the CSS/JS resources for the dark theme
+That's all you need! The plugin will automatically:
+- Detect page types (Javadoc, JaCoCo, JXR, Maven site pages)
+- Inject the appropriate dark theme CSS
+- Add syntax highlighting scripts
 
-## Step 2: Create the Site Descriptor
+## Step 2: Build Your Site
 
-Maven uses a file called `site.xml` to control how your documentation site looks. Create this file at `src/site/site.xml`.
+```bash
+mvn clean site
+```
 
-### The Complete site.xml
+Open `target/site/index.html` in your browser to see the result.
 
-Here's a full example with every option explained:
+## Step 3 (Optional): Configure site.xml
+
+For additional control over your site's navigation and branding, create `src/site/site.xml`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -41,59 +57,22 @@ Here's a full example with every option explained:
         https://maven.apache.org/xsd/decoration-1.8.0.xsd"
     name="My Project">
 
-    <!-- The skin controls the overall look and feel -->
     <skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-fluido-skin</artifactId>
         <version>2.0.0-M8</version>
     </skin>
 
-    <!-- Fluido Skin configuration options -->
     <custom>
         <fluidoSkin>
-            <!-- Navigation bar at the top of the page -->
             <topBarEnabled>true</topBarEnabled>
-
-            <!-- Sidebar with table of contents (disable for cleaner look) -->
             <sideBarEnabled>false</sideBarEnabled>
-
-            <!-- Your logo in the navbar -->
-            <topBarIcon>
-                <name>My Project</name>
-                <alt>My Project Logo</alt>
-                <src>https://example.com/logo.svg</src>
-                <href>/index.html</href>
-            </topBarIcon>
-
-            <!-- IMPORTANT: Use navbar-dark for the terminal theme -->
+            <!-- IMPORTANT: Use navbar-dark for best results -->
             <navBarStyle>navbar-dark</navBarStyle>
-
-            <!-- Show line numbers in code blocks -->
-            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
-
-            <!-- Hide the generation date in footer -->
-            <skipGenerationDate>true</skipGenerationDate>
         </fluidoSkin>
     </custom>
 
     <body>
-        <!-- Include our theme CSS and syntax highlighting -->
-        <head>
-            <![CDATA[
-                <!-- Prism.js for syntax highlighting -->
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
-                <!-- Our terminal-themed Prism override -->
-                <link href="./css/prism-terminal.css" rel="stylesheet" />
-                <!-- Prism core -->
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
-                <!-- Java syntax support -->
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js" defer></script>
-                <!-- Our custom JS enhancements -->
-                <script src="./js/custom.js" defer></script>
-            ]]>
-        </head>
-
-        <!-- Navigation menu structure -->
         <menu name="Overview">
             <item name="Introduction" href="index.html"/>
         </menu>
@@ -102,42 +81,33 @@ Here's a full example with every option explained:
             <item name="Javadoc" href="apidocs/index.html"/>
         </menu>
 
-        <!-- Automatically includes project reports -->
         <menu name="Project Information" ref="reports"/>
     </body>
 </project>
 ```
 
-## Understanding the Fluido Skin Options
+## Understanding Fluido Skin Options
 
 ### Layout Options
 
 | Option | Values | Description |
 |--------|--------|-------------|
-| `topBarEnabled` | `true`/`false` | Shows a navigation bar at the top with your logo and menu |
-| `sideBarEnabled` | `true`/`false` | Shows a sidebar with page table of contents. Disable for a cleaner look |
-| `navBarStyle` | `navbar-dark`, `navbar-light` | **Must be `navbar-dark`** for Terminal Javadocs theme |
+| `topBarEnabled` | `true`/`false` | Shows a navigation bar at the top |
+| `sideBarEnabled` | `true`/`false` | Shows a sidebar with page table of contents |
+| `navBarStyle` | `navbar-dark`, `navbar-light` | Use `navbar-dark` for Terminal theme |
 
 ### Top Bar Icon (Logo)
 
 ```xml
 <topBarIcon>
-    <name>Display Name</name>      <!-- Text shown next to logo -->
-    <alt>Alt text</alt>            <!-- Accessibility text -->
-    <src>https://url/logo.svg</src> <!-- URL to your logo image -->
-    <href>/index.html</href>       <!-- Where clicking the logo goes -->
+    <name>Display Name</name>
+    <alt>Alt text</alt>
+    <src>https://url/logo.svg</src>
+    <href>/index.html</href>
 </topBarIcon>
 ```
 
-### Display Options
-
-| Option | Values | Description |
-|--------|--------|-------------|
-| `sourceLineNumbersEnabled` | `true`/`false` | Show line numbers in code blocks |
-| `skipGenerationDate` | `true`/`false` | Hide "Generated on..." in footer |
-| `gitHub` | URL | Adds a GitHub ribbon/link to your repo |
-
-### Adding a GitHub Ribbon
+### GitHub Ribbon
 
 ```xml
 <fluidoSkin>
@@ -149,47 +119,56 @@ Here's a full example with every option explained:
 </fluidoSkin>
 ```
 
-### Twitter Follow Button
+## Multi-Module Projects
 
-Add a Twitter follow button to your site:
+For multi-module Maven projects, add the plugin to each module that generates a site, or add it to the parent pom to inherit.
 
-```xml
-<fluidoSkin>
-    <twitter>
-        <user>your_username</user>
-        <showUser>true</showUser>
-        <showFollowers>true</showFollowers>
-    </twitter>
-</fluidoSkin>
-```
-
-| Option | Description |
-|--------|-------------|
-| `user` | Your Twitter/X username (without @) |
-| `showUser` | Display the username in the button |
-| `showFollowers` | Show follower count |
-
-### Google Analytics
-
-Track your site visitors:
+### Example Parent POM
 
 ```xml
-<fluidoSkin>
-    <googleAnalytics>
-        <accountId>G-XXXXXXXXXX</accountId>
-        <anonymizeIp>false</anonymizeIp>
-        <forceSSL>false</forceSSL>
-    </googleAnalytics>
-</fluidoSkin>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.guinetik</groupId>
+            <artifactId>terminaljavadocs-maven-plugin</artifactId>
+            <version>1.0.44</version>
+            <executions>
+                <execution>
+                    <id>inject-styles</id>
+                    <phase>site</phase>
+                    <goals>
+                        <goal>inject-styles</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 ```
 
-| Option | Description |
-|--------|-------------|
-| `accountId` | Your GA4 measurement ID (starts with G-) |
-| `anonymizeIp` | Anonymize visitor IP addresses |
-| `forceSSL` | Force HTTPS for analytics requests |
+### Generating Landing Pages
 
-## Step 3: Add Content Pages
+For multi-module projects, you can generate landing pages that list all modules with coverage and source cross-reference reports:
+
+```bash
+mvn clean install site site:stage \
+    com.guinetik:terminaljavadocs-maven-plugin:generate-landing-pages \
+    com.guinetik:terminaljavadocs-maven-plugin:inject-styles
+```
+
+This creates:
+- **`coverage.html`** - Lists all modules with JaCoCo coverage reports
+- **`source-xref.html`** - Lists all modules with JXR source cross-reference
+
+These pages are placed in `target/staging/` and automatically include only modules that actually have reports.
+
+### Why site:stage?
+
+- Creates an aggregated site with all module reports accessible
+- Generates proper relative paths between modules
+- Required for proper multi-module site structure
+
+## Adding Content Pages
 
 Create markdown files in `src/site/markdown/`:
 
@@ -221,86 +200,63 @@ public class Example {
 \`\`\`
 ```
 
-## Step 4: Build Your Site
+## Enabling Reports
 
-### Basic Site Generation
+### JaCoCo Coverage Reports
 
-```bash
-mvn clean site
-```
-
-Open `target/site/index.html` in your browser to see the result.
-
-### Generate Landing Pages (Recommended)
-
-For multi-module projects, Terminal Javadocs automatically generates **dynamic landing pages** that list modules with coverage and source cross-reference reports:
-
-```bash
-mvn clean install site site:stage -Psite-generation
-```
-
-The `-Psite-generation` profile activates the landing page generator, which creates:
-
-- **`coverage.html`** - Lists all modules with JaCoCo coverage reports
-- **`source-xref.html`** - Lists all modules with JXR source cross-reference reports
-
-These pages are placed in `target/staging/` and automatically updated if you add or remove modules with reports.
-
-**Why use `site:stage`?**
-- Creates an aggregated site with all module reports accessible
-- Generates proper relative paths between modules
-- Required for proper multi-module site structure
-
-## Using Maven Properties
-
-You can use Maven properties in `site.xml` to avoid hardcoding values:
-
-### In your pom.xml:
+Add JaCoCo to your build:
 
 ```xml
-<properties>
-    <terminaljavadocs.project.name>My Project</terminaljavadocs.project.name>
-    <terminaljavadocs.project.logo>https://example.com/logo.svg</terminaljavadocs.project.logo>
-</properties>
+<plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.8.11</version>
+    <executions>
+        <execution>
+            <id>prepare-agent</id>
+            <goals>
+                <goal>prepare-agent</goal>
+            </goals>
+        </execution>
+        <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+                <goal>report</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
 ```
 
-### In your site.xml:
+And add it to your reporting section:
 
 ```xml
-<project name="${terminaljavadocs.project.name}">
-    ...
-    <topBarIcon>
-        <name>${terminaljavadocs.project.name}</name>
-        <src>${terminaljavadocs.project.logo}</src>
-    </topBarIcon>
-    ...
-</project>
+<reporting>
+    <plugins>
+        <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.11</version>
+        </plugin>
+    </plugins>
+</reporting>
 ```
 
-## Adding More Prism Language Support
-
-The default setup includes Java. To highlight other languages, add more Prism components:
+### JXR Source Cross-Reference
 
 ```xml
-<head>
-    <![CDATA[
-        <!-- ... existing includes ... -->
-
-        <!-- Add XML support -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-xml-doc.min.js" defer></script>
-
-        <!-- Add Bash support -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
-
-        <!-- Add Python support -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" defer></script>
-    ]]>
-</head>
+<reporting>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jxr-plugin</artifactId>
+            <version>3.3.2</version>
+        </plugin>
+    </plugins>
+</reporting>
 ```
-
-See [Prism.js components](https://prismjs.com/#supported-languages) for all available languages.
 
 ## Next Steps
 
 - [Customization Guide](customization.html) - Override colors, add custom CSS
-- [JaCoCo Theme](customization.html#jacoco) - Enable dark coverage reports
