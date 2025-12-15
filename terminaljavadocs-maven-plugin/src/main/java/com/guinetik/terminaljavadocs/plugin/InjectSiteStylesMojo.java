@@ -158,6 +158,21 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     @Parameter(property = "terminaljavadocs.processNestedSites", defaultValue = "true")
     private boolean processNestedSites;
 
+    /**
+     * Project name for branding in the navigation header.
+     * Replaces the %%PROJECT_NAME%% token in JavaScript.
+     */
+    @Parameter(property = "terminaljavadocs.project.name", defaultValue = "${project.name}")
+    private String projectName;
+
+    /**
+     * Project logo URL for branding in the navigation header.
+     * Replaces the %%PROJECT_LOGO%% token in JavaScript.
+     * Can be an absolute URL or a path relative to the site root.
+     */
+    @Parameter(property = "terminaljavadocs.project.logo", defaultValue = "")
+    private String projectLogo;
+
     /** Counter for total HTML files processed. */
     private int processedFiles = 0;
 
@@ -299,6 +314,7 @@ public class InjectSiteStylesMojo extends AbstractMojo {
 
     /**
      * Copies all style resources (CSS and JS) from the plugin JAR to the target directory.
+     * JavaScript files are processed for token replacement.
      *
      * @param targetDir the directory to copy resources to (will be created if needed)
      * @throws IOException if file copying fails
@@ -313,8 +329,49 @@ public class InjectSiteStylesMojo extends AbstractMojo {
                     new File(targetDir, pageType.getCssFile()));
         }
 
-        // Copy JS
-        copyResource(STYLES_RESOURCE_PATH + JS_FILE, new File(targetDir, JS_FILE));
+        // Copy JS with token replacement
+        copyJsWithTokenReplacement(STYLES_RESOURCE_PATH + JS_FILE, new File(targetDir, JS_FILE));
+    }
+
+    /**
+     * Copies a JavaScript file with token replacement for project branding.
+     *
+     * <p>
+     * Replaces the following tokens:
+     * <ul>
+     * <li>{@code %%PROJECT_NAME%%} - replaced with {@link #projectName}</li>
+     * <li>{@code %%PROJECT_LOGO%%} - replaced with {@link #projectLogo}</li>
+     * </ul>
+     *
+     * @param resourcePath the classpath resource path to copy from
+     * @param targetFile   the target file to copy to
+     * @throws IOException if file reading or writing fails
+     */
+    private void copyJsWithTokenReplacement(String resourcePath, File targetFile) throws IOException {
+        try (InputStream is = getResourceStream(resourcePath)) {
+            if (is != null) {
+                // Java 8 compatible way to read all bytes from InputStream
+                java.io.ByteArrayOutputStream buffer = new java.io.ByteArrayOutputStream();
+                byte[] data = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = is.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, bytesRead);
+                }
+                String content = new String(buffer.toByteArray(), StandardCharsets.UTF_8);
+
+                // Replace tokens
+                content = content.replace("%%PROJECT_NAME%%", projectName != null ? projectName : "");
+                content = content.replace("%%PROJECT_LOGO%%", projectLogo != null ? projectLogo : "");
+
+                Files.write(targetFile.toPath(), content.getBytes(StandardCharsets.UTF_8));
+                getLog().debug("Copied JS with token replacement: " + resourcePath + " -> " + targetFile);
+                getLog().debug("  PROJECT_NAME: " + projectName);
+                getLog().debug("  PROJECT_LOGO: " + projectLogo);
+            } else {
+                getLog().warn("Resource not found: " + resourcePath +
+                        ". Run 'npm run build' in css-zen-garden to generate it.");
+            }
+        }
     }
 
     /**
