@@ -45,6 +45,7 @@ public class InjectSiteStylesMojo extends AbstractMojo {
      * Page types with their corresponding CSS files.
      */
     public enum PageType {
+        LANDING("landing", "terminaljavadocs-landing.min.css"),
         COVERAGE("coverage", "terminaljavadocs-coverage.min.css"),
         JXR("jxr", "terminaljavadocs-jxr.min.css"),
         JAVADOC("javadoc", "terminaljavadocs-javadoc.min.css"),
@@ -73,8 +74,18 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     /** Resource path for the bundled JS */
     private static final String JS_FILE = "terminaljavadocs.min.js";
 
-    /** Marker to detect already-injected pages */
-    private static final String INJECTION_MARKER = "terminal-javadocs-injected";
+    /** Resource path for themed JaCoCo resources */
+    private static final String JACOCO_RESOURCES_PATH = "jacoco-resources/";
+
+    /** JaCoCo resource files to copy (images for coverage bars) */
+    private static final String[] JACOCO_RESOURCE_FILES = {
+        "branchfc.gif", "branchnc.gif", "branchpc.gif",
+        "greenbar.gif", "redbar.gif",
+        "down.gif", "up.gif", "sort.gif"
+    };
+
+    /** Marker to detect already-injected pages (must be HTML comment format to avoid false positives) */
+    private static final String INJECTION_MARKER = "<!-- terminal-javadocs-injected";
 
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
@@ -101,6 +112,7 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     private boolean processNestedSites;
 
     private int processedFiles = 0;
+    private int landingFiles = 0;
     private int coverageFiles = 0;
     private int jxrFiles = 0;
     private int javadocFiles = 0;
@@ -131,6 +143,9 @@ public class InjectSiteStylesMojo extends AbstractMojo {
             File stylesTargetDir = new File(siteDir, stylesDir);
             copyStyleResources(stylesTargetDir);
 
+            // Replace JaCoCo's default resources with themed versions
+            themeJacocoResources(siteDir);
+
             // Process the main site
             processHtmlFiles(siteDir, siteDir);
 
@@ -154,6 +169,9 @@ public class InjectSiteStylesMojo extends AbstractMojo {
                             // Copy styles to staged module subdirectory
                             File moduleStylesDir = new File(moduleStagedDir, stylesDir);
                             copyStyleResources(moduleStylesDir);
+
+                            // Replace JaCoCo resources in this module
+                            themeJacocoResources(moduleStagedDir);
 
                             getLog().info("Processing staged module site: " + artifactId);
                             processHtmlFiles(moduleStagedDir, moduleStagedDir);
@@ -183,6 +201,9 @@ public class InjectSiteStylesMojo extends AbstractMojo {
                         File moduleStylesDir = new File(moduleSiteDir, stylesDir);
                         copyStyleResources(moduleStylesDir);
 
+                        // Replace JaCoCo resources in this module
+                        themeJacocoResources(moduleSiteDir);
+
                         getLog().info("Processing individual module site: " + artifactId);
                         processHtmlFiles(moduleSiteDir, moduleSiteDir);
                     }
@@ -192,6 +213,7 @@ public class InjectSiteStylesMojo extends AbstractMojo {
             // Log statistics
             getLog().info("Style injection complete:");
             getLog().info("  Total HTML files processed: " + processedFiles);
+            getLog().info("  Landing pages: " + landingFiles);
             getLog().info("  Coverage pages: " + coverageFiles);
             getLog().info("  JXR pages: " + jxrFiles);
             getLog().info("  Javadoc pages: " + javadocFiles);
@@ -232,6 +254,35 @@ public class InjectSiteStylesMojo extends AbstractMojo {
                         ". Run 'npm run build' in css-zen-garden to generate it.");
             }
         }
+    }
+
+    /**
+     * Copy themed JaCoCo resources (coverage bar images) to a jacoco-resources directory.
+     */
+    private void copyJacocoResources(File jacocoResourcesDir) throws IOException {
+        if (!jacocoResourcesDir.exists()) {
+            return;
+        }
+
+        for (String fileName : JACOCO_RESOURCE_FILES) {
+            copyResource(JACOCO_RESOURCES_PATH + fileName, new File(jacocoResourcesDir, fileName));
+        }
+        getLog().debug("Copied themed JaCoCo resources to: " + jacocoResourcesDir);
+    }
+
+    /**
+     * Find and theme all JaCoCo resource directories in the given site directory.
+     */
+    private void themeJacocoResources(File siteDir) throws IOException {
+        Files.walkFileTree(siteDir.toPath(), new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                if (dir.getFileName() != null && dir.getFileName().toString().equals("jacoco-resources")) {
+                    copyJacocoResources(dir.toFile());
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 
     /**
@@ -304,6 +355,9 @@ public class InjectSiteStylesMojo extends AbstractMojo {
 
             // Update statistics
             switch (pageType) {
+                case LANDING:
+                    landingFiles++;
+                    break;
                 case COVERAGE:
                     coverageFiles++;
                     break;
@@ -327,6 +381,12 @@ public class InjectSiteStylesMojo extends AbstractMojo {
      */
     private PageType detectPageType(File htmlFile, String content) {
         String path = htmlFile.getAbsolutePath().replace('\\', '/').toLowerCase();
+        String fileName = htmlFile.getName().toLowerCase();
+
+        // Landing pages (generated by generate-landing-pages goal)
+        if (fileName.equals("coverage.html") || fileName.equals("source-xref.html")) {
+            return PageType.LANDING;
+        }
 
         // Path-based detection (most reliable)
         if (path.contains("/jacoco/") || path.contains("/coverage/")) {
@@ -340,6 +400,9 @@ public class InjectSiteStylesMojo extends AbstractMojo {
         }
 
         // Content-based detection (fallback)
+        if (isLandingContent(content)) {
+            return PageType.LANDING;
+        }
         if (isJacocoContent(content)) {
             return PageType.COVERAGE;
         }
@@ -352,6 +415,15 @@ public class InjectSiteStylesMojo extends AbstractMojo {
 
         // Default to site
         return PageType.SITE;
+    }
+
+    /**
+     * Check if content is from a landing page (coverage.html or source-xref.html).
+     */
+    private boolean isLandingContent(String content) {
+        return content.contains("class=\"terminal-header\"") ||
+                content.contains("class=\"terminal-brand\"") ||
+                content.contains("class=\"module-list\"");
     }
 
     /**
