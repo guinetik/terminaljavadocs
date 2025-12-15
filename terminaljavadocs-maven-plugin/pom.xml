@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.guinetik</groupId>
         <artifactId>terminaljavadocs</artifactId>
-        <version>1.0.43-SNAPSHOT</version>
+        <version>1.0.44-SNAPSHOT</version>
     </parent>
 
     <artifactId>terminaljavadocs-maven-plugin</artifactId>
@@ -21,7 +21,7 @@
 
     <properties>
         <!-- Terminal Specific Propeties -->
-        <terminaljavadocs.version>1.0.43-SNAPSHOT</terminaljavadocs.version>
+        <terminaljavadocs.version>${project.version}</terminaljavadocs.version>
         <terminaljavadocs.project.name
         >Terminal Java Docs</terminaljavadocs.project.name>
         <terminaljavadocs.github.user>guinetik</terminaljavadocs.github.user>
@@ -94,21 +94,10 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Inject Terminal Javadocs styles -->
-            <plugin>
-                <groupId>com.guinetik</groupId>
-                <artifactId>terminaljavadocs-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <executions>
-                    <execution>
-                        <id>inject-styles</id>
-                        <phase>site</phase>
-                        <goals>
-                            <goal>inject-styles</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!-- NOTE: We don't configure inject-styles here because this plugin
+                 cannot use itself during the site phase (bootstrap/circular dependency).
+                 Style injection for this module happens via direct invocation at the
+                 reactor root level, which processes all modules in target/staging/. -->
         </plugins>
     </build>
 </project>

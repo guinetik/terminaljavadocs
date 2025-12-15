@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.guinetik</groupId>
         <artifactId>terminaljavadocs</artifactId>
-        <version>1.0.43-SNAPSHOT</version>
+        <version>1.0.44-SNAPSHOT</version>
     </parent>
 
     <artifactId>terminaljavadocs-examples</artifactId>
@@ -23,7 +23,7 @@
 
     <properties>
         <!-- Terminal Specific Propeties -->
-        <terminaljavadocs.version>1.0.43-SNAPSHOT</terminaljavadocs.version>
+        <terminaljavadocs.version>${project.version}</terminaljavadocs.version>
         <terminaljavadocs.project.name
         >Terminal Java Docs</terminaljavadocs.project.name>
         <terminaljavadocs.github.user>guinetik</terminaljavadocs.github.user>
