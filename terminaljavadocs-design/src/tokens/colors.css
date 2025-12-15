@@ -46,4 +46,36 @@
     --border-subtle: rgba(255, 255, 255, 0.06);
     --border-default: rgba(255, 255, 255, 0.1);
     --border-strong: rgba(255, 255, 255, 0.15);
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       SYNTAX HIGHLIGHTING - Unified Palette
+       Used by: Prism, JXR, Prettify (JaCoCo)
+       ═══════════════════════════════════════════════════════════════════════════ */
+
+    /* Comments - gray, fades into background */
+    --syn-comment: var(--text-secondary);
+
+    /* Strings - almost white, high contrast */
+    --syn-string: #e0e0e0;
+
+    /* Keywords - darker green phosphor glow */
+    --syn-keyword: var(--accent);
+
+    /* Numbers/Literals - cyan pop */
+    --syn-number: var(--cyan);
+
+    /* General tokens (punctuation, operators) - darker green */
+    --syn-token: var(--accent-dim);
+
+    /* Types/Classes - lime accent */
+    --syn-type: #7fff00;
+
+    /* Functions - sea algae */
+    --syn-function: #a1c181;
+
+    /* Annotations - amber highlight */
+    --syn-annotation: var(--accent-subtle);
+
+    /* Javadoc comments - amber for distinction from regular comments */
+    --syn-javadoc: var(--text-secondary);
 }

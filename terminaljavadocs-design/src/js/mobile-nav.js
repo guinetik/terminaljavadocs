@@ -3,12 +3,51 @@
  * - Injects minimal header on pages without #topbar (JaCoCo, Javadoc, etc.)
  * - Handles mobile hamburger menu on pages with full navbar
  * - Injects project title into brand
+ *
+ * Tokens replaced at build time by InjectSiteStylesMojo:
+ *   %%PROJECT_LOGO%% - URL to project logo (from terminaljavadocs.project.logo)
+ *   %%PROJECT_NAME%% - Project name (from terminaljavadocs.project.name)
  */
 (function() {
   'use strict';
 
-  // Logo SVG (inline to avoid path issues)
-  var LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28"><circle cx="50" cy="85" r="8" fill="#00ff41"/><path d="M50 10 L30 75 L40 75 L50 45 L60 75 L70 75 Z" fill="#00ff41"/></svg>';
+  // Project branding (tokens replaced at build time by InjectSiteStylesMojo)
+  // Using array access pattern to prevent Terser from evaluating at minify time
+  var PROJECT_LOGO = ['%%PROJECT_LOGO%%'][0];
+  var PROJECT_NAME = ['%%PROJECT_NAME%%'][0];
+
+  // Token markers for runtime detection (Terser can't optimize these away)
+  var TOKEN_MARKER = '%%PROJECT';
+
+  // Fallback SVG if no logo URL is configured
+  var FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28"><circle cx="50" cy="85" r="8" fill="#00ff41"/><path d="M50 10 L30 75 L40 75 L50 45 L60 75 L70 75 Z" fill="#00ff41"/></svg>';
+
+  /**
+   * Check if a token was replaced (doesn't start with %%)
+   */
+  function isTokenReplaced(value) {
+    return value && value.indexOf(TOKEN_MARKER) !== 0 && value.length > 0;
+  }
+
+  /**
+   * Get the logo HTML - either an img tag for URL or fallback SVG
+   */
+  function getLogoHtml() {
+    if (isTokenReplaced(PROJECT_LOGO)) {
+      return '<img src="' + PROJECT_LOGO + '" alt="' + getProjectName() + '" width="28" height="28" />';
+    }
+    return FALLBACK_SVG;
+  }
+
+  /**
+   * Get the project name - use token value or fallback
+   */
+  function getProjectName() {
+    if (isTokenReplaced(PROJECT_NAME)) {
+      return PROJECT_NAME;
+    }
+    return 'Terminal Javadocs';
+  }
 
   /**
    * Calculate root path based on current location
@@ -32,8 +71,8 @@
     header.innerHTML =
       '<div class="topbar-minimal-inner">' +
         '<a href="' + root + 'index.html" class="brand" title="Back to Home">' +
-          LOGO_SVG +
-          '<span class="project-title">Terminal Javadocs</span>' +
+          getLogoHtml() +
+          '<span class="project-title">' + getProjectName() + '</span>' +
         '</a>' +
       '</div>';
 

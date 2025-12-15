@@ -1362,6 +1362,7 @@ footer > hr {
 
 /* =============================================================================
    PRISM.JS OVERRIDES
+   Uses unified --syn-* tokens from colors.css
    ============================================================================= */
 
 code[class*="language-"],
@@ -1371,30 +1372,30 @@ pre[class*="language-"] {
 }
 
 .token.comment {
-    color: var(--text-secondary) !important;
+    color: var(--syn-comment) !important;
     font-style: italic !important;
 }
 .token.keyword {
-    color: var(--accent-bright) !important;
+    color: var(--syn-keyword) !important;
     font-weight: 600 !important;
 }
 .token.string {
-    color: #00ff00 !important;
+    color: var(--syn-string) !important;
 }
 .token.number {
-    color: var(--amber) !important;
+    color: var(--syn-number) !important;
 }
 .token.function {
-    color: #00ffaa !important;
+    color: var(--syn-function) !important;
 }
 .token.class-name {
-    color: var(--link-hover) !important;
+    color: var(--syn-type) !important;
 }
 .token.punctuation {
-    color: #00aa66 !important;
+    color: var(--syn-token) !important;
 }
 .token.annotation {
-    color: #ff9500 !important;
+    color: var(--syn-annotation) !important;
 }
 
 /* Ensure no white backgrounds leak through */

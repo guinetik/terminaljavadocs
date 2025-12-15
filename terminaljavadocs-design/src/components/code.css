@@ -61,22 +61,24 @@ pre:has(> code[class*="language-"])::before {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   PRISM TOKEN COLORS - Terminal Palette
+   PRISM TOKEN COLORS - Unified Terminal Palette
+   Uses --syn-* tokens from colors.css
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Comments - dim green */
+/* Comments - gray, recedes into background */
 .token.comment,
 .token.prolog,
 .token.doctype,
 .token.cdata {
-    color: #3d5a3d !important;
+    color: var(--syn-comment) !important;
     font-style: italic;
     background: none !important;
 }
 
-/* Punctuation */
-.token.punctuation {
-    color: #00cc00 !important;
+/* Punctuation & Operators - darker green */
+.token.punctuation,
+.token.operator {
+    color: var(--syn-token) !important;
     background: none !important;
 }
 
@@ -85,65 +87,79 @@ pre:has(> code[class*="language-"])::before {
     opacity: 0.8;
 }
 
-/* Strings - bright cyan/teal */
+/* Strings - almost white for high contrast */
 .token.string,
-.token.attr-value {
-    color: #00ffcc !important;
+.token.attr-value,
+.token.char {
+    color: var(--syn-string) !important;
     background: none !important;
 }
 
-/* Properties, tags, symbols - yellow */
+/* Numbers, booleans, constants - cyan pop */
+.token.number,
+.token.boolean,
+.token.constant {
+    color: var(--syn-number) !important;
+    background: none !important;
+}
+
+/* Properties, tags, symbols */
 .token.property,
 .token.tag,
-.token.boolean,
-.token.number,
-.token.constant,
 .token.symbol,
 .token.deleted {
-    color: #ffcc00 !important;
+    color: var(--syn-token) !important;
     background: none !important;
 }
 
-/* Selectors, chars, inserted */
+/* Selectors, builtins, inserted */
 .token.selector,
-.token.char,
 .token.builtin,
 .token.inserted {
-    color: #00ff88 !important;
+    color: var(--syn-type) !important;
     background: none !important;
 }
 
-/* Operators, entities, URLs */
-.token.operator,
+/* Entities, URLs */
 .token.entity,
 .token.url,
 .language-css .token.string,
 .style .token.string {
-    color: #00ffaa !important;
+    color: var(--syn-function) !important;
     background: none !important;
 }
 
-/* At-rules, attributes, functions */
-.token.atrule,
-.token.attr-name,
-.token.function,
-.token.class-name {
-    color: #88ff00 !important;
+/* Functions */
+.token.function {
+    color: var(--syn-function) !important;
     background: none !important;
 }
 
-/* Keywords - bright green */
+/* Types/Classes - lime */
+.token.class-name,
+.token.atrule {
+    color: var(--syn-type) !important;
+    background: none !important;
+}
+
+/* Attribute names */
+.token.attr-name {
+    color: var(--syn-type) !important;
+    background: none !important;
+}
+
+/* Keywords - neon green, the star */
 .token.keyword {
-    color: #00ff44 !important;
+    color: var(--syn-keyword) !important;
     font-weight: 600;
     background: none !important;
 }
 
-/* Regex, important, variable */
+/* Regex, important, variable - amber accent */
 .token.regex,
 .token.important,
 .token.variable {
-    color: #ff8800 !important;
+    color: var(--syn-annotation) !important;
     background: none !important;
 }
 
@@ -169,38 +185,38 @@ pre:has(> code[class*="language-"])::before {
 
 /* Java */
 .language-java .token.keyword {
-    color: #00ff44 !important;
+    color: var(--syn-keyword) !important;
     background: none !important;
 }
 
 .language-java .token.class-name {
-    color: #88ff00 !important;
+    color: var(--syn-type) !important;
     background: none !important;
 }
 
 .language-java .token.function {
-    color: #44ff88 !important;
+    color: var(--syn-function) !important;
     background: none !important;
 }
 
 .language-java .token.annotation {
-    color: #ffaa00 !important;
+    color: var(--syn-annotation) !important;
     background: none !important;
 }
 
 /* XML */
 .language-xml .token.tag {
-    color: #00ff66 !important;
+    color: var(--syn-keyword) !important;
     background: none !important;
 }
 
 .language-xml .token.attr-name {
-    color: #88ff44 !important;
+    color: var(--syn-type) !important;
     background: none !important;
 }
 
 .language-xml .token.attr-value {
-    color: #00ffcc !important;
+    color: var(--syn-string) !important;
     background: none !important;
 }
 

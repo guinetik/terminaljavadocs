@@ -93,6 +93,7 @@ ul.navList li.navBarCell1Rev,
 body > pre:not([class]) {
     padding-left: 0 !important;
     margin: var(--sp-4) !important;
+    color: #008523 !important;
 }
 
 /* =============================================================================
@@ -130,26 +131,27 @@ a[name]:target {
 
 /* =============================================================================
    SYNTAX HIGHLIGHTING - JXR Classes
+   Uses unified --syn-* tokens from colors.css
    ============================================================================= */
 
-/* Keywords (public, class, void, if, etc.) - bright green */
+/* Keywords (public, class, void, if, etc.) - neon green */
 .jxr_keyword,
 strong.jxr_keyword {
-    color: var(--accent-bright) !important;
+    color: var(--syn-keyword) !important;
     font-weight: 600 !important;
     font-style: normal !important;
 }
 
-/* Strings - cyan */
+/* Strings - almost white */
 .jxr_string,
 span.jxr_string {
-    color: var(--cyan) !important;
+    color: var(--syn-string) !important;
 }
 
-/* Regular comments - muted */
+/* Regular comments - gray */
 .jxr_comment,
 em.jxr_comment {
-    color: var(--text-muted) !important;
+    color: var(--syn-comment) !important;
     font-style: italic !important;
     font-weight: normal !important;
 }
@@ -157,7 +159,7 @@ em.jxr_comment {
 /* Javadoc comments - amber for distinction */
 .jxr_javadoccomment,
 em.jxr_javadoccomment {
-    color: var(--amber) !important;
+    color: var(--syn-javadoc) !important;
     font-style: italic !important;
     font-weight: normal !important;
 }
@@ -165,7 +167,7 @@ em.jxr_javadoccomment {
 /* Class/type links within source code */
 #overview ~ pre a:not(.jxr_linenumber),
 body > pre a:not(.jxr_linenumber) {
-    color: var(--link) !important;
+    color: var(--syn-type) !important;
     text-decoration: none !important;
 }
 

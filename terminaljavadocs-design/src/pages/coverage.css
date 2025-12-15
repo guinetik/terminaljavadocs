@@ -344,64 +344,65 @@ pre.source span[id^="L"]:target {
 }
 
 /* =============================================================================
-   PRETTIFY SYNTAX HIGHLIGHTING - Terminal Green Palette
+   PRETTIFY SYNTAX HIGHLIGHTING - Unified Terminal Palette
+   Uses --syn-* tokens from colors.css
    ============================================================================= */
 
-/* Keywords - bright green */
+/* Keywords - neon green, the star */
 pre.source .kwd {
-    color: #00ff44 !important;
+    color: var(--syn-keyword) !important;
     font-weight: 600 !important;
 }
 
-/* Types (class names, interfaces) - lime green */
+/* Types (class names, interfaces) - lime */
 pre.source .typ {
-    color: #88ff00 !important;
+    color: var(--syn-type) !important;
 }
 
-/* Strings - cyan/teal */
+/* Strings - almost white */
 pre.source .str {
-    color: #00ffcc !important;
+    color: var(--syn-string) !important;
 }
 
-/* Comments - dim green */
+/* Comments - gray */
 pre.source .com {
-    color: #3d5a3d !important;
+    color: var(--syn-comment) !important;
     font-style: italic !important;
 }
 
-/* Literals/Numbers - amber */
+/* Literals/Numbers - cyan */
 pre.source .lit {
-    color: #ffcc00 !important;
+    color: var(--syn-number) !important;
 }
 
-/* Punctuation - soft green */
+/* Punctuation - darker green */
 pre.source .pun {
-    color: #00cc00 !important;
+    color: var(--syn-token) !important;
 }
 
-/* Plain text - terminal green */
+/* Plain text - darker green */
 pre.source .pln {
-    color: #00ff00 !important;
+    color: var(--syn-token) !important;
 }
 
-/* Annotations - orange */
+/* Annotations - amber */
 pre.source .atn {
-    color: #ffaa00 !important;
+    color: var(--syn-annotation) !important;
 }
 
-/* Attribute values - cyan */
+/* Attribute values - almost white like strings */
 pre.source .atv {
-    color: #00ffcc !important;
+    color: var(--syn-string) !important;
 }
 
-/* Tags (for XML/HTML in Javadoc) */
+/* Tags (for XML/HTML in Javadoc) - neon green like keywords */
 pre.source .tag {
-    color: #00ff66 !important;
+    color: var(--syn-keyword) !important;
 }
 
-/* Functions - bright teal */
+/* Functions - seafoam */
 pre.source .fun {
-    color: #44ff88 !important;
+    color: var(--syn-function) !important;
 }
 
 /* =============================================================================
