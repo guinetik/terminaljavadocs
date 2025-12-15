@@ -5,7 +5,7 @@
 
 Dark terminal-themed Maven site styling for Java documentation. Features a sleek black-and-green aesthetic for your Maven sites, Javadoc, JXR source cross-reference, and JaCoCo coverage reports.
 
-![Terminal Javadocs Main Site](main.png)
+![Terminal Javadocs Main Site](img/main.png)
 
 ## Features
 
@@ -22,11 +22,16 @@ Dark terminal-themed Maven site styling for Java documentation. Features a sleek
 
 ### Javadoc
 
-![Javadoc with Terminal Theme](javadocs.png)
+![Javadoc with Terminal Theme](img/javadocs.png)
 
 ### JaCoCo Coverage Reports
 
-![JaCoCo Coverage with Terminal Theme](coverage.png)
+![JaCoCo Coverage Dashboard with Terminal Theme](img/coverage.png)
+
+![JaCoCo Code Coverage](img/codecov.png)
+
+### Code Blocks
+![JaCoCo Code Coverage](img/code.png)
 
 ## Quick Start
 
@@ -73,6 +78,8 @@ The plugin automatically:
 For multi-module projects, add the plugin to each module, or to the parent with inheritance.
 
 ### Landing Pages
+
+![Landing page design](img/landings.png)
 
 To generate landing pages (`coverage.html`, `source-xref.html`) that list all modules with reports:
 
