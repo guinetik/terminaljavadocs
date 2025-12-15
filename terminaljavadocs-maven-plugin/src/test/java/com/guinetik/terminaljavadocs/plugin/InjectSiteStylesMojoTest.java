@@ -39,15 +39,19 @@ import static org.mockito.Mockito.*;
  */
 public class InjectSiteStylesMojoTest {
 
+    /** Temporary directory for test file operations, cleaned up after each test. */
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
+    /** Mock Maven session providing access to reactor projects. */
     @Mock
     private MavenSession session;
 
+    /** Mock Maven project representing the current build. */
     @Mock
     private MavenProject project;
 
+    /** The mojo instance under test. */
     private InjectSiteStylesMojo mojo;
 
     /**

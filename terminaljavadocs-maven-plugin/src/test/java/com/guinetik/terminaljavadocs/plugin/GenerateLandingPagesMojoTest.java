@@ -19,21 +19,39 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Tests for GenerateLandingPagesMojo
+ * Unit tests for {@link GenerateLandingPagesMojo}.
+ *
+ * <p>
+ * Tests the landing page generation goal including skip behavior,
+ * packaging type checks, and site directory creation.
+ *
+ * <p>
+ * Uses Mockito to mock Maven session and project dependencies,
+ * and JUnit's TemporaryFolder for isolated file system operations.
  */
 public class GenerateLandingPagesMojoTest {
 
+    /** Temporary directory for test file operations, cleaned up after each test. */
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
+    /** Mock Maven session providing access to reactor projects. */
     @Mock
     private MavenSession session;
 
+    /** Mock Maven project representing the current build. */
     @Mock
     private MavenProject project;
 
+    /** The mojo instance under test. */
     private GenerateLandingPagesMojo mojo;
 
+    /**
+     * Sets up the test fixture with mocked Maven dependencies.
+     * Initializes the mojo with default configuration using reflection.
+     *
+     * @throws Exception if reflection fails during field injection
+     */
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
@@ -47,6 +65,11 @@ public class GenerateLandingPagesMojoTest {
         setField(mojo, "skip", false);
     }
 
+    /**
+     * Verifies that the mojo exits early without processing when skip=true.
+     *
+     * @throws Exception if reflection or execution fails
+     */
     @Test
     public void testMojoSkipsWhenSkipFlagIsTrue() throws Exception {
         setField(mojo, "skip", true);
@@ -56,6 +79,12 @@ public class GenerateLandingPagesMojoTest {
         mojo.execute();
     }
 
+    /**
+     * Verifies that the mojo exits early for non-POM packaging types.
+     * Landing pages should only be generated for aggregator (pom) projects.
+     *
+     * @throws Exception if reflection or execution fails
+     */
     @Test
     public void testMojoSkipsWhenNotPomPackaging() throws Exception {
         when(project.getPackaging()).thenReturn("jar");
@@ -64,6 +93,13 @@ public class GenerateLandingPagesMojoTest {
         mojo.execute();
     }
 
+    /**
+     * Verifies that the mojo executes successfully for POM packaging.
+     * Sets up a mock reactor with one module (without reports) to test
+     * the scanning logic.
+     *
+     * @throws Exception if reflection or execution fails
+     */
     @Test
     public void testMojoExecutesForPomProject() throws Exception {
         when(project.getPackaging()).thenReturn("pom");
@@ -86,6 +122,12 @@ public class GenerateLandingPagesMojoTest {
         mojo.execute();
     }
 
+    /**
+     * Verifies that the site output directory is created when it doesn't exist.
+     * When no staging directory exists, the mojo should create target/site.
+     *
+     * @throws Exception if reflection or execution fails
+     */
     @Test
     public void testSiteDirectoryIsCreated() throws Exception {
         when(project.getPackaging()).thenReturn("pom");
@@ -98,6 +140,12 @@ public class GenerateLandingPagesMojoTest {
         assertTrue(new File(tempFolder.getRoot(), "site").exists());
     }
 
+    /**
+     * Verifies that the custom project name parameter is accepted.
+     * The project name is used in the generated landing page headers.
+     *
+     * @throws Exception if reflection or execution fails
+     */
     @Test
     public void testProjectNameIsUsedInPages() throws Exception {
         String projectName = "My Custom Project";
@@ -111,6 +159,12 @@ public class GenerateLandingPagesMojoTest {
         mojo.execute();
     }
 
+    /**
+     * Verifies graceful handling when the reactor contains no modules.
+     * This can occur in single-module projects or during partial builds.
+     *
+     * @throws Exception if reflection or execution fails
+     */
     @Test
     public void testHandlesEmptyReactorProjects() throws Exception {
         when(project.getPackaging()).thenReturn("pom");
@@ -121,7 +175,12 @@ public class GenerateLandingPagesMojoTest {
     }
 
     /**
-     * Helper method to set private fields using reflection
+     * Sets a private field on an object using reflection.
+     *
+     * @param target    the object to modify
+     * @param fieldName the name of the field to set
+     * @param value     the value to assign to the field
+     * @throws Exception if the field cannot be accessed or set
      */
     private void setField(Object target, String fieldName, Object value) throws Exception {
         Field field = target.getClass().getDeclaredField(fieldName);

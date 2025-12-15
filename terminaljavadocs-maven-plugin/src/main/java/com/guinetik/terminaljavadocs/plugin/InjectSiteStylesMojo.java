@@ -43,59 +43,106 @@ public class InjectSiteStylesMojo extends AbstractMojo {
 
     /**
      * Page types with their corresponding CSS files.
+     *
+     * <p>
+     * Each page type maps to a specific minified CSS file that provides
+     * Terminal Javadocs styling for that category of generated documentation.
      */
     public enum PageType {
+        /** Landing pages (coverage.html, source-xref.html). */
         LANDING("landing", "terminaljavadocs-landing.min.css"),
+        /** JaCoCo coverage report pages. */
         COVERAGE("coverage", "terminaljavadocs-coverage.min.css"),
+        /** JXR source cross-reference pages. */
         JXR("jxr", "terminaljavadocs-jxr.min.css"),
+        /** Javadoc API documentation pages. */
         JAVADOC("javadoc", "terminaljavadocs-javadoc.min.css"),
+        /** General Maven site pages. */
         SITE("site", "terminaljavadocs-site.min.css");
 
+        /** The short name used in injection markers. */
         private final String name;
+
+        /** The minified CSS filename for this page type. */
         private final String cssFile;
 
+        /**
+         * Creates a page type with its associated CSS file.
+         *
+         * @param name    the short name for logging and markers
+         * @param cssFile the minified CSS filename
+         */
         PageType(String name, String cssFile) {
             this.name = name;
             this.cssFile = cssFile;
         }
 
+        /**
+         * Returns the short name of this page type.
+         *
+         * @return the name used in injection markers (e.g., "javadoc")
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         * Returns the CSS filename for this page type.
+         *
+         * @return the minified CSS filename (e.g., "terminaljavadocs-javadoc.min.css")
+         */
         public String getCssFile() {
             return cssFile;
         }
     }
 
-    /** Resource path prefix for styles */
+    /** Resource path prefix for styles within the plugin JAR. */
     private static final String STYLES_RESOURCE_PATH = "styles/";
 
-    /** Resource path for the bundled JS */
+    /** Filename of the bundled JavaScript file. */
     private static final String JS_FILE = "terminaljavadocs.min.js";
 
-    /** Resource path for themed JaCoCo resources */
+    /** Resource path prefix for themed JaCoCo images within the plugin JAR. */
     private static final String JACOCO_RESOURCES_PATH = "jacoco-resources/";
 
-    /** JaCoCo resource files to copy (images for coverage bars) */
+    /**
+     * JaCoCo resource files to copy (themed coverage bar images).
+     * These replace JaCoCo's default images with Terminal Javadocs styled versions.
+     */
     private static final String[] JACOCO_RESOURCE_FILES = {
         "branchfc.gif", "branchnc.gif", "branchpc.gif",
         "greenbar.gif", "redbar.gif",
         "down.gif", "up.gif", "sort.gif"
     };
 
-    /** Marker to detect already-injected pages (must be HTML comment format to avoid false positives) */
+    /**
+     * HTML comment marker to detect already-injected pages.
+     * Prevents duplicate style injection on re-runs.
+     */
     private static final String INJECTION_MARKER = "<!-- terminal-javadocs-injected";
 
+    /**
+     * The current Maven session, providing access to reactor projects.
+     */
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
+    /**
+     * The current Maven project being built.
+     */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
+    /**
+     * Skip style injection when set to {@code true}.
+     * Can be set via {@code -Dterminaljavadocs.skip=true}.
+     */
     @Parameter(property = "terminaljavadocs.skip", defaultValue = "false")
     private boolean skip;
 
+    /**
+     * The project's build output directory (typically {@code target/}).
+     */
     @Parameter(defaultValue = "${project.build.directory}", readonly = true)
     private File buildDirectory;
 
@@ -111,13 +158,39 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     @Parameter(property = "terminaljavadocs.processNestedSites", defaultValue = "true")
     private boolean processNestedSites;
 
+    /** Counter for total HTML files processed. */
     private int processedFiles = 0;
+
+    /** Counter for landing pages processed. */
     private int landingFiles = 0;
+
+    /** Counter for coverage report pages processed. */
     private int coverageFiles = 0;
+
+    /** Counter for JXR source pages processed. */
     private int jxrFiles = 0;
+
+    /** Counter for Javadoc pages processed. */
     private int javadocFiles = 0;
+
+    /** Counter for general site pages processed. */
     private int siteFiles = 0;
 
+    /**
+     * Executes the style injection goal.
+     *
+     * <p>
+     * This method:
+     * <ol>
+     * <li>Locates the site output directory (staging or site)</li>
+     * <li>Copies CSS and JS resources to the styles directory</li>
+     * <li>Replaces JaCoCo's default images with themed versions</li>
+     * <li>Recursively processes all HTML files, injecting appropriate styles</li>
+     * <li>Processes nested module sites if enabled</li>
+     * </ol>
+     *
+     * @throws MojoExecutionException if file operations fail
+     */
     @Override
     public void execute() throws MojoExecutionException {
         if (skip) {
@@ -225,7 +298,10 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Copy style resources from the plugin JAR to the target directory.
+     * Copies all style resources (CSS and JS) from the plugin JAR to the target directory.
+     *
+     * @param targetDir the directory to copy resources to (will be created if needed)
+     * @throws IOException if file copying fails
      */
     private void copyStyleResources(File targetDir) throws IOException {
         targetDir.mkdirs();
@@ -242,7 +318,11 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Copy a single resource file.
+     * Copies a single resource file from the plugin JAR to the filesystem.
+     *
+     * @param resourcePath the classpath resource path to copy from
+     * @param targetFile   the target file to copy to
+     * @throws IOException if file copying fails
      */
     private void copyResource(String resourcePath, File targetFile) throws IOException {
         try (InputStream is = getResourceStream(resourcePath)) {
@@ -257,7 +337,10 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Copy themed JaCoCo resources (coverage bar images) to a jacoco-resources directory.
+     * Copies themed JaCoCo resources (coverage bar images) to a jacoco-resources directory.
+     *
+     * @param jacocoResourcesDir the JaCoCo resources directory to update
+     * @throws IOException if file copying fails
      */
     private void copyJacocoResources(File jacocoResourcesDir) throws IOException {
         if (!jacocoResourcesDir.exists()) {
@@ -271,7 +354,11 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Find and theme all JaCoCo resource directories in the given site directory.
+     * Finds and themes all JaCoCo resource directories in the given site directory.
+     * Recursively walks the directory tree looking for {@code jacoco-resources} folders.
+     *
+     * @param siteDir the site directory to search
+     * @throws IOException if directory traversal or file copying fails
      */
     private void themeJacocoResources(File siteDir) throws IOException {
         Files.walkFileTree(siteDir.toPath(), new SimpleFileVisitor<Path>() {
@@ -286,7 +373,18 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Get an input stream for a resource, trying multiple classloaders.
+     * Gets an input stream for a classpath resource, trying multiple classloaders.
+     *
+     * <p>
+     * Attempts loading in this order:
+     * <ol>
+     * <li>Thread context classloader</li>
+     * <li>Class classloader</li>
+     * <li>Direct resource stream with leading slash</li>
+     * </ol>
+     *
+     * @param resourcePath the resource path to load
+     * @return the input stream, or {@code null} if not found
      */
     private InputStream getResourceStream(String resourcePath) {
         InputStream is = Thread.currentThread()
@@ -305,7 +403,11 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Process all HTML files in the given directory recursively.
+     * Processes all HTML files in the given directory recursively.
+     *
+     * @param directory the directory to scan for HTML files
+     * @param siteRoot  the root of the site (for relative path calculations)
+     * @throws IOException if file traversal or processing fails
      */
     private void processHtmlFiles(File directory, File siteRoot) throws IOException {
         Files.walkFileTree(directory.toPath(), new SimpleFileVisitor<Path>() {
@@ -326,7 +428,11 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Process a single HTML file - detect its type and inject appropriate styles.
+     * Processes a single HTML file by detecting its type and injecting appropriate styles.
+     *
+     * @param htmlFile the HTML file to process
+     * @param siteRoot the root of the site (for relative path calculations)
+     * @throws IOException if file reading or writing fails
      */
     private void processHtmlFile(File htmlFile, File siteRoot) throws IOException {
         String content = new String(Files.readAllBytes(htmlFile.toPath()), StandardCharsets.UTF_8);
@@ -377,7 +483,20 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Detect the page type based on file path and content.
+     * Detects the page type based on file path and content.
+     *
+     * <p>
+     * Detection priority:
+     * <ol>
+     * <li>Filename match (coverage.html, source-xref.html)</li>
+     * <li>Path-based detection (/jacoco/, /xref/, /apidocs/)</li>
+     * <li>Content-based detection (HTML markers)</li>
+     * <li>Default to SITE type</li>
+     * </ol>
+     *
+     * @param htmlFile the HTML file being processed
+     * @param content  the file's content
+     * @return the detected page type
      */
     private PageType detectPageType(File htmlFile, String content) {
         String path = htmlFile.getAbsolutePath().replace('\\', '/').toLowerCase();
@@ -418,7 +537,10 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Check if content is from a landing page (coverage.html or source-xref.html).
+     * Checks if content is from a landing page (coverage.html or source-xref.html).
+     *
+     * @param content the HTML content to check
+     * @return {@code true} if landing page markers are found
      */
     private boolean isLandingContent(String content) {
         return content.contains("class=\"terminal-header\"") ||
@@ -427,7 +549,10 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Check if content is from JaCoCo coverage report.
+     * Checks if content is from a JaCoCo coverage report.
+     *
+     * @param content the HTML content to check
+     * @return {@code true} if JaCoCo markers are found
      */
     private boolean isJacocoContent(String content) {
         return content.contains("jacoco") ||
@@ -438,7 +563,10 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Check if content is from JXR source cross-reference.
+     * Checks if content is from a JXR source cross-reference page.
+     *
+     * @param content the HTML content to check
+     * @return {@code true} if JXR markers are found
      */
     private boolean isJxrContent(String content) {
         return content.contains("jxr") ||
@@ -448,7 +576,10 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Check if content is from Javadoc.
+     * Checks if content is from Javadoc API documentation.
+     *
+     * @param content the HTML content to check
+     * @return {@code true} if Javadoc markers are found
      */
     private boolean isJavadocContent(String content) {
         return content.contains("Generated by javadoc") ||
@@ -459,7 +590,11 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Calculate relative path from HTML file to site root.
+     * Calculates the relative path from an HTML file's directory to the site root.
+     *
+     * @param htmlFile the HTML file being processed
+     * @param siteRoot the root directory of the site
+     * @return the relative path with trailing slash (e.g., "../../../")
      */
     private String calculateRelativePath(File htmlFile, File siteRoot) {
         Path htmlPath = htmlFile.toPath().getParent();
@@ -482,7 +617,19 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Generate the style injection snippet for a page type.
+     * Generates the HTML snippet to inject for a given page type.
+     *
+     * <p>
+     * The snippet includes:
+     * <ul>
+     * <li>An HTML comment marker for detection</li>
+     * <li>A CSS link tag for the page-specific stylesheet</li>
+     * <li>A deferred script tag for the JavaScript bundle</li>
+     * </ul>
+     *
+     * @param pageType     the type of page being processed
+     * @param relativePath the relative path to the site root
+     * @return the HTML snippet to inject
      */
     private String generateStyleSnippet(PageType pageType, String relativePath) {
         String stylesPath = relativePath + stylesDir + "/";
@@ -493,7 +640,19 @@ public class InjectSiteStylesMojo extends AbstractMojo {
     }
 
     /**
-     * Inject styles into HTML content before &lt;/head&gt;.
+     * Injects the style snippet into HTML content before the closing head tag.
+     *
+     * <p>
+     * Injection strategy:
+     * <ol>
+     * <li>Try to inject before {@code </head>} (preferred)</li>
+     * <li>Fall back to after {@code <head>} if no closing tag</li>
+     * <li>Return {@code null} if no head section found</li>
+     * </ol>
+     *
+     * @param content      the HTML content to modify
+     * @param styleSnippet the style snippet to inject
+     * @return the modified content, or {@code null} if injection failed
      */
     private String injectStyles(String content, String styleSnippet) {
         // Try to inject before </head>
