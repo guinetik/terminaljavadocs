@@ -7,6 +7,40 @@ This guide walks you through setting up Terminal Javadocs with detailed explanat
 - Maven 3.6+
 - Java 8+
 
+### Required Plugin Versions
+
+Terminal Javadocs uses Doxia Sitetools 2.0.0-M12+ features. You **must** use compatible versions of the Maven site plugins:
+
+```xml
+<properties>
+    <maven-site-plugin.version>4.0.0-M13</maven-site-plugin.version>
+    <maven-project-info-reports-plugin.version>3.5.0</maven-project-info-reports-plugin.version>
+</properties>
+
+<build>
+    <pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${maven-site-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${maven-project-info-reports-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </pluginManagement>
+</build>
+```
+
+If you see this error, your maven-site-plugin version is too old:
+
+```
+RendererException: Cannot use skin: has 2.0.0-M12 Doxia Sitetools prerequisite, but current is 1.11.1
+```
+
 ## Step 1: Add the Plugin
 
 Add the Terminal Javadocs plugin to your `pom.xml`:
@@ -17,7 +51,7 @@ Add the Terminal Javadocs plugin to your `pom.xml`:
         <plugin>
             <groupId>com.guinetik</groupId>
             <artifactId>terminaljavadocs-maven-plugin</artifactId>
-            <version>1.0.44</version>
+            <version>1.0.5</version>
             <executions>
                 <execution>
                     <id>inject-styles</id>
@@ -131,7 +165,7 @@ For multi-module Maven projects, add the plugin to each module that generates a 
         <plugin>
             <groupId>com.guinetik</groupId>
             <artifactId>terminaljavadocs-maven-plugin</artifactId>
-            <version>1.0.44</version>
+            <version>1.0.5</version>
             <executions>
                 <execution>
                     <id>inject-styles</id>

@@ -1,8 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/DECORATION/1.8.0"
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+    xmlns="http://maven.apache.org/DECORATION/1.8.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 https://maven.apache.org/xsd/decoration-1.8.0.xsd"
-    name="Terminal Javadocs">
+    name="Terminal Javadocs"
+>
 
     <skin>
         <groupId>org.apache.maven.skins</groupId>
@@ -64,29 +66,30 @@
                 <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png" />
             ]]>
         </head>
-        
+
         <menu name="Overview">
-            <item name="Introduction" href="index.html"/>
-            <item name="Quick Start" href="quickstart.html"/>
-            <item name="Customization" href="customization.html"/>
+            <item name="Introduction" href="index.html" />
+            <item name="Quick Start" href="quickstart.html" />
+            <item name="Customization" href="customization.html" />
         </menu>
 
         <menu name="Documentation">
-            <item name="Javadoc" href="apidocs/index.html"/>
-            <item name="Source Code (XRef)" href="source-xref.html"/>
-            <item name="Code Coverage" href="coverage.html"/>
+            <item name="Javadoc" href="apidocs/index.html" />
+            <item name="Source Code (XRef)" href="source-xref.html" />
+            <item name="Code Coverage" href="coverage.html" />
         </menu>
 
-        <menu name="Examples">
-            <item name="Browse All" href="examples/index.html"/>
-            <item name="HelloTerminal" href="examples/index.html?path=com/guinetik/examples/HelloTerminal.html"/>
-        </menu>
-
-        <menu name="Project Information" ref="reports"/>
+        <menu name="Project Information" ref="reports" />
 
         <menu name="Links">
-            <item name="GitHub" href="https://github.com/guinetik/terminaljavadocs"/>
-            <item name="Maven Central" href="https://central.sonatype.com/artifact/com.guinetik/terminaljavadocs"/>
+            <item
+                name="GitHub"
+                href="https://github.com/guinetik/terminaljavadocs"
+            />
+            <item
+                name="Maven Central"
+                href="https://central.sonatype.com/artifact/com.guinetik/terminaljavadocs"
+            />
         </menu>
     </body>
 </project>

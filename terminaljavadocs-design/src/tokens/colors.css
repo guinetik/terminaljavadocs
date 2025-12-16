@@ -53,13 +53,13 @@
        ═══════════════════════════════════════════════════════════════════════════ */
 
     /* Comments - gray, fades into background */
-    --syn-comment: var(--text-secondary);
+    --syn-comment: var(--text-muted);
 
-    /* Strings - almost white, high contrast */
-    --syn-string: #e0e0e0;
+    /* Strings - Accent color */
+    --syn-string: var(--accent);
 
-    /* Keywords - darker green phosphor glow */
-    --syn-keyword: var(--accent);
+    /* Keywords - secondary color */
+    --syn-keyword: var(--text-secondary);
 
     /* Numbers/Literals - cyan pop */
     --syn-number: var(--cyan);
@@ -74,7 +74,7 @@
     --syn-function: #a1c181;
 
     /* Annotations - amber highlight */
-    --syn-annotation: var(--accent-subtle);
+    --syn-annotation: var(--accent-dim);
 
     /* Javadoc comments - amber for distinction from regular comments */
     --syn-javadoc: var(--text-secondary);

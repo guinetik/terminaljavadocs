@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.guinetik</groupId>
         <artifactId>terminaljavadocs</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.51</version>
     </parent>
 
     <artifactId>terminaljavadocs-examples</artifactId>
