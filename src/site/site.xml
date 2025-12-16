@@ -30,17 +30,21 @@
                 <showUser>true</showUser>
                 <showFollowers>true</showFollowers>
             </twitter>
-            <googleAnalytics>
-                <accountId>G-ZY3ZHWZ6ZS</accountId>
-                <anonymizeIp>false</anonymizeIp>
-                <forceSSL>false</forceSSL>
-            </googleAnalytics>
         </fluidoSkin>
     </custom>
 
     <body>
         <head>
             <![CDATA[
+                <!-- Google Analytics 4 -->
+                <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZY3ZHWZ6ZS"></script>
+                <script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', 'G-ZY3ZHWZ6ZS');
+                </script>
+
                 <!-- SEO Meta Tags -->
                 <meta name="description" content="Dark terminal-themed Maven site styling for Java documentation. Features sleek black-and-green aesthetic for Maven sites, Javadoc, and JaCoCo reports." />
                 <meta name="keywords" content="maven, javadoc, documentation, dark theme, terminal, java, jacoco, coverage, maven-site" />
