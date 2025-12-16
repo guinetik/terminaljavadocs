@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModuleReport.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script>
+<!-- <!-- terminal-javadocs-injected [coverage] -->
+<link rel="stylesheet" href="../../../terminal-styles/terminaljavadocs-coverage.min.css">
+<script src="../../../terminal-styles/terminaljavadocs.min.js" defer></script>
+</head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Terminal Javadocs Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">com.guinetik.terminaljavadocs.plugin</a> &gt; <span class="el_source">ModuleReport.java</span></div><h1>ModuleReport.java</h1><pre class="source lang-java linenums">package com.guinetik.terminaljavadocs.plugin;
+
+/**
+ * Data transfer object representing a Maven module's report metadata.
+ *
+ * &lt;p&gt;
+ * Used by {@link GenerateLandingPagesMojo} to collect information about modules
+ * that have generated reports (coverage, xref) and render them into landing pages.
+ *
+ * &lt;p&gt;
+ * Example usage:
+ * &lt;pre&gt;{@code
+ * ModuleReport report = new ModuleReport(
+ *     &quot;my-module&quot;,
+ *     &quot;Core utilities library&quot;,
+ *     &quot;my-module&quot;
+ * );
+ * // Use in template: report.getArtifactId() -&gt; &quot;my-module&quot;
+ * }&lt;/pre&gt;
+ *
+ * @see GenerateLandingPagesMojo
+ */
+public class ModuleReport {
+
+    private final String artifactId;
+    private final String description;
+    private final String relativePath;
+
+    /**
+     * Creates a new module report with the specified metadata.
+     *
+     * @param artifactId   the Maven artifact ID of the module (e.g., &quot;my-module&quot;)
+     * @param description  the module's description from pom.xml, may be {@code null}
+     * @param relativePath the relative path from the landing page to this module's reports
+     */
+<span class="fc" id="L36">    public ModuleReport(String artifactId, String description, String relativePath) {</span>
+<span class="fc" id="L37">        this.artifactId = artifactId;</span>
+<span class="fc" id="L38">        this.description = description;</span>
+<span class="fc" id="L39">        this.relativePath = relativePath;</span>
+<span class="fc" id="L40">    }</span>
+
+    /**
+     * Returns the Maven artifact ID of this module.
+     *
+     * @return the artifact ID, never {@code null}
+     */
+    public String getArtifactId() {
+<span class="fc" id="L48">        return artifactId;</span>
+    }
+
+    /**
+     * Returns the module's description from its pom.xml.
+     *
+     * @return the description, or {@code null} if not specified in the POM
+     */
+    public String getDescription() {
+<span class="fc" id="L57">        return description;</span>
+    }
+
+    /**
+     * Returns the relative path from the landing page to this module's report directory.
+     *
+     * &lt;p&gt;
+     * This path is used to construct links in the generated landing pages,
+     * e.g., {@code ./my-module/jacoco/index.html}.
+     *
+     * @return the relative path to the module's reports
+     */
+    public String getRelativePath() {
+<span class="fc" id="L70">        return relativePath;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

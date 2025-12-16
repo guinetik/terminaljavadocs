@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HelloTerminal.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script>
+<!-- <!-- terminal-javadocs-injected [coverage] -->
+<link rel="stylesheet" href="../../terminal-styles/terminaljavadocs-coverage.min.css">
+<script src="../../terminal-styles/terminaljavadocs.min.js" defer></script>
+</head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Terminal Javadocs Examples</a> &gt; <a href="index.source.html" class="el_package">com.guinetik.examples</a> &gt; <span class="el_source">HelloTerminal.java</span></div><h1>HelloTerminal.java</h1><pre class="source lang-java linenums">/*
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ */
+package com.guinetik.examples;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+/**
+ * A comprehensive example class demonstrating Terminal Javadocs JXR styling
+ * with Prism.js syntax highlighting.
+ *
+ * &lt;p&gt;This class showcases various Java language features including:&lt;/p&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Generics and type parameters&lt;/li&gt;
+ *   &lt;li&gt;Lambda expressions and method references&lt;/li&gt;
+ *   &lt;li&gt;Stream API operations&lt;/li&gt;
+ *   &lt;li&gt;Optional handling&lt;/li&gt;
+ *   &lt;li&gt;Exception handling patterns&lt;/li&gt;
+ *   &lt;li&gt;Inner classes and enums&lt;/li&gt;
+ *   &lt;li&gt;Annotations&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * &lt;h2&gt;Usage Example&lt;/h2&gt;
+ * &lt;pre class=&quot;language-java&quot;&gt;&lt;code&gt;
+ * HelloTerminal terminal = new HelloTerminal(&quot;World&quot;);
+ * terminal.displayGreeting();
+ * terminal.runAsyncTask(&quot;Process data&quot;);
+ * &lt;/code&gt;&lt;/pre&gt;
+ *
+ * @author guinetik
+ * @version 1.0.0
+ * @since 2024
+ * @see java.util.concurrent.CompletableFuture
+ */
+@SuppressWarnings({ &quot;unused&quot;, &quot;WeakerAccess&quot; })
+public class HelloTerminal {
+
+    // =========================================================================
+    // CONSTANTS
+    // =========================================================================
+
+    /** The default greeting template */
+    public static final String DEFAULT_GREETING = &quot;Hello, %s!&quot;;
+
+    /** ANSI escape code for green text */
+    public static final String ANSI_GREEN = &quot;\u001B[32m&quot;;
+
+    /** ANSI escape code to reset text color */
+    public static final String ANSI_RESET = &quot;\u001B[0m&quot;;
+
+    /** Maximum number of retries for async operations */
+    private static final int MAX_RETRIES = 3;
+
+    /** Default timeout in milliseconds */
+    private static final long DEFAULT_TIMEOUT_MS = 5000L;
+
+    // =========================================================================
+    // INSTANCE FIELDS
+    // =========================================================================
+
+    /** The target name for greetings */
+    private final String name;
+
+    /** List of registered message handlers */
+    private final List&lt;Function&lt;String, String&gt;&gt; handlers;
+
+    /** Current status of the terminal */
+    private Status status;
+
+    /** Timestamp of last activity */
+    private LocalDateTime lastActivity;
+
+    // =========================================================================
+    // CONSTRUCTORS
+    // =========================================================================
+
+    /**
+     * Creates a new HelloTerminal with a default name.
+     */
+    public HelloTerminal() {
+<span class="nc" id="L93">        this(&quot;Terminal&quot;);</span>
+<span class="nc" id="L94">    }</span>
+
+    /**
+     * Creates a new HelloTerminal with the specified name.
+     *
+     * @param name the target name for greetings
+     * @throws IllegalArgumentException if name is null or empty
+     */
+<span class="nc" id="L102">    public HelloTerminal(String name) {</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">        if (name == null || name.trim().isEmpty()) {</span>
+<span class="nc" id="L104">            throw new IllegalArgumentException(&quot;Name cannot be null or empty&quot;);</span>
+        }
+<span class="nc" id="L106">        this.name = name;</span>
+<span class="nc" id="L107">        this.handlers = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L108">        this.status = Status.INITIALIZED;</span>
+<span class="nc" id="L109">        this.lastActivity = LocalDateTime.now();</span>
+<span class="nc" id="L110">    }</span>
+
+    // =========================================================================
+    // PUBLIC METHODS
+    // =========================================================================
+
+    /**
+     * Displays a colorful greeting to the terminal.
+     *
+     * &lt;p&gt;The greeting is formatted using ANSI escape codes for
+     * terminal color support.&lt;/p&gt;
+     */
+    public void displayGreeting() {
+<span class="nc" id="L123">        String greeting = String.format(DEFAULT_GREETING, name);</span>
+<span class="nc" id="L124">        String coloredOutput = ANSI_GREEN + greeting + ANSI_RESET;</span>
+
+<span class="nc" id="L126">        System.out.println(coloredOutput);</span>
+<span class="nc" id="L127">        System.out.println(</span>
+<span class="nc" id="L128">            &quot;Timestamp: &quot; + formatTimestamp(LocalDateTime.now())</span>
+        );
+
+<span class="nc" id="L131">        updateStatus(Status.ACTIVE);</span>
+<span class="nc" id="L132">    }</span>
+
+    /**
+     * Registers a message handler function.
+     *
+     * @param handler the handler function to register
+     * @return this instance for method chaining
+     */
+    public HelloTerminal addHandler(Function&lt;String, String&gt; handler) {
+<span class="nc" id="L141">        handlers.add(handler);</span>
+<span class="nc" id="L142">        return this;</span>
+    }
+
+    /**
+     * Processes a message through all registered handlers.
+     *
+     * @param message the message to process
+     * @return the processed message after all handlers have been applied
+     */
+    public String processMessage(String message) {
+<span class="nc" id="L152">        return handlers</span>
+<span class="nc" id="L153">            .stream()</span>
+<span class="nc" id="L154">            .reduce(Function.identity(), Function::andThen)</span>
+<span class="nc" id="L155">            .apply(message);</span>
+    }
+
+    /**
+     * Runs an asynchronous task with the given description.
+     *
+     * @param taskDescription description of the task to run
+     * @return a CompletableFuture containing the task result
+     */
+    public CompletableFuture&lt;TaskResult&gt; runAsyncTask(String taskDescription) {
+<span class="nc" id="L165">        return CompletableFuture.supplyAsync(() -&gt; {</span>
+<span class="nc" id="L166">            updateStatus(Status.PROCESSING);</span>
+
+            try {
+                // Simulate some work
+<span class="nc" id="L170">                Thread.sleep(100);</span>
+
+<span class="nc" id="L172">                String result = String.format(</span>
+                    &quot;[%s] Completed: %s&quot;,
+<span class="nc" id="L174">                    formatTimestamp(LocalDateTime.now()),</span>
+                    taskDescription
+                );
+
+<span class="nc" id="L178">                updateStatus(Status.ACTIVE);</span>
+<span class="nc" id="L179">                return new TaskResult(true, result, null);</span>
+<span class="nc" id="L180">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L181">                Thread.currentThread().interrupt();</span>
+<span class="nc" id="L182">                updateStatus(Status.ERROR);</span>
+<span class="nc" id="L183">                return new TaskResult(false, null, e);</span>
+            }
+        });
+    }
+
+    /**
+     * Finds a value by key with optional default.
+     *
+     * @param &lt;T&gt; the type of value to find
+     * @param key the key to search for
+     * @param defaultValue the default value if not found
+     * @return an Optional containing the found value or default
+     */
+    public &lt;T&gt; Optional&lt;T&gt; findValue(String key, T defaultValue) {
+        // Demonstrating Optional usage
+<span class="nc" id="L198">        return Optional.ofNullable(key)</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">            .filter(k -&gt; !k.isEmpty())</span>
+<span class="nc" id="L200">            .map(k -&gt; {</span>
+                // In a real implementation, this would look up the value
+<span class="nc" id="L202">                return defaultValue;</span>
+            });
+    }
+
+    /**
+     * Generates a sequence of numbers with transformations.
+     *
+     * @param count the number of elements to generate
+     * @return a list of formatted number strings
+     */
+    public List&lt;String&gt; generateSequence(int count) {
+<span class="nc" id="L213">        return IntStream.rangeClosed(1, count)</span>
+<span class="nc" id="L214">            .boxed()</span>
+<span class="nc" id="L215">            .map(i -&gt; String.format(&quot;Item #%03d&quot;, i))</span>
+<span class="nc" id="L216">            .peek(item -&gt; System.out.println(&quot;Generated: &quot; + item))</span>
+<span class="nc" id="L217">            .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Gets the current status.
+     *
+     * @return the current status
+     */
+    public Status getStatus() {
+<span class="nc" id="L226">        return status;</span>
+    }
+
+    /**
+     * Gets the last activity timestamp.
+     *
+     * @return the last activity time
+     */
+    public LocalDateTime getLastActivity() {
+<span class="nc" id="L235">        return lastActivity;</span>
+    }
+
+    // =========================================================================
+    // PRIVATE METHODS
+    // =========================================================================
+
+    /**
+     * Updates the status and records activity timestamp.
+     *
+     * @param newStatus the new status to set
+     */
+    private void updateStatus(Status newStatus) {
+<span class="nc" id="L248">        this.status = newStatus;</span>
+<span class="nc" id="L249">        this.lastActivity = LocalDateTime.now();</span>
+<span class="nc" id="L250">    }</span>
+
+    /**
+     * Formats a timestamp for display.
+     *
+     * @param timestamp the timestamp to format
+     * @return formatted timestamp string
+     */
+    private String formatTimestamp(LocalDateTime timestamp) {
+<span class="nc" id="L259">        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(</span>
+            &quot;yyyy-MM-dd HH:mm:ss&quot;
+        );
+<span class="nc" id="L262">        return timestamp.format(formatter);</span>
+    }
+
+    // =========================================================================
+    // INNER CLASSES
+    // =========================================================================
+
+    /**
+     * Represents the status of the terminal.
+     */
+<span class="nc" id="L272">    public enum Status {</span>
+        /** Terminal has been initialized but not yet used */
+<span class="nc" id="L274">        INITIALIZED(&quot;Initialized&quot;),</span>
+
+        /** Terminal is actively processing */
+<span class="nc" id="L277">        ACTIVE(&quot;Active&quot;),</span>
+
+        /** Terminal is processing a task */
+<span class="nc" id="L280">        PROCESSING(&quot;Processing&quot;),</span>
+
+        /** Terminal encountered an error */
+<span class="nc" id="L283">        ERROR(&quot;Error&quot;),</span>
+
+        /** Terminal has been shut down */
+<span class="nc" id="L286">        SHUTDOWN(&quot;Shutdown&quot;);</span>
+
+        private final String displayName;
+
+<span class="nc" id="L290">        Status(String displayName) {</span>
+<span class="nc" id="L291">            this.displayName = displayName;</span>
+<span class="nc" id="L292">        }</span>
+
+        /**
+         * Gets the display name for this status.
+         *
+         * @return the human-readable status name
+         */
+        public String getDisplayName() {
+<span class="nc" id="L300">            return displayName;</span>
+        }
+
+        @Override
+        public String toString() {
+<span class="nc" id="L305">            return displayName;</span>
+        }
+    }
+
+    /**
+     * Represents the result of an asynchronous task.
+     */
+    public static class TaskResult {
+
+        private final boolean success;
+        private final String message;
+        private final Exception error;
+
+        /**
+         * Creates a new TaskResult.
+         *
+         * @param success whether the task succeeded
+         * @param message the result message
+         * @param error any error that occurred
+         */
+<span class="nc" id="L325">        public TaskResult(boolean success, String message, Exception error) {</span>
+<span class="nc" id="L326">            this.success = success;</span>
+<span class="nc" id="L327">            this.message = message;</span>
+<span class="nc" id="L328">            this.error = error;</span>
+<span class="nc" id="L329">        }</span>
+
+        /**
+         * Checks if the task was successful.
+         *
+         * @return true if successful, false otherwise
+         */
+        public boolean isSuccess() {
+<span class="nc" id="L337">            return success;</span>
+        }
+
+        /**
+         * Gets the result message.
+         *
+         * @return the message, or null if failed
+         */
+        public String getMessage() {
+<span class="nc" id="L346">            return message;</span>
+        }
+
+        /**
+         * Gets any error that occurred.
+         *
+         * @return the error, or null if successful
+         */
+        public Optional&lt;Exception&gt; getError() {
+<span class="nc" id="L355">            return Optional.ofNullable(error);</span>
+        }
+
+        @Override
+        public String toString() {
+<span class="nc bnc" id="L360" title="All 2 branches missed.">            if (success) {</span>
+<span class="nc" id="L361">                return &quot;TaskResult{success=true, message='&quot; + message + &quot;'}&quot;;</span>
+            } else {
+<span class="nc" id="L363">                return &quot;TaskResult{success=false, error=&quot; + error + &quot;}&quot;;</span>
+            }
+        }
+    }
+
+    // =========================================================================
+    // MAIN METHOD
+    // =========================================================================
+
+    /**
+     * Main entry point for testing the HelloTerminal class.
+     *
+     * @param args command line arguments (first argument used as name)
+     */
+    public static void main(String[] args) {
+        // Parse command line arguments
+<span class="nc bnc" id="L379" title="All 2 branches missed.">        String name = args.length &gt; 0 ? args[0] : &quot;World&quot;;</span>
+
+<span class="nc" id="L381">        System.out.println(&quot;=&quot;.repeat(50));</span>
+<span class="nc" id="L382">        System.out.println(&quot;  Terminal Javadocs - JXR Example&quot;);</span>
+<span class="nc" id="L383">        System.out.println(&quot;=&quot;.repeat(50));</span>
+<span class="nc" id="L384">        System.out.println();</span>
+
+        // Create instance and display greeting
+<span class="nc" id="L387">        HelloTerminal terminal = new HelloTerminal(name);</span>
+<span class="nc" id="L388">        terminal.displayGreeting();</span>
+
+<span class="nc" id="L390">        System.out.println();</span>
+
+        // Add message handlers using lambdas
+<span class="nc" id="L393">        terminal</span>
+<span class="nc" id="L394">            .addHandler(String::toUpperCase)</span>
+<span class="nc" id="L395">            .addHandler(msg -&gt; &quot;[PROCESSED] &quot; + msg)</span>
+<span class="nc" id="L396">            .addHandler(msg -&gt; msg + &quot; (&quot; + terminal.getStatus() + &quot;)&quot;);</span>
+
+        // Process a message
+<span class="nc" id="L399">        String result = terminal.processMessage(&quot;Hello from the terminal!&quot;);</span>
+<span class="nc" id="L400">        System.out.println(&quot;Processed message: &quot; + result);</span>
+
+<span class="nc" id="L402">        System.out.println();</span>
+
+        // Generate a sequence
+<span class="nc" id="L405">        System.out.println(&quot;Generating sequence:&quot;);</span>
+<span class="nc" id="L406">        List&lt;String&gt; sequence = terminal.generateSequence(5);</span>
+<span class="nc" id="L407">        System.out.println(&quot;Total items: &quot; + sequence.size());</span>
+
+<span class="nc" id="L409">        System.out.println();</span>
+
+        // Run async task
+<span class="nc" id="L412">        System.out.println(&quot;Running async task...&quot;);</span>
+<span class="nc" id="L413">        terminal</span>
+<span class="nc" id="L414">            .runAsyncTask(&quot;Example async operation&quot;)</span>
+<span class="nc" id="L415">            .thenAccept(taskResult -&gt; {</span>
+<span class="nc bnc" id="L416" title="All 2 branches missed.">                if (taskResult.isSuccess()) {</span>
+<span class="nc" id="L417">                    System.out.println(</span>
+<span class="nc" id="L418">                        &quot;Task result: &quot; + taskResult.getMessage()</span>
+                    );
+                } else {
+<span class="nc" id="L421">                    taskResult</span>
+<span class="nc" id="L422">                        .getError()</span>
+<span class="nc" id="L423">                        .ifPresent(e -&gt;</span>
+<span class="nc" id="L424">                            System.err.println(&quot;Task failed: &quot; + e.getMessage())</span>
+                        );
+                }
+<span class="nc" id="L427">            })</span>
+<span class="nc" id="L428">            .join(); // Wait for completion in this example</span>
+
+<span class="nc" id="L430">        System.out.println();</span>
+<span class="nc" id="L431">        System.out.println(</span>
+<span class="nc" id="L432">            &quot;Final status: &quot; + terminal.getStatus().getDisplayName()</span>
+        );
+<span class="nc" id="L434">        System.out.println(&quot;Last activity: &quot; + terminal.getLastActivity());</span>
+<span class="nc" id="L435">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

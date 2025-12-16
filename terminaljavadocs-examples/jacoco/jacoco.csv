@@ -1,0 +1,5 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Terminal Javadocs Examples,com.guinetik.examples,HelloTerminal.Status,52,0,0,0,11,0,4,0,4,0
+Terminal Javadocs Examples,com.guinetik.examples,FibonacciSequence,89,238,5,33,19,57,5,24,1,9
+Terminal Javadocs Examples,com.guinetik.examples,HelloTerminal.TaskResult,49,0,2,0,11,0,6,0,5,0
+Terminal Javadocs Examples,com.guinetik.examples,HelloTerminal,376,0,10,0,87,0,27,0,22,0

@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Terminal Javadocs Maven Plugin,com.guinetik.terminaljavadocs.plugin,InjectSiteStylesMojo,274,801,56,68,50,145,48,35,1,18
+Terminal Javadocs Maven Plugin,com.guinetik.terminaljavadocs.plugin,InjectSiteStylesMojo.new SimpleFileVisitor() {...},5,17,2,2,1,3,2,2,0,2
+Terminal Javadocs Maven Plugin,com.guinetik.terminaljavadocs.plugin,ModuleReport,0,21,0,0,0,8,0,4,0,4
+Terminal Javadocs Maven Plugin,com.guinetik.terminaljavadocs.plugin,InjectSiteStylesMojo.PageType,0,60,0,0,0,12,0,4,0,4
+Terminal Javadocs Maven Plugin,com.guinetik.terminaljavadocs.plugin,InjectSiteStylesMojo.new SimpleFileVisitor() {...},19,23,0,2,2,4,1,3,1,2
+Terminal Javadocs Maven Plugin,com.guinetik.terminaljavadocs.plugin,GenerateLandingPagesMojo,395,201,26,16,81,43,22,5,4,2

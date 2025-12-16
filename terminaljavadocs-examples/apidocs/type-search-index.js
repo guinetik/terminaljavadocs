@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.guinetik.examples","l":"FibonacciSequence"},{"p":"com.guinetik.examples","l":"HelloTerminal"},{"p":"com.guinetik.examples","l":"HelloTerminal.Status"},{"p":"com.guinetik.examples","l":"HelloTerminal.TaskResult"}];updateSearchResults();

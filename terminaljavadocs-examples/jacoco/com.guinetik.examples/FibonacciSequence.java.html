@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FibonacciSequence.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script>
+<!-- <!-- terminal-javadocs-injected [coverage] -->
+<link rel="stylesheet" href="../../terminal-styles/terminaljavadocs-coverage.min.css">
+<script src="../../terminal-styles/terminaljavadocs.min.js" defer></script>
+</head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Terminal Javadocs Examples</a> &gt; <a href="index.source.html" class="el_package">com.guinetik.examples</a> &gt; <span class="el_source">FibonacciSequence.java</span></div><h1>FibonacciSequence.java</h1><pre class="source lang-java linenums">/*
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ */
+package com.guinetik.examples;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * A utility class for generating and working with Fibonacci sequences.
+ *
+ * &lt;p&gt;Demonstrates various approaches to calculating Fibonacci numbers including
+ * iterative, recursive, and memoized implementations. This class is designed
+ * to showcase code coverage and documentation in Terminal Javadocs.&lt;/p&gt;
+ *
+ * &lt;h2&gt;Fibonacci Definition&lt;/h2&gt;
+ * &lt;p&gt;The Fibonacci sequence is defined as:&lt;/p&gt;
+ * &lt;pre class=&quot;language-java&quot;&gt;&lt;code&gt;
+ * F(0) = 0
+ * F(1) = 1
+ * F(n) = F(n-1) + F(n-2) for n &amp;gt; 1
+ * &lt;/code&gt;&lt;/pre&gt;
+ *
+ * &lt;h2&gt;Usage Example&lt;/h2&gt;
+ * &lt;pre class=&quot;language-java&quot;&gt;&lt;code&gt;
+ * FibonacciSequence fib = new FibonacciSequence();
+ * long number = fib.calculate(10);  // Returns 55
+ * List&amp;lt;Long&amp;gt; sequence = fib.generateSequence(5);
+ * &lt;/code&gt;&lt;/pre&gt;
+ *
+ * @author guinetik
+ * @version 1.0.0
+ * @since 2025
+ */
+@SuppressWarnings({&quot;unused&quot;, &quot;WeakerAccess&quot;})
+public class FibonacciSequence {
+
+    // =========================================================================
+    // CONSTANTS
+    // =========================================================================
+
+    /** The maximum index for iterative calculation to avoid overflow */
+    public static final int MAX_SAFE_INDEX = 92;
+
+    /** Cache for memoized calculations */
+    private final Map&lt;Integer, Long&gt; cache;
+
+    // =========================================================================
+    // CONSTRUCTORS
+    // =========================================================================
+
+    /**
+     * Creates a new FibonacciSequence calculator with an empty cache.
+     */
+<span class="fc" id="L61">    public FibonacciSequence() {</span>
+<span class="fc" id="L62">        this.cache = new HashMap&lt;&gt;();</span>
+        // Pre-populate cache with base cases
+<span class="fc" id="L64">        cache.put(0, 0L);</span>
+<span class="fc" id="L65">        cache.put(1, 1L);</span>
+<span class="fc" id="L66">    }</span>
+
+    // =========================================================================
+    // PUBLIC METHODS
+    // =========================================================================
+
+    /**
+     * Calculates the nth Fibonacci number using iterative approach.
+     *
+     * &lt;p&gt;This is the most efficient approach for most use cases, with O(n)
+     * time complexity and O(1) space complexity.&lt;/p&gt;
+     *
+     * @param n the index of the Fibonacci number to calculate (0-based)
+     * @return the nth Fibonacci number
+     * @throws IllegalArgumentException if n is negative or exceeds MAX_SAFE_INDEX
+     */
+    public long calculate(int n) {
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (n &lt; 0) {</span>
+<span class="fc" id="L84">            throw new IllegalArgumentException(&quot;Index cannot be negative&quot;);</span>
+        }
+
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (n &gt; MAX_SAFE_INDEX) {</span>
+<span class="fc" id="L88">            throw new IllegalArgumentException(</span>
+                &quot;Index cannot exceed &quot; + MAX_SAFE_INDEX + &quot; to avoid overflow&quot;
+            );
+        }
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (n &lt;= 1) {</span>
+<span class="fc" id="L94">            return n;</span>
+        }
+
+<span class="fc" id="L97">        long prev = 0;</span>
+<span class="fc" id="L98">        long current = 1;</span>
+
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (int i = 2; i &lt;= n; i++) {</span>
+<span class="fc" id="L101">            long next = prev + current;</span>
+<span class="fc" id="L102">            prev = current;</span>
+<span class="fc" id="L103">            current = next;</span>
+        }
+
+<span class="fc" id="L106">        return current;</span>
+    }
+
+    /**
+     * Calculates the nth Fibonacci number using recursive approach with memoization.
+     *
+     * &lt;p&gt;This approach uses caching to avoid redundant calculations. The first call
+     * will be slower, but subsequent calls benefit from the cache.&lt;/p&gt;
+     *
+     * @param n the index of the Fibonacci number to calculate (0-based)
+     * @return the nth Fibonacci number
+     * @throws IllegalArgumentException if n is negative
+     */
+    public long calculateMemoized(int n) {
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (n &lt; 0) {</span>
+<span class="nc" id="L121">            throw new IllegalArgumentException(&quot;Index cannot be negative&quot;);</span>
+        }
+
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (cache.containsKey(n)) {</span>
+<span class="fc" id="L125">            return cache.get(n);</span>
+        }
+
+<span class="fc" id="L128">        long result = calculateMemoized(n - 1) + calculateMemoized(n - 2);</span>
+<span class="fc" id="L129">        cache.put(n, result);</span>
+<span class="fc" id="L130">        return result;</span>
+    }
+
+    /**
+     * Generates a Fibonacci sequence up to the specified count.
+     *
+     * @param count the number of Fibonacci numbers to generate
+     * @return a list containing the first 'count' Fibonacci numbers
+     * @throws IllegalArgumentException if count is negative
+     */
+    public List&lt;Long&gt; generateSequence(int count) {
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (count &lt; 0) {</span>
+<span class="fc" id="L142">            throw new IllegalArgumentException(&quot;Count cannot be negative&quot;);</span>
+        }
+
+<span class="fc" id="L145">        List&lt;Long&gt; sequence = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        for (int i = 0; i &lt; count; i++) {</span>
+<span class="fc" id="L148">            sequence.add(calculate(i));</span>
+        }
+
+<span class="fc" id="L151">        return sequence;</span>
+    }
+
+    /**
+     * Finds the first Fibonacci number that is greater than or equal to the threshold.
+     *
+     * @param threshold the minimum value to find
+     * @return the first Fibonacci number &gt;= threshold, or -1 if none found within safe range
+     * @throws IllegalArgumentException if threshold is negative
+     */
+    public long findFirstGreaterThan(long threshold) {
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (threshold &lt; 0) {</span>
+<span class="fc" id="L163">            throw new IllegalArgumentException(&quot;Threshold cannot be negative&quot;);</span>
+        }
+
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        for (int i = 0; i &lt;= MAX_SAFE_INDEX; i++) {</span>
+<span class="fc" id="L167">            long fib = calculate(i);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">            if (fib &gt;= threshold) {</span>
+<span class="fc" id="L169">                return fib;</span>
+            }
+        }
+
+<span class="nc" id="L173">        return -1;</span>
+    }
+
+    /**
+     * Calculates the sum of the first n Fibonacci numbers.
+     *
+     * @param n the count of Fibonacci numbers to sum
+     * @return the sum of the first n Fibonacci numbers
+     * @throws IllegalArgumentException if n is negative
+     */
+    public long sumSequence(int n) {
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (n &lt; 0) {</span>
+<span class="fc" id="L185">            throw new IllegalArgumentException(&quot;Count cannot be negative&quot;);</span>
+        }
+
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (n == 0) {</span>
+<span class="fc" id="L189">            return 0;</span>
+        }
+
+<span class="fc" id="L192">        long sum = 0;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L194">            sum += calculate(i);</span>
+        }
+
+<span class="fc" id="L197">        return sum;</span>
+    }
+
+    /**
+     * Clears the memoization cache.
+     *
+     * &lt;p&gt;This resets the cache to only contain the base cases (0 and 1).&lt;/p&gt;
+     */
+    public void clearCache() {
+<span class="fc" id="L206">        cache.clear();</span>
+<span class="fc" id="L207">        cache.put(0, 0L);</span>
+<span class="fc" id="L208">        cache.put(1, 1L);</span>
+<span class="fc" id="L209">    }</span>
+
+    /**
+     * Gets the current size of the memoization cache.
+     *
+     * @return the number of cached values
+     */
+    public int getCacheSize() {
+<span class="fc" id="L217">        return cache.size();</span>
+    }
+
+    /**
+     * Checks if a number is in the Fibonacci sequence.
+     *
+     * @param number the number to check
+     * @return true if the number is a Fibonacci number, false otherwise
+     */
+    public boolean isFibonacciNumber(long number) {
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        if (number &lt; 0) {</span>
+<span class="fc" id="L228">            return false;</span>
+        }
+
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">        for (int i = 0; i &lt;= MAX_SAFE_INDEX; i++) {</span>
+<span class="fc" id="L232">            long fib = calculate(i);</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">            if (fib == number) {</span>
+<span class="fc" id="L234">                return true;</span>
+            }
+<span class="fc bfc" id="L236" title="All 2 branches covered.">            if (fib &gt; number) {</span>
+<span class="fc" id="L237">                return false;</span>
+            }
+        }
+
+<span class="nc" id="L241">        return false;</span>
+    }
+
+    // =========================================================================
+    // MAIN METHOD
+    // =========================================================================
+
+    /**
+     * Main entry point demonstrating Fibonacci sequence calculations.
+     *
+     * @param args command line arguments (first argument is optional index)
+     */
+    public static void main(String[] args) {
+<span class="nc" id="L254">        System.out.println(&quot;=&quot;.repeat(50));</span>
+<span class="nc" id="L255">        System.out.println(&quot;  Fibonacci Sequence Calculator&quot;);</span>
+<span class="nc" id="L256">        System.out.println(&quot;=&quot;.repeat(50));</span>
+<span class="nc" id="L257">        System.out.println();</span>
+
+<span class="nc" id="L259">        FibonacciSequence fibonacci = new FibonacciSequence();</span>
+
+        // Calculate single value
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        int index = args.length &gt; 0 ? Integer.parseInt(args[0]) : 10;</span>
+<span class="nc" id="L263">        long result = fibonacci.calculate(index);</span>
+<span class="nc" id="L264">        System.out.println(&quot;Fibonacci(&quot; + index + &quot;) = &quot; + result);</span>
+<span class="nc" id="L265">        System.out.println();</span>
+
+        // Generate sequence
+<span class="nc" id="L268">        System.out.println(&quot;First 10 Fibonacci numbers:&quot;);</span>
+<span class="nc" id="L269">        List&lt;Long&gt; sequence = fibonacci.generateSequence(10);</span>
+<span class="nc" id="L270">        sequence.forEach(System.out::println);</span>
+<span class="nc" id="L271">        System.out.println();</span>
+
+        // Sum sequence
+<span class="nc" id="L274">        long sum = fibonacci.sumSequence(10);</span>
+<span class="nc" id="L275">        System.out.println(&quot;Sum of first 10 Fibonacci numbers: &quot; + sum);</span>
+<span class="nc" id="L276">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

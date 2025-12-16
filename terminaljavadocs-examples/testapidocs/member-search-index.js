@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"com.guinetik.examples","c":"FibonacciSequenceTest","l":"FibonacciSequenceTest()","u":"%3Cinit%3E()"}];updateSearchResults();

@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GenerateLandingPagesMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script>
+<!-- <!-- terminal-javadocs-injected [coverage] -->
+<link rel="stylesheet" href="../../../terminal-styles/terminaljavadocs-coverage.min.css">
+<script src="../../../terminal-styles/terminaljavadocs.min.js" defer></script>
+</head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Terminal Javadocs Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">com.guinetik.terminaljavadocs.plugin</a> &gt; <span class="el_source">GenerateLandingPagesMojo.java</span></div><h1>GenerateLandingPagesMojo.java</h1><pre class="source lang-java linenums">package com.guinetik.terminaljavadocs.plugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+
+/**
+ * Generates landing pages for code coverage and source xref reports by scanning
+ * reactor modules for actual generated reports.
+ */
+@Mojo(
+    name = &quot;generate-landing-pages&quot;,
+    defaultPhase = org.apache.maven.plugins.annotations.LifecyclePhase.POST_SITE,
+    aggregator = true
+)
+<span class="fc" id="L28">public class GenerateLandingPagesMojo extends AbstractMojo {</span>
+
+    /**
+     * The current Maven session, providing access to reactor projects.
+     */
+    @Parameter(defaultValue = &quot;${session}&quot;, readonly = true, required = true)
+    private MavenSession session;
+
+    /**
+     * The current Maven project being built.
+     */
+    @Parameter(defaultValue = &quot;${project}&quot;, readonly = true, required = true)
+    private MavenProject project;
+
+    /**
+     * The project name to display in landing page headers.
+     * Defaults to the project's name from pom.xml.
+     */
+    @Parameter(
+        property = &quot;terminaljavadocs.project.name&quot;,
+        defaultValue = &quot;${project.name}&quot;
+    )
+    private String projectName;
+
+    /**
+     * Skip landing page generation when set to {@code true}.
+     * Can be set via {@code -Dterminaljavadocs.skip=true}.
+     */
+    @Parameter(property = &quot;terminaljavadocs.skip&quot;, defaultValue = &quot;false&quot;)
+    private boolean skip;
+
+    /**
+     * The project's build output directory (typically {@code target/}).
+     */
+    @Parameter(defaultValue = &quot;${project.build.directory}&quot;, readonly = true)
+    private File buildDirectory;
+
+    /**
+     * Executes the landing page generation goal.
+     *
+     * &lt;p&gt;
+     * This method:
+     * &lt;ol&gt;
+     * &lt;li&gt;Skips execution if {@code skip=true} or project is not a POM&lt;/li&gt;
+     * &lt;li&gt;Scans all reactor projects for JaCoCo and JXR reports&lt;/li&gt;
+     * &lt;li&gt;Generates {@code coverage.html} if coverage reports exist&lt;/li&gt;
+     * &lt;li&gt;Generates {@code source-xref.html} if xref reports exist&lt;/li&gt;
+     * &lt;/ol&gt;
+     *
+     * &lt;p&gt;
+     * Output is written to {@code target/staging} if it exists, otherwise {@code target/site}.
+     *
+     * @throws MojoExecutionException if template loading or file writing fails
+     */
+    @Override
+    public void execute() throws MojoExecutionException {
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (skip) {</span>
+<span class="fc" id="L85">            getLog().info(&quot;Skipping landing page generation&quot;);</span>
+<span class="fc" id="L86">            return;</span>
+        }
+
+        // Skip if this is not an aggregator build (only run on parent POM)
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (!&quot;pom&quot;.equals(project.getPackaging())) {</span>
+<span class="fc" id="L91">            getLog().debug(</span>
+                &quot;Skipping landing page generation: not a POM project&quot;
+            );
+<span class="fc" id="L94">            return;</span>
+        }
+
+        try {
+<span class="fc" id="L98">            List&lt;ModuleReport&gt; coverageModules = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L99">            List&lt;ModuleReport&gt; xrefModules = new ArrayList&lt;&gt;();</span>
+
+            // Scan all reactor projects for reports
+<span class="fc" id="L102">            List&lt;MavenProject&gt; projects = session.getProjects();</span>
+<span class="fc" id="L103">            getLog().info(</span>
+<span class="fc" id="L104">                &quot;Scanning &quot; + projects.size() + &quot; reactor projects for reports&quot;</span>
+            );
+<span class="fc bfc" id="L106" title="All 2 branches covered.">            for (MavenProject reactorProject : projects) {</span>
+<span class="fc" id="L107">                String artifactId = reactorProject.getArtifactId();</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">                String description = reactorProject.getDescription() != null</span>
+<span class="fc" id="L109">                    ? reactorProject.getDescription()</span>
+<span class="pc" id="L110">                    : &quot;&quot;;</span>
+<span class="fc" id="L111">                String buildDir = reactorProject.getBuild().getDirectory();</span>
+
+                // Check for coverage reports - try staging first, then site
+<span class="fc" id="L114">                File jacocoIndex = new File(buildDir, &quot;staging/jacoco/index.html&quot;);</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">                if (!jacocoIndex.exists()) {</span>
+<span class="fc" id="L116">                    jacocoIndex = new File(buildDir, &quot;site/jacoco/index.html&quot;);</span>
+                }
+<span class="fc" id="L118">                getLog().debug(</span>
+<span class="fc" id="L119">                    &quot;Checking for coverage in &quot; + artifactId + &quot; at: &quot; + jacocoIndex.getAbsolutePath()</span>
+                );
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">                if (jacocoIndex.exists()) {</span>
+<span class="nc" id="L122">                    coverageModules.add(</span>
+                        new ModuleReport(artifactId, description, artifactId)
+                    );
+<span class="nc" id="L125">                    getLog().info(&quot;Found coverage report in: &quot; + artifactId);</span>
+                } else {
+<span class="fc" id="L127">                    getLog().debug(</span>
+                        &quot;No coverage report found for &quot; + artifactId
+                    );
+                }
+
+                // Check for xref reports - try staging first, then site
+                // Use overview-summary.html (no-frames version) instead of index.html (frameset)
+<span class="fc" id="L134">                File xrefIndex = new File(buildDir, &quot;staging/xref/overview-summary.html&quot;);</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">                if (!xrefIndex.exists()) {</span>
+<span class="fc" id="L136">                    xrefIndex = new File(buildDir, &quot;site/xref/overview-summary.html&quot;);</span>
+                }
+<span class="fc" id="L138">                getLog().debug(</span>
+<span class="fc" id="L139">                    &quot;Checking for xref in &quot; + artifactId + &quot; at: &quot; + xrefIndex.getAbsolutePath()</span>
+                );
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">                if (xrefIndex.exists()) {</span>
+<span class="nc" id="L142">                    xrefModules.add(</span>
+                        new ModuleReport(artifactId, description, artifactId)
+                    );
+<span class="nc" id="L145">                    getLog().info(&quot;Found xref report in: &quot; + artifactId);</span>
+                } else {
+<span class="fc" id="L147">                    getLog().debug(</span>
+                        &quot;No xref report found for &quot; + artifactId
+                    );
+                }
+<span class="fc" id="L151">            }</span>
+
+            // Determine the output directory - prefer staging if it exists, otherwise use site
+<span class="fc" id="L154">            File outputDir = new File(buildDirectory, &quot;staging&quot;);</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">            if (!outputDir.exists()) {</span>
+<span class="fc" id="L156">                outputDir = new File(buildDirectory, &quot;site&quot;);</span>
+            }
+<span class="fc" id="L158">            outputDir.mkdirs();</span>
+
+            // Generate coverage page if there are modules with coverage reports
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">            if (!coverageModules.isEmpty()) {</span>
+<span class="nc" id="L162">                String coverageHtml = generateCoveragePage(</span>
+                    coverageModules,
+                    projectName
+                );
+<span class="nc" id="L166">                Path coveragePath = Paths.get(</span>
+<span class="nc" id="L167">                    outputDir.getAbsolutePath(),</span>
+                    &quot;coverage.html&quot;
+                );
+<span class="nc" id="L170">                Files.write(</span>
+                    coveragePath,
+<span class="nc" id="L172">                    coverageHtml.getBytes(StandardCharsets.UTF_8)</span>
+                );
+<span class="nc" id="L174">                getLog().info(</span>
+                    &quot;Generated coverage landing page: &quot; + coveragePath
+                );
+            }
+
+            // Generate xref page if there are modules with xref reports
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">            if (!xrefModules.isEmpty()) {</span>
+<span class="nc" id="L181">                String xrefHtml = generateXrefPage(xrefModules, projectName);</span>
+<span class="nc" id="L182">                Path xrefPath = Paths.get(</span>
+<span class="nc" id="L183">                    outputDir.getAbsolutePath(),</span>
+                    &quot;source-xref.html&quot;
+                );
+<span class="nc" id="L186">                Files.write(</span>
+                    xrefPath,
+<span class="nc" id="L188">                    xrefHtml.getBytes(StandardCharsets.UTF_8)</span>
+                );
+<span class="nc" id="L190">                getLog().info(&quot;Generated xref landing page: &quot; + xrefPath);</span>
+            }
+
+<span class="pc bpc" id="L193" title="2 of 4 branches missed.">            if (coverageModules.isEmpty() &amp;&amp; xrefModules.isEmpty()) {</span>
+<span class="fc" id="L194">                getLog().info(&quot;No modules with coverage or xref reports found&quot;);</span>
+            }
+<span class="nc" id="L196">        } catch (IOException e) {</span>
+<span class="nc" id="L197">            throw new MojoExecutionException(</span>
+                &quot;Failed to generate landing pages&quot;,
+                e
+            );
+<span class="fc" id="L201">        }</span>
+<span class="fc" id="L202">    }</span>
+
+    /**
+     * Generates the coverage landing page HTML from the template.
+     *
+     * &lt;p&gt;
+     * Loads {@code templates/coverage-page.html} and replaces placeholders:
+     * &lt;ul&gt;
+     * &lt;li&gt;{@code {{project.name}}} - the project name&lt;/li&gt;
+     * &lt;li&gt;{@code {{module-rows}}} - table rows for each module with coverage&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @param modules     list of modules with coverage reports
+     * @param projectName the project name to display in the page header
+     * @return the rendered HTML content
+     * @throws IOException if the template cannot be loaded
+     */
+    private String generateCoveragePage(
+        List&lt;ModuleReport&gt; modules,
+        String projectName
+    ) throws IOException {
+<span class="nc" id="L223">        String template = loadTemplate(&quot;templates/coverage-page.html&quot;);</span>
+
+        // Generate module rows
+<span class="nc" id="L226">        StringBuilder rows = new StringBuilder();</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">        for (ModuleReport module : modules) {</span>
+<span class="nc" id="L228">            String row =</span>
+                &quot;                &lt;tr&gt;\n&quot; +
+                &quot;                    &lt;td&gt;&quot; +
+<span class="nc" id="L231">                escapeHtml(module.getArtifactId()) +</span>
+                &quot;&lt;/td&gt;\n&quot; +
+                &quot;                    &lt;td&gt;&quot; +
+<span class="nc" id="L234">                escapeHtml(module.getDescription()) +</span>
+                &quot;&lt;/td&gt;\n&quot; +
+                &quot;                    &lt;td&gt;&lt;a href=\&quot;./&quot; +
+<span class="nc" id="L237">                escapeHtml(module.getArtifactId()) +</span>
+                &quot;/jacoco/index.html\&quot;&gt;View Coverage →&lt;/a&gt;&lt;/td&gt;\n&quot; +
+                &quot;                &lt;/tr&gt;\n&quot;;
+<span class="nc" id="L240">            rows.append(row);</span>
+<span class="nc" id="L241">        }</span>
+
+        // Replace placeholders
+<span class="nc" id="L244">        String result = template</span>
+<span class="nc" id="L245">            .replace(&quot;{{project.name}}&quot;, escapeHtml(projectName))</span>
+<span class="nc" id="L246">            .replace(&quot;{{module-rows}}&quot;, rows.toString());</span>
+
+<span class="nc" id="L248">        return result;</span>
+    }
+
+    /**
+     * Generates the source cross-reference landing page HTML from the template.
+     *
+     * &lt;p&gt;
+     * Loads {@code templates/xref-page.html} and replaces placeholders:
+     * &lt;ul&gt;
+     * &lt;li&gt;{@code {{project.name}}} - the project name&lt;/li&gt;
+     * &lt;li&gt;{@code {{module-rows}}} - table rows for each module with xref reports&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @param modules     list of modules with xref reports
+     * @param projectName the project name to display in the page header
+     * @return the rendered HTML content
+     * @throws IOException if the template cannot be loaded
+     */
+    private String generateXrefPage(
+        List&lt;ModuleReport&gt; modules,
+        String projectName
+    ) throws IOException {
+<span class="nc" id="L270">        String template = loadTemplate(&quot;templates/xref-page.html&quot;);</span>
+
+        // Generate module rows
+<span class="nc" id="L273">        StringBuilder rows = new StringBuilder();</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">        for (ModuleReport module : modules) {</span>
+<span class="nc" id="L275">            String row =</span>
+                &quot;                &lt;tr&gt;\n&quot; +
+                &quot;                    &lt;td&gt;&quot; +
+<span class="nc" id="L278">                escapeHtml(module.getArtifactId()) +</span>
+                &quot;&lt;/td&gt;\n&quot; +
+                &quot;                    &lt;td&gt;&quot; +
+<span class="nc" id="L281">                escapeHtml(module.getDescription()) +</span>
+                &quot;&lt;/td&gt;\n&quot; +
+                &quot;                    &lt;td&gt;&lt;a href=\&quot;./&quot; +
+<span class="nc" id="L284">                escapeHtml(module.getArtifactId()) +</span>
+                &quot;/xref/overview-summary.html\&quot;&gt;Browse Source →&lt;/a&gt;&lt;/td&gt;\n&quot; +
+                &quot;                &lt;/tr&gt;\n&quot;;
+<span class="nc" id="L287">            rows.append(row);</span>
+<span class="nc" id="L288">        }</span>
+
+        // Replace placeholders
+<span class="nc" id="L291">        String result = template</span>
+<span class="nc" id="L292">            .replace(&quot;{{project.name}}&quot;, escapeHtml(projectName))</span>
+<span class="nc" id="L293">            .replace(&quot;{{module-rows}}&quot;, rows.toString());</span>
+
+<span class="nc" id="L295">        return result;</span>
+    }
+
+    /**
+     * Loads an HTML template from the classpath or filesystem.
+     *
+     * &lt;p&gt;
+     * Attempts to load the template in the following order:
+     * &lt;ol&gt;
+     * &lt;li&gt;Thread context classloader (packaged JAR)&lt;/li&gt;
+     * &lt;li&gt;Class classloader (packaged JAR)&lt;/li&gt;
+     * &lt;li&gt;Direct resource stream with leading slash&lt;/li&gt;
+     * &lt;li&gt;Filesystem at {@code src/main/resources/} (development mode)&lt;/li&gt;
+     * &lt;/ol&gt;
+     *
+     * &lt;p&gt;
+     * The filesystem fallback enables template loading during development
+     * when the JAR hasn't been built yet.
+     *
+     * @param resourcePath the resource path relative to the classpath root
+     *                     (e.g., &quot;templates/coverage-page.html&quot;)
+     * @return the template content as a UTF-8 string
+     * @throws IOException if the template cannot be found in any location
+     */
+    private String loadTemplate(String resourcePath) throws IOException {
+        // Try 1: Load from classloader (for packaged plugin JAR) - most reliable
+<span class="nc" id="L321">        InputStream is = null;</span>
+
+        // Try thread context classloader
+<span class="nc" id="L324">        is = Thread.currentThread()</span>
+<span class="nc" id="L325">            .getContextClassLoader()</span>
+<span class="nc" id="L326">            .getResourceAsStream(resourcePath);</span>
+
+        // Try class classloader
+<span class="nc bnc" id="L329" title="All 2 branches missed.">        if (is == null) {</span>
+<span class="nc" id="L330">            is =</span>
+<span class="nc" id="L331">                GenerateLandingPagesMojo.class.getClassLoader().getResourceAsStream(</span>
+                    resourcePath
+                );
+        }
+
+        // Try Class.getResourceAsStream with leading slash
+<span class="nc bnc" id="L337" title="All 2 branches missed.">        if (is == null) {</span>
+<span class="nc" id="L338">            is = GenerateLandingPagesMojo.class.getResourceAsStream(</span>
+                &quot;/&quot; + resourcePath
+            );
+        }
+
+<span class="nc bnc" id="L343" title="All 2 branches missed.">        if (is != null) {</span>
+<span class="nc" id="L344">            return new String(is.readAllBytes(), StandardCharsets.UTF_8);</span>
+        }
+
+        // Try 2: Load from plugin module filesystem (for development/build time)
+        // This allows the template to be loaded even if the JAR isn't fully built yet
+        try {
+            // Look for the template in the plugin module's source directory
+            // by scanning common Maven plugin locations relative to the class file
+<span class="nc" id="L352">            String classPath =</span>
+<span class="nc" id="L353">                GenerateLandingPagesMojo.class.getProtectionDomain()</span>
+<span class="nc" id="L354">                    .getCodeSource()</span>
+<span class="nc" id="L355">                    .getLocation()</span>
+<span class="nc" id="L356">                    .getPath();</span>
+
+            // If running from target/classes, look in src/main/resources
+<span class="nc bnc" id="L359" title="All 2 branches missed.">            if (classPath.contains(&quot;target&quot; + File.separator + &quot;classes&quot;)) {</span>
+<span class="nc" id="L360">                Path targetClasses = Paths.get(classPath);</span>
+<span class="nc" id="L361">                Path pluginModule = targetClasses.getParent().getParent(); // Go up from target/classes to plugin module</span>
+<span class="nc" id="L362">                Path templatePath = pluginModule.resolve(</span>
+                    &quot;src/main/resources/&quot; + resourcePath
+                );
+
+<span class="nc bnc" id="L366" title="All 2 branches missed.">                if (Files.exists(templatePath)) {</span>
+<span class="nc" id="L367">                    getLog().debug(</span>
+                        &quot;Loading template from filesystem: &quot; + templatePath
+                    );
+<span class="nc" id="L370">                    return new String(</span>
+<span class="nc" id="L371">                        Files.readAllBytes(templatePath),</span>
+                        StandardCharsets.UTF_8
+                    );
+                }
+            }
+<span class="nc" id="L376">        } catch (Exception e) {</span>
+<span class="nc" id="L377">            getLog().debug(</span>
+<span class="nc" id="L378">                &quot;Could not load template from filesystem: &quot; + e.getMessage()</span>
+            );
+<span class="nc" id="L380">        }</span>
+
+<span class="nc" id="L382">        throw new IOException(</span>
+            &quot;Template not found: &quot; +
+                resourcePath +
+                &quot;. Make sure templates are in src/main/resources/ or packaged in the plugin JAR.&quot;
+        );
+    }
+
+    /**
+     * Escapes HTML special characters to prevent XSS vulnerabilities.
+     *
+     * &lt;p&gt;
+     * Converts the following characters:
+     * &lt;ul&gt;
+     * &lt;li&gt;{@code &amp;} → {@code &amp;amp;}&lt;/li&gt;
+     * &lt;li&gt;{@code &lt;} → {@code &amp;lt;}&lt;/li&gt;
+     * &lt;li&gt;{@code &gt;} → {@code &amp;gt;}&lt;/li&gt;
+     * &lt;li&gt;{@code &quot;} → {@code &amp;quot;}&lt;/li&gt;
+     * &lt;li&gt;{@code '} → {@code &amp;#39;}&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @param text the text to escape, may be {@code null}
+     * @return the escaped text, or empty string if input is {@code null}
+     */
+    private String escapeHtml(String text) {
+<span class="nc bnc" id="L406" title="All 2 branches missed.">        if (text == null) {</span>
+<span class="nc" id="L407">            return &quot;&quot;;</span>
+        }
+<span class="nc" id="L409">        return text</span>
+<span class="nc" id="L410">            .replace(&quot;&amp;&quot;, &quot;&amp;amp;&quot;)</span>
+<span class="nc" id="L411">            .replace(&quot;&lt;&quot;, &quot;&amp;lt;&quot;)</span>
+<span class="nc" id="L412">            .replace(&quot;&gt;&quot;, &quot;&amp;gt;&quot;)</span>
+<span class="nc" id="L413">            .replace(&quot;\&quot;&quot;, &quot;&amp;quot;&quot;)</span>
+<span class="nc" id="L414">            .replace(&quot;'&quot;, &quot;&amp;#39;&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
