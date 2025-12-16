@@ -68,6 +68,20 @@ mvn clean site
 
 That's it! Your themed site will be generated at `target/site/`.
 
+### 3. Version Requirements
+
+Terminal Javadocs is built against specific versions of the Maven site toolchain. Using incompatible versions may cause style issues or build failures.
+
+| Dependency | Required Version | Notes |
+|------------|------------------|-------|
+| Maven Site Plugin | `4.0.0-M13` | Other versions may have Doxia Sitetools incompatibilities |
+| Maven Fluido Skin | `2.0.0-M8` | Newer versions (2.1.0+) require Doxia Sitetools 2.0.0 GA |
+| Doxia Sitetools | `2.0.0-M16` | Bundled with Site Plugin 4.0.0-M13 |
+
+**Why these specific versions?**
+
+The Maven site ecosystem has transitive dependency constraints between the Site Plugin, Doxia Sitetools, and skins. Fluido Skin 2.1.0+ requires Doxia Sitetools 2.0.0 GA (available in Site Plugin 3.21.0), but this project's CSS overrides are tested against the 4.0.0-M13 milestone which uses Doxia 2.0.0-M16.
+
 The plugin automatically:
 - Detects page types (Javadoc, JaCoCo, JXR, site pages)
 - Injects the appropriate CSS for each page type
